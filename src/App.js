@@ -2,8 +2,12 @@ import "./App.css";
 import AddTutorial from "./components/AddTutorial";
 import Tutorial from "./components/Tutorial";
 import TutorialsList from "./components/TutorialsList";
+import PrivateRoute from "./components/PrivateRoute";
+import Login from "./components/Login";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Switch, Route, Link } from "react-router-dom";
+import Logout from "./components/Logout";
+import { isLogin } from "./utils/refreshToken";
 function App() {
   return (
     <div>
@@ -28,6 +32,19 @@ function App() {
             </Link>
           </li>
         </div>
+        <div className="navbar-nav ml-auto">
+          <li className="nav-item">
+            {isLogin() ? (
+              <Link to={"/signout"} className="nav-link">
+                Logout
+              </Link>
+            ) : (
+              <Link to={"/signin"} className="nav-link">
+                Log in
+              </Link>
+            )}
+          </li>
+        </div>
       </nav>
 
       <div className="container mt-3">
@@ -35,7 +52,13 @@ function App() {
           <Route exact path={["/", "/tutorials"]} component={TutorialsList} />
           <Route exact path="/add" component={AddTutorial} />
           <Route path="/tutorials/update/:id" component={Tutorial} />
-          <Route path="/tutorials/update/" component={TutorialsList} />
+          <Route exact path="/signin" component={Login} />
+          <Route exact path="/signout" component={Logout} />
+          <PrivateRoute
+            path="/tutorials/update/"
+            component={TutorialsList}
+            exact
+          />
         </Switch>
       </div>
     </div>
