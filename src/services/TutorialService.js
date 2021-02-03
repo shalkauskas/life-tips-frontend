@@ -1,11 +1,12 @@
 import http from "../http-common";
-
+import axios from "axios";
+import authHeader from "../utils/auth-header";
 const getAll = () => {
-  return http.get("/tutorials");
+  return http.get("/tutorials", { headers: authHeader() });
 };
 
 const get = (id) => {
-  return http.get(`/tutorials/update/${id}`);
+  return axios.get(`/tutorials/update/${id}`, { headers: authHeader() });
 };
 
 const create = (data) => {

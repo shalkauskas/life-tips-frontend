@@ -1,14 +1,12 @@
-import "./App.css";
-import "bootstrap/dist/css/bootstrap.min.css";
 import { Switch, Route, Link } from "react-router-dom";
-import Logout from "./components/Logout";
-import { isLogin } from "./utils/refreshToken";
-import AddTutorial from "./components/AddTutorial";
-import Tutorial from "./components/Tutorial";
-import TutorialsList from "./components/TutorialsList";
-import PrivateRoute from "./components/PrivateRoute";
-import Login from "./components/Login";
-export default function App() {
+import Logout from "./Logout";
+import { isLogin } from "../utils/refreshToken";
+import AddTutorial from "./AddTutorial";
+import Tutorial from "./Tutorial";
+import TutorialsList from "./TutorialsList";
+import PrivateRoute from "./PrivateRoute";
+import Login from "./Login";
+export default function Index() {
   return (
     <div>
       <nav className="navbar navbar-expand navbar-dark bg-dark">
