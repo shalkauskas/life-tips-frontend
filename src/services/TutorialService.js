@@ -1,12 +1,13 @@
 import http from "../http-common";
-import axios from "axios";
 import authHeader from "../utils/auth-header";
+import { isLogin } from "../utils/refreshToken";
+
 const getAll = () => {
-  return http.get("/tutorials", { headers: authHeader() });
+  return http.get("/tutorials", isLogin() ? { headers: authHeader() } : {});
 };
 
 const get = (id) => {
-  return axios.get(`/tutorials/update/${id}`, { headers: authHeader() });
+  return http.get(`/tutorials/update/${id}`, { headers: authHeader() });
 };
 
 const create = (data) => {

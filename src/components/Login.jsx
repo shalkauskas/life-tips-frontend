@@ -1,9 +1,7 @@
 import React from "react";
 import { GoogleLogin } from "react-google-login";
 import { useHistory } from "react-router-dom";
-// refresh token
 import { refreshTokenSetup } from "../utils/refreshToken";
-
 export default function Login() {
   const clientId = process.env.REACT_APP_clientId;
   const history = useHistory();
@@ -13,9 +11,10 @@ export default function Login() {
     alert(
       `Logged in successfully welcome ${res.profileObj.name} 😍. \n See console for full profile object.`
     );
+    // save token to user's browser
     localStorage.setItem("loggedin", token);
-    //     console.log(localStorage.getItem("loggedin"));
-    history.push("/tutorials");
+    //  redirect to index and refresh to apply
+    history.push("/");
     history.go(0);
     refreshTokenSetup(res);
   };
