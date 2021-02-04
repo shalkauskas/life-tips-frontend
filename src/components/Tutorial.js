@@ -64,7 +64,7 @@ const Tutorial = (props) => {
     TutorialDataService.remove(currentTutorial.id)
       .then((response) => {
         console.log(response.data);
-        props.history.push("/tutorials");
+        props.history.push("/tutorials/update");
       })
       .catch((e) => {
         console.log(e);

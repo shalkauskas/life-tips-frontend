@@ -40,6 +40,12 @@ export default function Index() {
                 </label>{" "}
                 {tutorial.description}
               </div>
+              <div>
+                <label>
+                  <strong>Author:</strong>
+                </label>{" "}
+                {tutorial.author}
+              </div>
             </div>
           ))}
       </div>

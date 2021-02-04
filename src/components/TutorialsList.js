@@ -130,6 +130,12 @@ const TutorialsList = () => {
               </label>{" "}
               {currentTutorial.description}
             </div>
+            <div>
+              <label>
+                <strong>Author:</strong>
+              </label>{" "}
+              {currentTutorial.author}
+            </div>
             {window.location.pathname === "/tutorials/update/" ? (
               <div>
                 <label>

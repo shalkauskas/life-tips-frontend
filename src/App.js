@@ -24,13 +24,13 @@ export default function App() {
         });
     }
   }, []);
-  // console.log(userdata.photoUrl);
+  console.log(userdata);
   return (
     <div>
       <nav className="navbar navbar-expand navbar-dark bg-dark">
-        <a href="/" className="navbar-brand">
+        <Link to="/" className="navbar-brand">
           Web Development Tutorials
-        </a>
+        </Link>
         <div className="navbar-nav mr-auto">
           <li className="nav-item">
             <Link to={"/tutorials"} className="nav-link">
@@ -54,7 +54,9 @@ export default function App() {
             alt="user profile pic"
             width="35px"
             height="35px"
-            className="rounded-circle mr-3 my-auto"
+            className={`${
+              isLogin() ? "" : "d-none"
+            } rounded-circle mr-3 my-auto`}
           />
           <li className="nav-item">
             {isLogin() ? (
@@ -74,7 +76,17 @@ export default function App() {
         <Switch>
           <Route exact path={"/"} component={Index} />
           <Route exact path={"/tutorials"} component={TutorialsList} />
-          <Route exact path="/add" component={AddTutorial} />
+          <Route
+            exact
+            path="/add"
+            render={(props) => (
+              <AddTutorial
+                {...props}
+                author={userdata.fullName}
+                userId={userdata.userId}
+              />
+            )}
+          />
           <Route path="/tutorials/update/:id" component={Tutorial} />
           <Route exact path="/signin" component={Login} />
           <Route exact path="/signout" component={Logout} />
