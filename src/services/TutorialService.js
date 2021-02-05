@@ -1,29 +1,46 @@
 import http from "../http-common";
 import authHeader from "../utils/auth-header";
 import { isLogin } from "../utils/refreshToken";
-
-const getAll = () => {
-  return http.get("/tutorials", isLogin() ? { headers: authHeader() } : {});
-};
-
-const get = (id) => {
-  return http.get(`/tutorials/update/${id}`, { headers: authHeader() });
-};
-
+// Create a new Tutorial
 const create = (data) => {
   return http.post("/tutorials", data);
 };
-
-const update = (id, data) => {
-  return http.put(`/tutorials/update/${id}`, data);
+// Retrieve all Tutorials
+const getAll = () => {
+  return http.get("/tutorials", isLogin() ? { headers: authHeader() } : {});
 };
-
-const remove = (id) => {
-  return http.delete(`/tutorials/${id}`);
+// Retrieve all User published Tutorials
+const getAllOfUser = (userId) => {
+  return http.get(
+    `/tutorials/${userId}/update/`,
+    isLogin() ? { headers: authHeader() } : {}
+  );
 };
-
-const removeAll = () => {
-  return http.delete(`/tutorials`);
+// Retrieve a single Tutorial with id
+const get = (id) => {
+  return http.get(`/tutorials/${id}`, { headers: authHeader() });
+};
+// Retrieve a single Tutorial with id for update
+const getUpdate = (id, userId) => {
+  return http.get(`/tutorials/${userId}/update/${id}`, {
+    headers: authHeader(),
+  });
+};
+// Update a Tutorial with id
+const update = (id, data, userId) => {
+  return http.put(`/tutorials/${userId}/update/${id}`, data, {
+    headers: authHeader(),
+  });
+};
+// Delete a Tutorial with id
+const remove = (id, userId) => {
+  return http.delete(`/tutorials/${userId}/update/${id}`, {
+    headers: authHeader(),
+  });
+};
+// Delete all Tutorials
+const removeAll = (userId) => {
+  return http.delete(`/tutorials/${userId}/update`, { headers: authHeader() });
 };
 
 const findByTitle = (title) => {
@@ -33,7 +50,9 @@ const findByTitle = (title) => {
 // eslint-disable-next-line import/no-anonymous-default-export
 export default {
   getAll,
+  getAllOfUser,
   get,
+  getUpdate,
   create,
   update,
   remove,

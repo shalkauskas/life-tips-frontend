@@ -10,12 +10,13 @@ const Tutorial = (props) => {
   };
   const [currentTutorial, setCurrentTutorial] = useState(initialTutorialState);
   const [message, setMessage] = useState("");
-
+  const userId = props.userId;
   const getTutorial = (id) => {
     TutorialDataService.get(id)
       .then((response) => {
         setCurrentTutorial(response.data);
         console.log(response.data);
+        console.log(response);
       })
       .catch((e) => {
         console.log(e);
@@ -39,7 +40,7 @@ const Tutorial = (props) => {
       published: status,
     };
 
-    TutorialDataService.update(currentTutorial.id, data)
+    TutorialDataService.update(currentTutorial.id, data, userId)
       .then((response) => {
         setCurrentTutorial({ ...currentTutorial, published: status });
         console.log(response.data);
@@ -50,7 +51,7 @@ const Tutorial = (props) => {
   };
 
   const updateTutorial = () => {
-    TutorialDataService.update(currentTutorial.id, currentTutorial)
+    TutorialDataService.update(currentTutorial.id, currentTutorial, userId)
       .then((response) => {
         console.log(response.data);
         setMessage("The tutorial was updated successfully!");
@@ -61,10 +62,10 @@ const Tutorial = (props) => {
   };
 
   const deleteTutorial = () => {
-    TutorialDataService.remove(currentTutorial.id)
+    TutorialDataService.remove(currentTutorial.id, userId)
       .then((response) => {
         console.log(response.data);
-        props.history.push("/tutorials/update");
+        props.history.push(`/tutorials/${userId}/update`);
       })
       .catch((e) => {
         console.log(e);

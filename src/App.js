@@ -7,10 +7,12 @@ import Index from "./components/Index";
 import AddTutorial from "./components/AddTutorial";
 import Tutorial from "./components/Tutorial";
 import TutorialsList from "./components/TutorialsList";
+import TutorialsEdit from "./components/TutorialsEdit";
 import PrivateRoute from "./components/PrivateRoute";
 import Login from "./components/Login";
 import React from "react";
 import AuthService from "./services/AuthService";
+import NotFound from "./components/NotFound";
 export default function App() {
   const [userdata, setUserdata] = React.useState([]);
   React.useEffect(() => {
@@ -43,7 +45,10 @@ export default function App() {
             </Link>
           </li>
           <li className="nav-item">
-            <Link to={"/tutorials/update/"} className="nav-link">
+            <Link
+              to={`/tutorials/${userdata.userId}/update/`}
+              className="nav-link"
+            >
               Edit
             </Link>
           </li>
@@ -87,14 +92,24 @@ export default function App() {
               />
             )}
           />
-          <Route path="/tutorials/update/:id" component={Tutorial} />
+          {/* <Route path="/tutorials/update/:id" component={Tutorial} /> */}
           <Route exact path="/signin" component={Login} />
           <Route exact path="/signout" component={Logout} />
           <PrivateRoute
-            path="/tutorials/update/"
-            component={TutorialsList}
+            path={`/tutorials/${userdata.userId}/update/:id`}
+            component={Tutorial}
+            author={userdata.fullName}
+            userId={userdata.userId}
             exact
           />
+          <PrivateRoute
+            path={`/tutorials/${userdata.userId}/update/`}
+            component={TutorialsEdit}
+            author={userdata.fullName}
+            userId={userdata.userId}
+            exact
+          />
+          <Route component={NotFound} />
         </Switch>
       </div>
     </div>
