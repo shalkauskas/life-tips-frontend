@@ -1,21 +1,21 @@
 import http from "../http-common";
 import authHeader from "../utils/auth-header";
-import { isLogin } from "../utils/refreshToken";
 // Create a new Tutorial
 const create = (data) => {
   return http.post("/tutorials", data);
 };
 // Retrieve all Tutorials
-const getAll = () => {
-  return http.get("/tutorials", isLogin() ? { headers: authHeader() } : {});
+const getAll = (userId) => {
+  return http.get(`/tutorials/${userId}/update/`, { headers: authHeader() });
+};
+// Retrieve all Published Tutorials
+const getAllPublished = () => {
+  return http.get(`/tutorials`, { headers: authHeader() });
 };
 // Retrieve all User published Tutorials
-const getAllOfUser = (userId) => {
-  return http.get(
-    `/tutorials/${userId}/update/`,
-    isLogin() ? { headers: authHeader() } : {}
-  );
-};
+// const getAllOfUser = (userId) => {
+//   return http.get(`/tutorials/${userId}/update/`, { headers: authHeader() });
+// };
 // Retrieve a single Tutorial with id
 const get = (id) => {
   return http.get(`/tutorials/${id}`, { headers: authHeader() });
@@ -50,7 +50,8 @@ const findByTitle = (title) => {
 // eslint-disable-next-line import/no-anonymous-default-export
 export default {
   getAll,
-  getAllOfUser,
+  // getAllOfUser,
+  getAllPublished,
   get,
   getUpdate,
   create,

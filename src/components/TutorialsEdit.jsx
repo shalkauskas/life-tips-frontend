@@ -9,19 +9,20 @@ export default function TutorialsEdit(props) {
   const [searchTitle, setSearchTitle] = useState("");
   const userId = props.userId;
 
-  useEffect(() => {
-    const retrieveTutorials = () => {
-      TutorialDataService.getAllOfUser(userId)
-        .then((response) => {
-          setTutorials(response.data);
-          console.log(response.data);
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    };
-    retrieveTutorials();
+  const retrieveTutorials = React.useCallback(() => {
+    TutorialDataService.getAll(userId)
+      .then((response) => {
+        setTutorials(response.data);
+        console.log(response.data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   }, [userId]);
+
+  useEffect(() => {
+    retrieveTutorials();
+  }, [retrieveTutorials]);
 
   const onChangeSearchTitle = (e) => {
     const searchTitle = e.target.value;
@@ -29,7 +30,7 @@ export default function TutorialsEdit(props) {
   };
 
   const refreshList = () => {
-    //     retrieveTutorials();
+    retrieveTutorials();
     setCurrentTutorial(null);
     setCurrentIndex(-1);
   };

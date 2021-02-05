@@ -17,7 +17,7 @@ const TutorialsList = () => {
   };
 
   const retrieveTutorials = () => {
-    TutorialDataService.getAll()
+    TutorialDataService.getAllPublished()
       .then((response) => {
         setTutorials(response.data);
         console.log(response.data);
@@ -69,21 +69,17 @@ const TutorialsList = () => {
         <h4>Tutorials List</h4>
 
         <ul className="list-group">
-          {tutorials
-            .filter((tutorial) => {
-              return tutorial.published;
-            })
-            .map((tutorial, index) => (
-              <li
-                className={
-                  "list-group-item " + (index === currentIndex ? "active" : "")
-                }
-                onClick={() => setActiveTutorial(tutorial, index)}
-                key={index}
-              >
-                {tutorial.title}
-              </li>
-            ))}
+          {tutorials.map((tutorial, index) => (
+            <li
+              className={
+                "list-group-item " + (index === currentIndex ? "active" : "")
+              }
+              onClick={() => setActiveTutorial(tutorial, index)}
+              key={index}
+            >
+              {tutorial.title}
+            </li>
+          ))}
         </ul>
       </div>
       <div className="col-md-6">
