@@ -6,7 +6,7 @@ export default function TutorialsEdit(props) {
   const [tutorials, setTutorials] = useState([]);
   const [currentTutorial, setCurrentTutorial] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(-1);
-  const [searchTitle, setSearchTitle] = useState("");
+  const [search, setSearch] = useState("");
   const userId = props.userId;
 
   const retrieveTutorials = React.useCallback(() => {
@@ -24,9 +24,9 @@ export default function TutorialsEdit(props) {
     retrieveTutorials();
   }, [retrieveTutorials]);
 
-  const onChangeSearchTitle = (e) => {
-    const searchTitle = e.target.value;
-    setSearchTitle(searchTitle);
+  const onChangeSearch = (e) => {
+    const search = e.target.value;
+    setSearch(search);
   };
 
   const refreshList = () => {
@@ -51,8 +51,8 @@ export default function TutorialsEdit(props) {
       });
   };
 
-  const findByTitle = () => {
-    TutorialDataService.findByTitle(searchTitle)
+  const findBySearch = () => {
+    TutorialDataService.findBySearch(search)
       .then((response) => {
         setTutorials(response.data);
         console.log(response.data);
@@ -69,15 +69,21 @@ export default function TutorialsEdit(props) {
           <input
             type="text"
             className="form-control"
-            placeholder="Search by title"
-            value={searchTitle}
-            onChange={onChangeSearchTitle}
+            placeholder=""
+            value={search}
+            onChange={onChangeSearch}
           />
+          <button
+            className="btn btn-outline-secondary"
+            onClick={() => setSearch("")}
+          >
+            Reset
+          </button>
           <div className="input-group-append">
             <button
               className="btn btn-outline-secondary"
               type="button"
-              onClick={findByTitle}
+              onClick={findBySearch}
             >
               Search
             </button>

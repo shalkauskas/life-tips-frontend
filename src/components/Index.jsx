@@ -6,7 +6,7 @@ export default function Index() {
     retrieveTutorials();
   }, []);
   const retrieveTutorials = () => {
-    TutorialDataService.getAll()
+    TutorialDataService.getAllPublished()
       .then((response) => {
         setTutorials(response.data);
         // console.log(response.data);
@@ -19,35 +19,29 @@ export default function Index() {
     <div>
       <h1 className="text-center">Welcome to Web Development Tutorials</h1>
       <div className="container">
-        {tutorials
-          .filter((tutorial) => {
-            return window.location.pathname === "/tutorials/update/"
-              ? tutorial
-              : tutorial.published;
-          })
-          .map((tutorial, index) => (
-            <div key={index}>
-              <h4>Tutorial</h4>
-              <div>
-                <label>
-                  <strong>Title:</strong>
-                </label>{" "}
-                {tutorial.title}
-              </div>
-              <div>
-                <label>
-                  <strong>Description:</strong>
-                </label>{" "}
-                {tutorial.description}
-              </div>
-              <div>
-                <label>
-                  <strong>Author:</strong>
-                </label>{" "}
-                {tutorial.author}
-              </div>
+        {tutorials.map((tutorial, index) => (
+          <div key={index}>
+            <h4>Tutorial</h4>
+            <div>
+              <label>
+                <strong>Title:</strong>
+              </label>{" "}
+              {tutorial.title}
             </div>
-          ))}
+            <div>
+              <label>
+                <strong>Description:</strong>
+              </label>{" "}
+              {tutorial.description}
+            </div>
+            <div>
+              <label>
+                <strong>Author:</strong>
+              </label>{" "}
+              {tutorial.author}
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );

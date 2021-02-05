@@ -5,15 +5,15 @@ const TutorialsList = () => {
   const [tutorials, setTutorials] = useState([]);
   const [currentTutorial, setCurrentTutorial] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(-1);
-  const [searchTitle, setSearchTitle] = useState("");
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     retrieveTutorials();
   }, []);
 
-  const onChangeSearchTitle = (e) => {
-    const searchTitle = e.target.value;
-    setSearchTitle(searchTitle);
+  const onChangeSearch = (e) => {
+    const search = e.target.value;
+    setSearch(search);
   };
 
   const retrieveTutorials = () => {
@@ -32,8 +32,8 @@ const TutorialsList = () => {
     setCurrentIndex(index);
   };
 
-  const findByTitle = () => {
-    TutorialDataService.findByTitle(searchTitle)
+  const findBySearch = () => {
+    TutorialDataService.findBySearch(search)
       .then((response) => {
         setTutorials(response.data);
         console.log(response.data);
@@ -50,15 +50,15 @@ const TutorialsList = () => {
           <input
             type="text"
             className="form-control"
-            placeholder="Search by title"
-            value={searchTitle}
-            onChange={onChangeSearchTitle}
+            placeholder=""
+            value={search}
+            onChange={onChangeSearch}
           />
           <div className="input-group-append">
             <button
               className="btn btn-outline-secondary"
               type="button"
-              onClick={findByTitle}
+              onClick={findBySearch}
             >
               Search
             </button>

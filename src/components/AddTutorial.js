@@ -79,7 +79,7 @@ const AddTutorial = (props) => {
 
             <div className="form-group">
               <label htmlFor="description">Description</label>
-              <input
+              <textarea
                 type="text"
                 className="form-control"
                 id="description"
@@ -87,6 +87,7 @@ const AddTutorial = (props) => {
                 value={tutorial.description}
                 onChange={handleInputChange}
                 name="description"
+                style={{ height: "10rem" }}
               />
             </div>
 

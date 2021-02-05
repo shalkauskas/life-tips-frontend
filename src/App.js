@@ -13,10 +13,12 @@ import Login from "./components/Login";
 import React from "react";
 import AuthService from "./services/AuthService";
 import NotFound from "./components/NotFound";
+import UserProfile from "./components/UserProfile";
 export default function App() {
   const [userdata, setUserdata] = React.useState([]);
   React.useEffect(() => {
     if (isLogin()) {
+      console.log("logged in");
       AuthService.index()
         .then((response) => {
           setUserdata(response.data);
@@ -26,7 +28,6 @@ export default function App() {
         });
     }
   }, []);
-  console.log(userdata);
   return (
     <div>
       <nav className="navbar navbar-expand navbar-dark bg-dark">
@@ -54,15 +55,17 @@ export default function App() {
           </li>
         </div>
         <div className="navbar-nav ml-auto">
-          <img
-            src={userdata.photoUrl}
-            alt="user profile pic"
-            width="35px"
-            height="35px"
-            className={`${
-              isLogin() ? "" : "d-none"
-            } rounded-circle mr-3 my-auto`}
-          />
+          <Link to={`/${userdata.userId}`} className="nav-link">
+            <img
+              src={userdata.photoUrl}
+              alt="user profile pic"
+              width="35px"
+              height="35px"
+              className={`${
+                isLogin() ? "" : "d-none"
+              } rounded-circle mr-3 my-auto`}
+            />
+          </Link>
           <li className="nav-item">
             {isLogin() ? (
               <Link to={"/signout"} className="nav-link">
@@ -107,6 +110,11 @@ export default function App() {
             component={TutorialsEdit}
             author={userdata.fullName}
             userId={userdata.userId}
+          />
+          <PrivateRoute
+            path={`/${userdata.userId}`}
+            component={UserProfile}
+            userdata={userdata}
             exact
           />
           <Route component={NotFound} />

@@ -43,8 +43,8 @@ const removeAll = (userId) => {
   return http.delete(`/tutorials/${userId}/update`, { headers: authHeader() });
 };
 
-const findByTitle = (title) => {
-  return http.get(`/tutorials?title=${title}`);
+const findBySearch = (query) => {
+  return http.get(`/tutorials?title=${query}`);
 };
 
 // eslint-disable-next-line import/no-anonymous-default-export
@@ -58,5 +58,5 @@ export default {
   update,
   remove,
   removeAll,
-  findByTitle,
+  findBySearch,
 };
