@@ -10,7 +10,7 @@ const Tutorial = (props) => {
   };
   const [currentTutorial, setCurrentTutorial] = useState(initialTutorialState);
   const [message, setMessage] = useState("");
-  const userId = props.userId;
+  const userId = props.username;
   const getTutorial = (id) => {
     TutorialDataService.get(id)
       .then((response) => {
@@ -65,7 +65,7 @@ const Tutorial = (props) => {
     TutorialDataService.remove(currentTutorial.id, userId)
       .then((response) => {
         console.log(response.data);
-        props.history.push(`/tutorials/${userId}/update`);
+        props.history.push(`/tutorials/update`);
       })
       .catch((e) => {
         console.log(e);

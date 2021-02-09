@@ -1,54 +1,48 @@
 import AuthService from "../services/AuthService";
 import React from "react";
-export default function Login(props) {
+
+export default function Register(props) {
   const initialUserData = {
     username: "",
     password: "",
   };
   const [userdata, setUserData] = React.useState(initialUserData);
   const [submitted, setSubmitted] = React.useState(false);
-
-  const handleInputChange = (event) => {
-    const { name, value } = event.target;
-    setUserData({ ...userdata, [name]: value });
-  };
-  const loginUser = () => {
+  const saveUser = () => {
     var data = {
       username: userdata.username,
       password: userdata.password,
     };
-    AuthService.login(data)
+    AuthService.register(data)
       .then((response) => {
         //    setUserData({
         //      username: response.data.username,
         //      password: response.data.password,
         //    });
-
-        //    why false ?
-        response.data.isAuthenticated
-          ? onLogin()
-          : props.history.push("/login");
+        setSubmitted(true);
+        submitted && response.data.success
+          ? props.history.push("/")
+          : props.history.push("/register");
         console.log(response.data);
       })
       .catch((e) => {
         console.log(e);
       });
-    setSubmitted(true);
-    console.log(submitted);
   };
-  const onLogin = () => {
-    props.history.push("/");
-    props.history.go(0);
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setUserData({ ...userdata, [name]: value });
   };
   return (
     <div className="container mt-5">
-      <h1>Login</h1>
+      <h1>Register</h1>
 
       <div className="row">
         <div className="col-sm-8">
           <div className="card">
             <div className="card-body">
-              {/* <!-- Makes POST request to /login route --> */}
+              {/* <!-- Makes POST request to /register route --> */}
               <div className="submit-form">
                 <div className="form-group">
                   <label htmlFor="email">Email</label>
@@ -70,12 +64,8 @@ export default function Login(props) {
                     onChange={handleInputChange}
                   />
                 </div>
-                <button
-                  type="submit"
-                  className="btn btn-dark"
-                  onClick={loginUser}
-                >
-                  Login
+                <button className="btn btn-dark" onClick={saveUser}>
+                  Register
                 </button>
               </div>
             </div>
@@ -91,7 +81,7 @@ export default function Login(props) {
                 role="button"
               >
                 <i className="fab fa-google"></i>
-                Sign In with Google
+                Sign Up with Google
               </a>
             </div>
           </div>

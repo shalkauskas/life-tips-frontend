@@ -1,16 +1,15 @@
 import http from "../http-common";
-import authHeader from "../utils/auth-header";
 // Create a new Tutorial
 const create = (data) => {
   return http.post("/tutorials", data);
 };
 // Retrieve all Tutorials
-const getAll = (userId) => {
-  return http.get(`/tutorials/${userId}/update/`, { headers: authHeader() });
+const getAll = () => {
+  return http.get(`/tutorials/update/`);
 };
 // Retrieve all Published Tutorials
 const getAllPublished = () => {
-  return http.get(`/tutorials`, { headers: authHeader() });
+  return http.get(`/tutorials`);
 };
 // Retrieve all User published Tutorials
 // const getAllOfUser = (userId) => {
@@ -18,29 +17,23 @@ const getAllPublished = () => {
 // };
 // Retrieve a single Tutorial with id
 const get = (id) => {
-  return http.get(`/tutorials/${id}`, { headers: authHeader() });
+  return http.get(`/tutorials/${id}`);
 };
-// Retrieve a single Tutorial with id for update
-const getUpdate = (id, userId) => {
-  return http.get(`/tutorials/${userId}/update/${id}`, {
-    headers: authHeader(),
-  });
+// Retrieve a single Tutorial with id for update (not used?)
+const getUpdate = (id) => {
+  return http.get(`/tutorials/update/${id}`);
 };
 // Update a Tutorial with id
-const update = (id, data, userId) => {
-  return http.put(`/tutorials/${userId}/update/${id}`, data, {
-    headers: authHeader(),
-  });
+const update = (id, data) => {
+  return http.put(`/tutorials/update/${id}`, data);
 };
 // Delete a Tutorial with id
-const remove = (id, userId) => {
-  return http.delete(`/tutorials/${userId}/update/${id}`, {
-    headers: authHeader(),
-  });
+const remove = (id) => {
+  return http.delete(`/tutorials/update/${id}`);
 };
 // Delete all Tutorials
-const removeAll = (userId) => {
-  return http.delete(`/tutorials/${userId}/update`, { headers: authHeader() });
+const removeAll = () => {
+  return http.delete(`/tutorials/update`);
 };
 
 const findBySearch = (query) => {

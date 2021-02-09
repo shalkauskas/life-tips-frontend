@@ -17,7 +17,6 @@ const AddTutorial = (props) => {
     const { name, value } = event.target;
     setTutorial({ ...tutorial, [name]: value });
   };
-
   const saveTutorial = () => {
     var data = {
       title: tutorial.title,

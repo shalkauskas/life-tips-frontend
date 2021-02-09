@@ -7,10 +7,9 @@ export default function TutorialsEdit(props) {
   const [currentTutorial, setCurrentTutorial] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(-1);
   const [search, setSearch] = useState("");
-  const userId = props.userId;
 
   const retrieveTutorials = React.useCallback(() => {
-    TutorialDataService.getAll(userId)
+    TutorialDataService.getAll()
       .then((response) => {
         setTutorials(response.data);
         console.log(response.data);
@@ -18,7 +17,7 @@ export default function TutorialsEdit(props) {
       .catch((e) => {
         console.log(e);
       });
-  }, [userId]);
+  }, []);
 
   useEffect(() => {
     retrieveTutorials();
@@ -41,7 +40,7 @@ export default function TutorialsEdit(props) {
   };
 
   const removeAllTutorials = () => {
-    TutorialDataService.removeAll(userId)
+    TutorialDataService.removeAll()
       .then((response) => {
         console.log(response.data);
         refreshList();
@@ -142,7 +141,7 @@ export default function TutorialsEdit(props) {
               {currentTutorial.published ? "Published" : "Pending"}
             </div>
             <Link
-              to={`/tutorials/${userId}/update/` + currentTutorial.id}
+              to={`/tutorials/update/` + currentTutorial.id}
               className="badge badge-warning"
             >
               Edit

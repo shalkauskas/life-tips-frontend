@@ -1,14 +1,24 @@
 /* eslint-disable import/no-anonymous-default-export */
 import http from "../http-common";
-import authHeader from "../utils/auth-header";
-import { isLogin } from "../utils/refreshToken";
+
 const index = () => {
-  return http.get("/", isLogin() ? { headers: authHeader() } : {});
+  return http.get("/");
 };
-const signIn = () => {
-  return http.get("/signin", { headers: authHeader() });
+const login = (data) => {
+  return http.post("/login", data);
+};
+// const dashboard = () => {
+//   return http.get(`/dashboard`);
+// };
+const register = (data) => {
+  return http.post("/register", data);
+};
+const logout = () => {
+  return http.get("/logout");
 };
 export default {
   index,
-  signIn,
+  login,
+  register,
+  logout,
 };
