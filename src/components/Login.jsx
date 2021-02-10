@@ -36,6 +36,11 @@ export default function Login(props) {
     setSubmitted(true);
     console.log(submitted);
   };
+  const loginGoogle = () => {
+    AuthService.loginGoogle().then((response) => {
+      console.log(response);
+    });
+  };
   const onLogin = () => {
     props.history.push("/");
     props.history.go(0);
@@ -86,9 +91,9 @@ export default function Login(props) {
           <div className="card">
             <div className="card-body">
               <a
+                href={`${process.env.REACT_APP_SERVER}/auth/google`}
                 className="btn btn-block btn-social btn-google"
-                href="/auth/google"
-                role="button"
+                onClick={loginGoogle}
               >
                 <i className="fab fa-google"></i>
                 Sign In with Google

@@ -7,6 +7,9 @@ const index = () => {
 const login = (data) => {
   return http.post("/login", data);
 };
+const loginGoogle = () => {
+  return http.get("/auth/google");
+};
 // const dashboard = () => {
 //   return http.get(`/dashboard`);
 // };
@@ -19,6 +22,7 @@ const logout = () => {
 export default {
   index,
   login,
+  loginGoogle,
   register,
   logout,
 };

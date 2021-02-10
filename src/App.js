@@ -19,6 +19,7 @@ export default function App() {
   React.useEffect(() => {
     AuthService.index()
       .then((response) => {
+        console.log(response);
         setAuthenticated(response.data.isAuthenticated);
 
         isAuthenticated ? setUserdata(response.data.user) : setUserdata([]);

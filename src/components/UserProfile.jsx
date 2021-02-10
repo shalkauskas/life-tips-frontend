@@ -1,7 +1,13 @@
 import { Link } from "react-router-dom";
-import Logout from "./Logout";
 import TutorialsEdit from "./TutorialsEdit";
+import AuthService from "../services/AuthService";
 export default function UserProfile(props) {
+  const logout = () => {
+    AuthService.logout().then((response) => {
+      window.location.reload();
+      console.log(response);
+    });
+  };
   return (
     <div className="d-flex flex-row-reverse">
       <div className="card mx-auto" style={{ width: "18rem" }}>
@@ -17,7 +23,9 @@ export default function UserProfile(props) {
             <Link to={`/tutorials/update/`} className="btn btn-primary mb-4">
               My tutorials
             </Link>
-            <Logout />
+            <span onClick={logout} className="nav-link">
+              Logout
+            </span>
           </div>
         </div>
       </div>
