@@ -1,35 +1,34 @@
 import React, { useState } from "react";
 import TutorialDataService from "../services/TutorialService";
 
-const AddTutorial = (props) => {
-  const initialTutorialState = {
+const AddJoke = (props) => {
+  const initialJokeState = {
     id: null,
-    title: "",
-    description: "",
+    content: "",
     published: false,
     author: "Anonymous",
     userId: "0",
+    rating: "0",
   };
-  const [tutorial, setTutorial] = useState(initialTutorialState);
+  const [joke, setJoke] = useState(initialJokeState);
   const [submitted, setSubmitted] = useState(false);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
-    setTutorial({ ...tutorial, [name]: value });
+    setJoke({ ...joke, [name]: value });
   };
-  const saveTutorial = () => {
+  const saveJoke = () => {
     var data = {
-      title: tutorial.title,
-      description: tutorial.description,
+      content: joke.content,
       author: props.author,
       userId: props.userId,
     };
     TutorialDataService.create(data)
       .then((response) => {
-        setTutorial({
+        setJoke({
           id: response.data.id,
-          title: response.data.title,
-          description: response.data.description,
+          rating: response.data.rating,
+          content: response.data.content,
           published: response.data.published,
           author: response.data.author,
           userId: response.data.userId,
@@ -42,55 +41,40 @@ const AddTutorial = (props) => {
       });
   };
 
-  const newTutorial = () => {
-    setTutorial(initialTutorialState);
+  const newJoke = () => {
+    setJoke(initialJokeState);
     setSubmitted(false);
   };
 
   return (
     <div>
-      <h2 className={`${submitted ? "d-none" : ""} mb-5`}>
-        You can add your own tutorial and after admin review it will be
-        published!
+      <h2 className={`${submitted ? "d-none" : ""} mb-5 text-center`}>
+        Put your pun here!
       </h2>
       <div className="submit-form">
         {submitted ? (
           <div className="text-center">
             <h4>You submitted successfully!</h4>
-            <button className="btn btn-success" onClick={newTutorial}>
+            <button className="btn btn-success" onClick={newJoke}>
               Add another
             </button>
           </div>
         ) : (
           <div>
             <div className="form-group">
-              <label htmlFor="title">Title</label>
-              <input
-                type="text"
-                className="form-control"
-                id="title"
-                required
-                value={tutorial.title}
-                onChange={handleInputChange}
-                name="title"
-              />
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="description">Description</label>
               <textarea
                 type="text"
                 className="form-control"
                 id="description"
                 required
-                value={tutorial.description}
+                value={joke.content}
                 onChange={handleInputChange}
-                name="description"
+                name="content"
                 style={{ height: "10rem" }}
               />
             </div>
 
-            <button onClick={saveTutorial} className="btn btn-success">
+            <button onClick={saveJoke} className="btn btn-success">
               Submit
             </button>
           </div>
@@ -100,4 +84,4 @@ const AddTutorial = (props) => {
   );
 };
 
-export default AddTutorial;
+export default AddJoke;

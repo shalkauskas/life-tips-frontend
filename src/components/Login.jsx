@@ -1,5 +1,6 @@
 import AuthService from "../services/AuthService";
 import React from "react";
+import { Link } from "react-router-dom";
 export default function Login(props) {
   const initialUserData = {
     username: "",
@@ -19,12 +20,6 @@ export default function Login(props) {
     };
     AuthService.login(data)
       .then((response) => {
-        //    setUserData({
-        //      username: response.data.username,
-        //      password: response.data.password,
-        //    });
-
-        //    why false ?
         response.data.isAuthenticated
           ? onLogin()
           : props.history.push("/login");
@@ -47,10 +42,10 @@ export default function Login(props) {
   };
   return (
     <div className="container mt-5">
-      <h1>Login</h1>
+      <h1 className="text-center">Login</h1>
 
-      <div className="row">
-        <div className="col-sm-8">
+      <div className="col">
+        <div className="col">
           <div className="card">
             <div className="card-body">
               {/* <!-- Makes POST request to /login route --> */}
@@ -77,7 +72,7 @@ export default function Login(props) {
                 </div>
                 <button
                   type="submit"
-                  className="btn btn-dark"
+                  className="btn btn-dark float-right"
                   onClick={loginUser}
                 >
                   Login
@@ -87,18 +82,26 @@ export default function Login(props) {
           </div>
         </div>
 
-        <div className="col-sm-4">
-          <div className="card">
-            <div className="card-body">
-              <a
-                href={`${process.env.REACT_APP_SERVER}/auth/google`}
-                className="btn btn-block btn-social btn-google"
-                onClick={loginGoogle}
-              >
-                <i className="fab fa-google"></i>
-                Sign In with Google
-              </a>
-            </div>
+        <div className="col-sm-4 mx-auto mt-3">
+          <div className="text-center">
+            <a
+              href={`${process.env.REACT_APP_SERVER}/auth/google`}
+              onClick={loginGoogle}
+            >
+              <img src="google-login.svg" alt="google login" width="300px" />
+            </a>
+          </div>
+        </div>
+        <hr />
+        <div className="card col-sm-4 mx-auto">
+          <div className="card-body text-center ">
+            {" "}
+            <p className="lead">Don't have an account yet?</p>
+            <Link to="/register">
+              <p className="underline">
+                <u>Register in one click</u>
+              </p>
+            </Link>
           </div>
         </div>
       </div>

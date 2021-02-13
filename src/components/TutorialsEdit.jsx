@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from "react";
 import TutorialDataService from "../services/TutorialService";
+import Joke from "./Joke";
 import { Link } from "react-router-dom";
 
 export default function TutorialsEdit(props) {
-  const [tutorials, setTutorials] = useState([]);
-  const [currentTutorial, setCurrentTutorial] = useState(null);
+  const [jokes, setJokes] = useState([]);
+  const [currentJoke, setCurrentJoke] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(-1);
   const [search, setSearch] = useState("");
 
   const retrieveTutorials = React.useCallback(() => {
     TutorialDataService.getAll()
       .then((response) => {
-        setTutorials(response.data);
+        setJokes(response.data);
         console.log(response.data);
       })
       .catch((e) => {
@@ -30,12 +31,12 @@ export default function TutorialsEdit(props) {
 
   const refreshList = () => {
     retrieveTutorials();
-    setCurrentTutorial(null);
+    setCurrentJoke(null);
     setCurrentIndex(-1);
   };
 
-  const setActiveTutorial = (tutorial, index) => {
-    setCurrentTutorial(tutorial);
+  const setActiveJoke = (joke, index) => {
+    setCurrentJoke(joke);
     setCurrentIndex(index);
   };
 
@@ -53,7 +54,7 @@ export default function TutorialsEdit(props) {
   const findBySearch = () => {
     TutorialDataService.findBySearch(search)
       .then((response) => {
-        setTutorials(response.data);
+        setJokes(response.data);
         console.log(response.data);
       })
       .catch((e) => {
@@ -90,21 +91,18 @@ export default function TutorialsEdit(props) {
         </div>
       </div>
       <div className="col-md-6">
-        <h4>Tutorials List</h4>
-
-        <ul className="list-group">
-          {tutorials.map((tutorial, index) => (
-            <li
-              className={
-                "list-group-item " + (index === currentIndex ? "active" : "")
-              }
-              onClick={() => setActiveTutorial(tutorial, index)}
-              key={index}
-            >
-              {tutorial.title}
-            </li>
-          ))}
-        </ul>
+        <h4>My Jokes</h4>
+        {jokes.map((joke, index) => (
+          <div
+            key={index}
+            onClick={() => setActiveJoke(joke, index)}
+            className={
+              "" + (index === currentIndex ? "border border-warning" : "")
+            }
+          >
+            <Joke content={joke.content} author={joke.author} />
+          </div>
+        ))}
         <button
           className="m-3 btn btn-sm btn-danger"
           onClick={removeAllTutorials}
@@ -113,35 +111,29 @@ export default function TutorialsEdit(props) {
         </button>
       </div>
       <div className="col-md-6">
-        {currentTutorial ? (
+        {currentJoke ? (
           <div>
-            <h4>Tutorial</h4>
-            <div>
-              <label>
-                <strong>Title:</strong>
-              </label>{" "}
-              {currentTutorial.title}
-            </div>
+            <h4>Joke</h4>
             <div>
               <label>
                 <strong>Description:</strong>
               </label>{" "}
-              {currentTutorial.description}
+              {currentJoke.content}
             </div>
             <div>
               <label>
                 <strong>Author:</strong>
               </label>{" "}
-              {currentTutorial.author}
+              {currentJoke.author}
             </div>
             <div>
               <label>
                 <strong>Status:</strong>
               </label>{" "}
-              {currentTutorial.published ? "Published" : "Pending"}
+              {currentJoke.published ? "Published" : "Pending"}
             </div>
             <Link
-              to={`/tutorials/update/` + currentTutorial.id}
+              to={`/tutorials/update/` + currentJoke.id}
               className="badge badge-warning"
             >
               Edit
@@ -150,7 +142,7 @@ export default function TutorialsEdit(props) {
         ) : (
           <div>
             <br />
-            <p>Please click on a Tutorial...</p>
+            <p>Please select...</p>
           </div>
         )}
       </div>

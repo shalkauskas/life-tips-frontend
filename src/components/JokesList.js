@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import TutorialDataService from "../services/TutorialService";
-
-const TutorialsList = () => {
-  const [tutorials, setTutorials] = useState([]);
-  const [currentTutorial, setCurrentTutorial] = useState(null);
+import Joke from "./Joke";
+const JokesList = () => {
+  const [jokes, setJokes] = useState([]);
+  const [currentJoke, setCurrentJoke] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(-1);
   const [search, setSearch] = useState("");
 
   useEffect(() => {
-    retrieveTutorials();
+    retrieveJokes();
   }, []);
 
   const onChangeSearch = (e) => {
@@ -16,10 +16,10 @@ const TutorialsList = () => {
     setSearch(search);
   };
 
-  const retrieveTutorials = () => {
+  const retrieveJokes = () => {
     TutorialDataService.getAllPublished()
       .then((response) => {
-        setTutorials(response.data);
+        setJokes(response.data);
         console.log(response.data);
       })
       .catch((e) => {
@@ -27,15 +27,15 @@ const TutorialsList = () => {
       });
   };
 
-  const setActiveTutorial = (tutorial, index) => {
-    setCurrentTutorial(tutorial);
+  const setActiveJoke = (joke, index) => {
+    setCurrentJoke(joke);
     setCurrentIndex(index);
   };
 
   const findBySearch = () => {
     TutorialDataService.findBySearch(search)
       .then((response) => {
-        setTutorials(response.data);
+        setJokes(response.data);
         console.log(response.data);
       })
       .catch((e) => {
@@ -66,45 +66,25 @@ const TutorialsList = () => {
         </div>
       </div>
       <div className="col-md-6">
-        <h4>Tutorials List</h4>
+        <h4>Best puns</h4>
 
         <ul className="list-group">
-          {tutorials.map((tutorial, index) => (
+          {jokes.map((joke, index) => (
             <li
               className={
                 "list-group-item " + (index === currentIndex ? "active" : "")
               }
-              onClick={() => setActiveTutorial(tutorial, index)}
+              onClick={() => setActiveJoke(joke, index)}
               key={index}
             >
-              {tutorial.title}
+              {joke.author}
             </li>
           ))}
         </ul>
       </div>
       <div className="col-md-6">
-        {currentTutorial ? (
-          <div>
-            <h4>Tutorial</h4>
-            <div>
-              <label>
-                <strong>Title:</strong>
-              </label>{" "}
-              {currentTutorial.title}
-            </div>
-            <div>
-              <label>
-                <strong>Description:</strong>
-              </label>{" "}
-              {currentTutorial.description}
-            </div>
-            <div>
-              <label>
-                <strong>Author:</strong>
-              </label>{" "}
-              {currentTutorial.author}
-            </div>
-          </div>
+        {currentJoke ? (
+          <Joke content={currentJoke.content} author={currentJoke.author} />
         ) : (
           <div>
             <br />
@@ -116,4 +96,4 @@ const TutorialsList = () => {
   );
 };
 
-export default TutorialsList;
+export default JokesList;

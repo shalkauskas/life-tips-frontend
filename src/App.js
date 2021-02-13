@@ -2,9 +2,9 @@ import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Switch, Route, Link } from "react-router-dom";
 import Index from "./components/Index";
-import AddTutorial from "./components/AddTutorial";
+import AddJoke from "./components/AddJoke";
 import Tutorial from "./components/Tutorial";
-import TutorialsList from "./components/TutorialsList";
+import JokesList from "./components/JokesList";
 import TutorialsEdit from "./components/TutorialsEdit";
 import PrivateRoute from "./components/PrivateRoute";
 import Login from "./components/Login";
@@ -20,6 +20,7 @@ export default function App() {
     AuthService.index()
       .then((response) => {
         console.log(response);
+
         setAuthenticated(response.data.isAuthenticated);
 
         isAuthenticated ? setUserdata(response.data.user) : setUserdata([]);
@@ -38,22 +39,17 @@ export default function App() {
     <div>
       <nav className="navbar navbar-expand navbar-dark bg-dark">
         <Link to="/" className="navbar-brand">
-          Web Development Tutorials
+          DB jokes
         </Link>
         <div className="navbar-nav mr-auto">
           <li className="nav-item">
             <Link to={"/tutorials"} className="nav-link">
-              Tutorials
+              Explore
             </Link>
           </li>
           <li className="nav-item">
             <Link to={"/add"} className="nav-link">
               Add
-            </Link>
-          </li>
-          <li className="nav-item">
-            <Link to={`/tutorials/update/`} className="nav-link">
-              Edit
             </Link>
           </li>
         </div>
@@ -69,11 +65,6 @@ export default function App() {
               } rounded-circle mr-3 my-auto`}
             />
           </Link>
-          <li className="nav-item">
-            <Link to={"/register"} className="nav-link">
-              Register
-            </Link>
-          </li>
           {isAuthenticated ? (
             <li className="nav-item">
               <span onClick={logout} className="nav-link">
@@ -93,12 +84,12 @@ export default function App() {
       <div className="container mt-3">
         <Switch>
           <Route exact path={"/"} component={Index} />
-          <Route exact path={"/tutorials"} component={TutorialsList} />
+          <Route exact path={"/tutorials"} component={JokesList} />
           <Route
             exact
             path="/add"
             render={(props) => (
-              <AddTutorial
+              <AddJoke
                 {...props}
                 author={userdata.username}
                 userId={userdata.id}

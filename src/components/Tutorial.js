@@ -2,15 +2,16 @@ import React, { useState, useEffect } from "react";
 import TutorialDataService from "../services/TutorialService";
 
 const Tutorial = (props) => {
-  const initialTutorialState = {
+  const initialJokeState = {
     id: null,
-    title: "",
-    description: "",
+    content: "",
     published: false,
+    author: "Anonymous",
+    userId: "0",
+    rating: "0",
   };
-  const [currentTutorial, setCurrentTutorial] = useState(initialTutorialState);
+  const [currentTutorial, setCurrentTutorial] = useState(initialJokeState);
   const [message, setMessage] = useState("");
-  const userId = props.username;
   const getTutorial = (id) => {
     TutorialDataService.get(id)
       .then((response) => {
@@ -40,7 +41,7 @@ const Tutorial = (props) => {
       published: status,
     };
 
-    TutorialDataService.update(currentTutorial.id, data, userId)
+    TutorialDataService.update(currentTutorial.id, data)
       .then((response) => {
         setCurrentTutorial({ ...currentTutorial, published: status });
         console.log(response.data);
@@ -51,7 +52,7 @@ const Tutorial = (props) => {
   };
 
   const updateTutorial = () => {
-    TutorialDataService.update(currentTutorial.id, currentTutorial, userId)
+    TutorialDataService.update(currentTutorial.id, currentTutorial)
       .then((response) => {
         console.log(response.data);
         setMessage("The tutorial was updated successfully!");
@@ -62,7 +63,7 @@ const Tutorial = (props) => {
   };
 
   const deleteTutorial = () => {
-    TutorialDataService.remove(currentTutorial.id, userId)
+    TutorialDataService.remove(currentTutorial.id)
       .then((response) => {
         console.log(response.data);
         props.history.push(`/tutorials/update`);
@@ -79,24 +80,13 @@ const Tutorial = (props) => {
           <h4>Tutorial</h4>
           <form>
             <div className="form-group">
-              <label htmlFor="title">Title</label>
-              <input
-                type="text"
-                className="form-control"
-                id="title"
-                name="title"
-                value={currentTutorial.title}
-                onChange={handleInputChange}
-              />
-            </div>
-            <div className="form-group">
               <label htmlFor="description">Description</label>
-              <input
+              <textarea
                 type="text"
                 className="form-control"
                 id="description"
                 name="description"
-                value={currentTutorial.description}
+                value={currentTutorial.content}
                 onChange={handleInputChange}
               />
             </div>

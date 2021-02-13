@@ -1,14 +1,16 @@
 import React from "react";
 import TutorialDataService from "../services/TutorialService";
+import Joke from "./Joke";
 export default function Index() {
-  const [tutorials, setTutorials] = React.useState([]);
+  const [jokes, setJokes] = React.useState([]);
+
   React.useEffect(() => {
-    retrieveTutorials();
+    retrieveJokes();
   }, []);
-  const retrieveTutorials = () => {
+  const retrieveJokes = () => {
     TutorialDataService.getAllPublished()
       .then((response) => {
-        setTutorials(response.data);
+        setJokes(response.data);
         // console.log(response.data);
       })
       .catch((e) => {
@@ -17,29 +19,16 @@ export default function Index() {
   };
   return (
     <div>
-      <h1 className="text-center">Welcome to Web Development Tutorials</h1>
+      <h1 className="text-center">Welcome to Dad's Bad jokes!</h1>
       <div className="container">
-        {tutorials.map((tutorial, index) => (
-          <div key={index}>
-            <h4>Tutorial</h4>
-            <div>
-              <label>
-                <strong>Title:</strong>
-              </label>{" "}
-              {tutorial.title}
-            </div>
-            <div>
-              <label>
-                <strong>Description:</strong>
-              </label>{" "}
-              {tutorial.description}
-            </div>
-            <div>
-              <label>
-                <strong>Author:</strong>
-              </label>{" "}
-              {tutorial.author}
-            </div>
+        {jokes.map((joke, index) => (
+          <div key={index} className="my-4">
+            <Joke
+              content={joke.content}
+              author={joke.author}
+              id={joke.id}
+              rating={joke.rating}
+            />
           </div>
         ))}
       </div>

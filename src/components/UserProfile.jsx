@@ -17,11 +17,11 @@ export default function UserProfile(props) {
           alt="Profile user pic"
         />
         <div className="card-body text-center">
-          <h5 className="card-title">{props.userdata.fullName}</h5>
+          <h5 className="card-title">{props.userdata.displayName}</h5>
           <p className="card-text">{props.userdata.username}</p>
           <div className="d-flex flex-column w-50 mx-auto">
             <Link to={`/tutorials/update/`} className="btn btn-primary mb-4">
-              My tutorials
+              My jokes
             </Link>
             <span onClick={logout} className="nav-link">
               Logout
