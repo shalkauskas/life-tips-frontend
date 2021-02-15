@@ -8,7 +8,6 @@ export default function Register(props) {
     password: "",
   };
   const [userdata, setUserData] = React.useState(initialUserData);
-  const [submitted, setSubmitted] = React.useState(false);
   const saveUser = () => {
     var data = {
       displayName: userdata.displayName,
@@ -21,8 +20,7 @@ export default function Register(props) {
         //      username: response.data.username,
         //      password: response.data.password,
         //    });
-        setSubmitted(true);
-        submitted && response.data.success
+        response.data.success
           ? props.history.push("/")
           : props.history.push("/register");
         console.log(response.data);
@@ -58,7 +56,7 @@ export default function Register(props) {
                     type="text"
                     id="displayName"
                     className="form-control"
-                    name="name"
+                    name="displayName"
                     value={userdata.displayName}
                     onChange={handleInputChange}
                     autoComplete="name"

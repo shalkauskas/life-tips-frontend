@@ -1,23 +1,14 @@
 import React, { useState, useEffect } from "react";
-import TutorialDataService from "../services/TutorialService";
+import DataService from "../services/DataService";
 import Joke from "./Joke";
-const JokesList = () => {
+const JokesList = (props) => {
   const [jokes, setJokes] = useState([]);
-  const [currentJoke, setCurrentJoke] = useState(null);
-  const [currentIndex, setCurrentIndex] = useState(-1);
-  const [search, setSearch] = useState("");
-
   useEffect(() => {
     retrieveJokes();
   }, []);
 
-  const onChangeSearch = (e) => {
-    const search = e.target.value;
-    setSearch(search);
-  };
-
   const retrieveJokes = () => {
-    TutorialDataService.getAllPublished()
+    DataService.getAllPublished()
       .then((response) => {
         setJokes(response.data);
         console.log(response.data);
@@ -26,71 +17,24 @@ const JokesList = () => {
         console.log(e);
       });
   };
-
-  const setActiveJoke = (joke, index) => {
-    setCurrentJoke(joke);
-    setCurrentIndex(index);
-  };
-
-  const findBySearch = () => {
-    TutorialDataService.findBySearch(search)
-      .then((response) => {
-        setJokes(response.data);
-        console.log(response.data);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  };
-
   return (
-    <div className="list row">
-      <div className="col-md-8">
-        <div className="input-group mb-3">
-          <input
-            type="text"
-            className="form-control"
-            placeholder=""
-            value={search}
-            onChange={onChangeSearch}
-          />
-          <div className="input-group-append">
-            <button
-              className="btn btn-outline-secondary"
-              type="button"
-              onClick={findBySearch}
-            >
-              Search
-            </button>
-          </div>
-        </div>
-      </div>
+    <div className="list">
       <div className="col-md-6">
         <h4>Best puns</h4>
 
-        <ul className="list-group">
-          {jokes.map((joke, index) => (
-            <li
-              className={
-                "list-group-item " + (index === currentIndex ? "active" : "")
-              }
-              onClick={() => setActiveJoke(joke, index)}
-              key={index}
-            >
-              {joke.author}
-            </li>
+        <div className="container">
+          {(props.jokes ? props.jokes : jokes).map((joke, index) => (
+            <div key={index} className="my-4">
+              <Joke
+                content={joke.content}
+                author={joke.author}
+                id={joke.id}
+                rating={joke.rating}
+                isAuthenticated={props.isAuthenticated}
+              />
+            </div>
           ))}
-        </ul>
-      </div>
-      <div className="col-md-6">
-        {currentJoke ? (
-          <Joke content={currentJoke.content} author={currentJoke.author} />
-        ) : (
-          <div>
-            <br />
-            <p>Please click on a Tutorial...</p>
-          </div>
-        )}
+        </div>
       </div>
     </div>
   );

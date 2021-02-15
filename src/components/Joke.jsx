@@ -1,13 +1,12 @@
 import React from "react";
-import TutorialDataService from "../services/TutorialService";
+import DataService from "../services/DataService";
 export default function Joke(props) {
   const [rating, setRating] = React.useState(props.rating);
-  const mounted = React.useRef();
-
+  Joke.defaultProps = { allowRate: true };
   // React.useEffect(() => {
   //   // if (!mounted.current) {
   // const retrieveJokes = (id) => {
-  //   TutorialDataService.get(id)
+  //   DataService.get(id)
   //     .then((response) => {
   //       setRating({ count: response.data.rating, ...rating });
   //     })
@@ -24,7 +23,7 @@ export default function Joke(props) {
 
   React.useEffect(() => {
     const retrieveJokes = (id) => {
-      TutorialDataService.get(id)
+      DataService.get(id)
         .then((response) => {
           setRating(response.data.rating);
         })
@@ -36,29 +35,23 @@ export default function Joke(props) {
   }, [props.id]);
 
   const updateRating = (modifier) => {
+    console.log(modifier);
     const data = {
-      rating: modifier ? rating + 1 : rating - 1,
+      rating: modifier === "up" ? rating + 1 : rating - 1,
     };
-    setRating(rating + 1);
+    setRating(data.rating);
     console.log(data);
-    TutorialDataService.update(props.id, data)
-      .then((response) => {
-        // setRating(response.data.rating);
-      })
+    DataService.update(props.id, data)
+      .then((response) => {})
       .catch((e) => {
         console.log(e);
       });
   };
-  // const ratingUp = () => {
-  //   rating.hasVoted
-  //     ? setRating({ count: rating.count - 1, hasVoted: false })
-  //     : setRating({ count: rating.count + 1, hasVoted: true });
-  // };
-  // const ratingDown = () => {
-  //   rating.hasVoted
-  //     ? setRating({ count: rating.count + 1, hasVoted: false })
-  //     : setRating({ count: rating.count - 1, hasVoted: true });
-  // };
+  const ratingHandler = (score) => {
+    props.isAuthenticated
+      ? updateRating(score)
+      : alert("You must be logged in to rate posts!");
+  };
   return (
     <div className="card shadow-sm">
       <div className="card-body">
@@ -68,20 +61,16 @@ export default function Joke(props) {
         <span>{props.author}</span>
         <div className="float-right d-flex align-middle">
           <span
-            onClick={() => updateRating(true)}
+            onClick={() => ratingHandler("up")}
             style={{ transform: "rotate(180deg)" }}
-            // className={`${
-            //   rating.hasVoted && rating.count + 1 ? "text-success" : ""
-            // }`}
+            className={`${props.allowRate ? "" : "d-none"}`}
           >
             &#8681;
           </span>
           <p className="mx-2 mb-0 align-self-center">{rating}</p>
           <span
-            onClick={() => updateRating(false)}
-            // className={`${
-            //   rating.hasVoted && rating.count - 1 ? "text-danger" : ""
-            // }`}
+            onClick={() => ratingHandler("down")}
+            className={`${props.allowRate ? "" : "d-none"}`}
           >
             &#8681;
           </span>

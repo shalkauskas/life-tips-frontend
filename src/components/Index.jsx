@@ -1,14 +1,14 @@
 import React from "react";
-import TutorialDataService from "../services/TutorialService";
+import DataService from "../services/DataService";
 import Joke from "./Joke";
-export default function Index() {
+export default function Index(props) {
   const [jokes, setJokes] = React.useState([]);
 
   React.useEffect(() => {
     retrieveJokes();
   }, []);
   const retrieveJokes = () => {
-    TutorialDataService.getAllPublished()
+    DataService.getAllPublished()
       .then((response) => {
         setJokes(response.data);
         // console.log(response.data);
@@ -21,13 +21,14 @@ export default function Index() {
     <div>
       <h1 className="text-center">Welcome to Dad's Bad jokes!</h1>
       <div className="container">
-        {jokes.map((joke, index) => (
+        {(props.jokes ? props.jokes : jokes).map((joke, index) => (
           <div key={index} className="my-4">
             <Joke
               content={joke.content}
               author={joke.author}
               id={joke.id}
               rating={joke.rating}
+              isAuthenticated={props.isAuthenticated}
             />
           </div>
         ))}

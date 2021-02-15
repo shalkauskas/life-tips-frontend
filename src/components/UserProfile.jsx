@@ -1,5 +1,4 @@
-import { Link } from "react-router-dom";
-import TutorialsEdit from "./TutorialsEdit";
+import JokesEdit from "./JokesEdit";
 import AuthService from "../services/AuthService";
 export default function UserProfile(props) {
   const logout = () => {
@@ -13,24 +12,21 @@ export default function UserProfile(props) {
       <div className="card mx-auto" style={{ width: "18rem" }}>
         <img
           src={"favicon.ico"}
-          className="card-img-top rounded-circle w-50 mx-auto"
+          className="card-img-top rounded-circle w-50 mx-auto mt-3"
           alt="Profile user pic"
         />
         <div className="card-body text-center">
-          <h5 className="card-title">{props.userdata.displayName}</h5>
+          <h5 className="card-title mt-5">{props.userdata.displayName}</h5>
           <p className="card-text">{props.userdata.username}</p>
           <div className="d-flex flex-column w-50 mx-auto">
-            <Link to={`/tutorials/update/`} className="btn btn-primary mb-4">
-              My jokes
-            </Link>
-            <span onClick={logout} className="nav-link">
+            <span onClick={logout} className="nav-link btn btn-danger">
               Logout
             </span>
           </div>
         </div>
       </div>
       <div>
-        <TutorialsEdit />
+        <JokesEdit />
       </div>
     </div>
   );

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import TutorialDataService from "../services/TutorialService";
+import DataService from "../services/DataService";
 
 const AddJoke = (props) => {
   const initialJokeState = {
@@ -23,7 +23,7 @@ const AddJoke = (props) => {
       author: props.author,
       userId: props.userId,
     };
-    TutorialDataService.create(data)
+    DataService.create(data)
       .then((response) => {
         setJoke({
           id: response.data.id,
