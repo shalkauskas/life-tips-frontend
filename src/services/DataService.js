@@ -27,6 +27,9 @@ const getUpdate = (id) => {
 const update = (id, data) => {
   return http.put(`/joke/update/${id}`, data);
 };
+const updateMany = (data) => {
+  return http.put(`/joke/update/`, data);
+};
 // Delete a Joke with id
 const remove = (id) => {
   return http.delete(`/joke/update/${id}`);
@@ -49,6 +52,7 @@ export default {
   getUpdate,
   create,
   update,
+  updateMany,
   remove,
   removeAll,
   findBySearch,

@@ -1,12 +1,13 @@
+import React from "react";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Switch, Route, Link } from "react-router-dom";
 import Index from "./components/Index";
 import AddJoke from "./components/AddJoke";
 import JokesList from "./components/JokesList";
+import Joke from "./components/Joke";
 import PrivateRoute from "./components/PrivateRoute";
 import Login from "./components/Login";
-import React from "react";
 import AuthService from "./services/AuthService";
 import NotFound from "./components/NotFound";
 import UserProfile from "./components/UserProfile";
@@ -23,7 +24,6 @@ export default function App() {
       DataService.findBySearch(search)
         .then((response) => {
           setJokes(response.data);
-          console.log(response.data);
         })
         .catch((e) => {
           console.log(e);
@@ -140,7 +140,18 @@ export default function App() {
           <Route
             exact
             path={"/explore"}
-            render={(props) => <JokesList {...props} jokes={jokes} />}
+            render={(props) => (
+              <JokesList
+                {...props}
+                jokes={jokes}
+                isAuthenticated={isAuthenticated}
+              />
+            )}
+          />
+          <Route
+            exact
+            path={"/joke/:id"}
+            render={(props) => <Joke {...props} />}
           />
           <Route
             exact

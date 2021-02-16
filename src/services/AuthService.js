@@ -10,9 +10,9 @@ const login = (data) => {
 const loginGoogle = () => {
   return http.get("/auth/google");
 };
-// const dashboard = () => {
-//   return http.get(`/dashboard`);
-// };
+const admin = () => {
+  return http.get(`/admin`);
+};
 const register = (data) => {
   return http.post("/register", data);
 };
@@ -22,6 +22,7 @@ const logout = () => {
 export default {
   index,
   login,
+  admin,
   loginGoogle,
   register,
   logout,

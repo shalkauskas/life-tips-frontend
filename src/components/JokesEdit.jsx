@@ -2,12 +2,16 @@ import React, { useState, useEffect } from "react";
 import DataService from "../services/DataService";
 import Joke from "./Joke";
 
-export default function JokesEdit() {
+export default function JokesEdit(props) {
   const [jokes, setJokes] = useState([]);
   const [currentJoke, setCurrentJoke] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(-1);
   const [edit, setEdit] = useState(false);
   const [message, setMessage] = useState("");
+  const [dropdown, setDropdown] = useState(false);
+  JokesEdit.defaultProps = {
+    admin: false,
+  };
   const retrieveTutorials = React.useCallback(() => {
     DataService.getAll()
       .then((response) => {
@@ -40,6 +44,17 @@ export default function JokesEdit() {
       .then((response) => {
         console.log(response.data);
         refreshList();
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+  const publishAllJokes = () => {
+    DataService.updateMany()
+      .then((response) => {
+        console.log(response.data);
+        refreshList();
+        setMessage("All jokes have been published!");
       })
       .catch((e) => {
         console.log(e);
@@ -87,10 +102,56 @@ export default function JokesEdit() {
         console.log(e);
       });
   };
+  const orderPublished = [...jokes].sort((a, b) =>
+    a.published < b.published ? 1 : -1
+  );
+  const orderNewest = [...jokes].sort((a, b) => (a.time < b.time ? 1 : -1));
+  const orderBest = [...jokes].sort((a, b) => (a.rating < b.rating ? 1 : -1));
+  const orderAuthor = [...jokes].sort((a, b) => (a.author < b.author ? 1 : -1));
   return (
     <div className="list row">
       <div className="col-md-6">
-        <h4>My Jokes</h4>
+        <div className="d-flex justify-content-center mb-3">
+          <h4 className="text-center">
+            {props.admin ? "All jokes" : "My Jokes"}
+          </h4>
+          <div className="dropdown ml-4">
+            <button
+              onClick={() => setDropdown(!dropdown)}
+              className="btn btn-sm btn-info dropdown-toggle"
+              type="button"
+            >
+              Sort
+            </button>
+            <div className={`${dropdown ? "d-block" : ""} dropdown-menu`}>
+              <button
+                className="dropdown-item"
+                onClick={() => setJokes(orderPublished)}
+              >
+                Published
+              </button>
+              <button
+                className="dropdown-item"
+                onClick={() => setJokes(orderNewest)}
+              >
+                Newest
+              </button>
+              <button
+                className="dropdown-item"
+                onClick={() => setJokes(orderBest)}
+              >
+                Best
+              </button>
+              <button
+                className="dropdown-item"
+                onClick={() => setJokes(orderAuthor)}
+              >
+                By author
+              </button>
+            </div>
+          </div>
+        </div>
+
         {jokes.map((joke, index) => (
           <div
             key={index}
@@ -108,6 +169,14 @@ export default function JokesEdit() {
             />
           </div>
         ))}
+        {props.admin ? (
+          <button
+            className="m-3 btn btn-sm btn-success"
+            onClick={publishAllJokes}
+          >
+            Publish All
+          </button>
+        ) : null}
         <button
           className="m-3 btn btn-sm btn-danger"
           onClick={removeAllTutorials}
@@ -115,9 +184,10 @@ export default function JokesEdit() {
           Remove All
         </button>
       </div>
-      <div className="col-md-6">
+
+      <div className="col-md-6 position-relative mt-5 px-0">
         {currentJoke ? (
-          <div>
+          <div className="position-fixed w-25 p-4 border">
             <h4>Review or change</h4>
             {edit ? (
               <div className="form-group">
@@ -150,21 +220,24 @@ export default function JokesEdit() {
             <p className="lead text-danger">{message}</p>
             {edit ? (
               <div>
-                {currentJoke.published ? (
-                  <button
-                    className="badge badge-primary mr-2"
-                    onClick={() => updatePublished(false)}
-                  >
-                    UnPublish
-                  </button>
-                ) : (
-                  <button
-                    className="badge badge-primary mr-2"
-                    onClick={() => updatePublished(true)}
-                  >
-                    Publish
-                  </button>
-                )}
+                {props.admin ? (
+                  currentJoke.published ? (
+                    <button
+                      className="badge badge-primary mr-2"
+                      onClick={() => updatePublished(false)}
+                    >
+                      UnPublish
+                    </button>
+                  ) : (
+                    <button
+                      className="badge badge-primary mr-2"
+                      onClick={() => updatePublished(true)}
+                    >
+                      Publish
+                    </button>
+                  )
+                ) : null}
+
                 <button
                   type="submit"
                   className="badge badge-success"
