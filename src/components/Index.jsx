@@ -28,6 +28,7 @@ export default function Index(props) {
               author={joke.author}
               id={joke.id}
               rating={joke.rating}
+              time={joke.time}
               isAuthenticated={props.isAuthenticated}
             />
           </div>

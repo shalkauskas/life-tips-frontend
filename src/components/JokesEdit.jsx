@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import DataService from "../services/DataService";
 import Joke from "./Joke";
 
-export default function JokesEdit(props) {
+export default function JokesEdit() {
   const [jokes, setJokes] = useState([]);
   const [currentJoke, setCurrentJoke] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(-1);
@@ -103,6 +103,7 @@ export default function JokesEdit(props) {
               author={joke.author}
               id={joke.id}
               rating={joke.rating}
+              time={joke.time}
               allowRate={false}
             />
           </div>

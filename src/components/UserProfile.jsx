@@ -9,7 +9,7 @@ export default function UserProfile(props) {
   };
   return (
     <div className="d-flex flex-row-reverse">
-      <div className="card mx-auto" style={{ width: "18rem" }}>
+      <div className="card ml-auto" style={{ width: "18rem", height: "25%" }}>
         <img
           src={"favicon.ico"}
           className="card-img-top rounded-circle w-50 mx-auto mt-3"

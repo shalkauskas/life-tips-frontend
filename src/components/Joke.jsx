@@ -52,13 +52,22 @@ export default function Joke(props) {
       ? updateRating(score)
       : alert("You must be logged in to rate posts!");
   };
+  const jokeId = props.id.replace(/\D/g, "");
   return (
-    <div className="card shadow-sm">
+    <article className="card shadow-sm">
+      <div className="card-header">
+        <span>
+          <u>#{jokeId.slice(jokeId.length - 5)}</u>
+        </span>
+        <span className="float-right"> {props.time}</span>
+      </div>
       <div className="card-body">
         <p>{props.content}</p>
       </div>
       <div className="card-footer">
-        <span>{props.author}</span>
+        <span>
+          <i>{props.author}</i>
+        </span>
         <div className="float-right d-flex align-middle">
           <span
             onClick={() => ratingHandler("up")}
@@ -76,6 +85,6 @@ export default function Joke(props) {
           </span>
         </div>
       </div>
-    </div>
+    </article>
   );
 }

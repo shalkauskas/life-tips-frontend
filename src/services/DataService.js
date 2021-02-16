@@ -1,43 +1,43 @@
 import http from "../http-common";
-// Create a new Tutorial
+// Create a new Joke
 const create = (data) => {
-  return http.post("/tutorials", data);
+  return http.post("/joke", data);
 };
-// Retrieve all Tutorials
+// Retrieve all Jokes
 const getAll = () => {
-  return http.get(`/tutorials/update/`);
+  return http.get(`/joke/update/`);
 };
-// Retrieve all Published Tutorials
+// Retrieve all Published Jokes
 const getAllPublished = () => {
-  return http.get(`/tutorials`);
+  return http.get(`/explore`);
 };
-// Retrieve all User published Tutorials
+// Retrieve all User published Jokes
 // const getAllOfUser = (userId) => {
-//   return http.get(`/tutorials/${userId}/update/`, { headers: authHeader() });
+//   return http.get(`/Jokes/${userId}/update/`, { headers: authHeader() });
 // };
-// Retrieve a single Tutorial with id
+// Retrieve a single Joke with id
 const get = (id) => {
-  return http.get(`/tutorials/${id}`);
+  return http.get(`/joke/${id}`);
 };
-// Retrieve a single Tutorial with id for update (not used?)
+// Retrieve a single Joke with id for update (not used?)
 const getUpdate = (id) => {
-  return http.get(`/tutorials/update/${id}`);
+  return http.get(`/joke/update/${id}`);
 };
-// Update a Tutorial with id
+// Update a Joke with id
 const update = (id, data) => {
-  return http.put(`/tutorials/update/${id}`, data);
+  return http.put(`/joke/update/${id}`, data);
 };
-// Delete a Tutorial with id
+// Delete a Joke with id
 const remove = (id) => {
-  return http.delete(`/tutorials/update/${id}`);
+  return http.delete(`/joke/update/${id}`);
 };
-// Delete all Tutorials
+// Delete all Jokes
 const removeAll = () => {
-  return http.delete(`/tutorials/update`);
+  return http.delete(`/joke/update`);
 };
 
 const findBySearch = (query) => {
-  return http.get(`/tutorials?title=${query}`);
+  return http.get(`/explore?title=${query}`);
 };
 
 // eslint-disable-next-line import/no-anonymous-default-export

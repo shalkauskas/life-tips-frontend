@@ -2,6 +2,13 @@ import React, { useState } from "react";
 import DataService from "../services/DataService";
 
 const AddJoke = (props) => {
+  const time = new Date().toLocaleString([], {
+    year: "numeric",
+    month: "numeric",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
   const initialJokeState = {
     id: null,
     content: "",
@@ -9,6 +16,7 @@ const AddJoke = (props) => {
     author: "Anonymous",
     userId: "0",
     rating: "0",
+    time: time,
   };
   const [joke, setJoke] = useState(initialJokeState);
   const [submitted, setSubmitted] = useState(false);
@@ -22,6 +30,7 @@ const AddJoke = (props) => {
       content: joke.content,
       author: props.author,
       userId: props.userId,
+      time: time,
     };
     DataService.create(data)
       .then((response) => {

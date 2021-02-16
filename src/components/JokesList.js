@@ -17,23 +17,48 @@ const JokesList = (props) => {
         console.log(e);
       });
   };
+  const orderBest = (a, b) => (a.rating < b.rating ? 1 : -1);
+  const orderNewest = (a, b) => (a.time < b.time ? 1 : -1);
   return (
-    <div className="list">
-      <div className="col-md-6">
-        <h4>Best puns</h4>
+    <div className="row">
+      <div className="col-lg-6">
+        <h4 className="text-center">Best puns</h4>
 
         <div className="container">
-          {(props.jokes ? props.jokes : jokes).map((joke, index) => (
-            <div key={index} className="my-4">
-              <Joke
-                content={joke.content}
-                author={joke.author}
-                id={joke.id}
-                rating={joke.rating}
-                isAuthenticated={props.isAuthenticated}
-              />
-            </div>
-          ))}
+          {(props.jokes ? props.jokes : jokes)
+            .sort(orderBest)
+            .map((joke, index) => (
+              <div key={index} className="my-4">
+                <Joke
+                  content={joke.content}
+                  author={joke.author}
+                  id={joke.id}
+                  rating={joke.rating}
+                  time={joke.time}
+                  isAuthenticated={props.isAuthenticated}
+                />
+              </div>
+            ))}
+        </div>
+      </div>
+      <div className="col-lg-6">
+        <h4 className="text-center">Newest</h4>
+
+        <div className="container">
+          {(props.jokes ? props.jokes : jokes)
+            .sort(orderNewest)
+            .map((joke, index) => (
+              <div key={index} className="my-4">
+                <Joke
+                  content={joke.content}
+                  author={joke.author}
+                  id={joke.id}
+                  rating={joke.rating}
+                  time={joke.time}
+                  isAuthenticated={props.isAuthenticated}
+                />
+              </div>
+            ))}
         </div>
       </div>
     </div>

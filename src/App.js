@@ -4,7 +4,6 @@ import { Switch, Route, Link } from "react-router-dom";
 import Index from "./components/Index";
 import AddJoke from "./components/AddJoke";
 import JokesList from "./components/JokesList";
-import JokesEdit from "./components/JokesEdit";
 import PrivateRoute from "./components/PrivateRoute";
 import Login from "./components/Login";
 import React from "react";
@@ -75,7 +74,7 @@ export default function App() {
         </Link>
         <div className="navbar-nav mr-auto">
           <li className="nav-item">
-            <Link to={"/tutorials"} className="nav-link">
+            <Link to={"/explore"} className="nav-link">
               Explore
             </Link>
           </li>
@@ -140,7 +139,7 @@ export default function App() {
           />
           <Route
             exact
-            path={"/tutorials"}
+            path={"/explore"}
             render={(props) => <JokesList {...props} jokes={jokes} />}
           />
           <Route
@@ -161,13 +160,6 @@ export default function App() {
             isAuthenticated={isAuthenticated}
           />
           <Route exact path="/register" component={Register} />
-          <PrivateRoute
-            path={`/tutorials/update/`}
-            component={JokesEdit}
-            isAuthenticated={isAuthenticated}
-            // author={userdata.username}
-            // userId={userdata.id}
-          />
           <PrivateRoute
             path={`/dashboard`}
             component={UserProfile}
