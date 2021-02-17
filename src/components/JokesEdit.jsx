@@ -16,7 +16,7 @@ export default function JokesEdit(props) {
     DataService.getAll()
       .then((response) => {
         setJokes(response.data);
-        console.log(response.data);
+        // console.log(response.data);
       })
       .catch((e) => {
         console.log(e);
@@ -26,6 +26,9 @@ export default function JokesEdit(props) {
   useEffect(() => {
     retrieveTutorials();
   }, [retrieveTutorials, message]);
+  useEffect(() => {
+    setJokes(props.jokes);
+  }, [props.jokes]);
 
   const refreshList = () => {
     retrieveTutorials();
@@ -103,14 +106,19 @@ export default function JokesEdit(props) {
       });
   };
   const orderPublished = [...jokes].sort((a, b) =>
-    a.published < b.published ? 1 : -1
+    a.published === b.published ? 0 : a.published ? -1 : 1
+  );
+  const orderUnPublished = [...jokes].sort((a, b) =>
+    a.published === b.published ? 0 : a.published ? 1 : -1
   );
   const orderNewest = [...jokes].sort((a, b) => (a.time < b.time ? 1 : -1));
+  const orderOldest = [...jokes].sort((a, b) => (a.time > b.time ? 1 : -1));
   const orderBest = [...jokes].sort((a, b) => (a.rating < b.rating ? 1 : -1));
+  const orderWorst = [...jokes].sort((a, b) => (a.rating < b.rating ? -1 : 1));
   const orderAuthor = [...jokes].sort((a, b) => (a.author < b.author ? 1 : -1));
   return (
-    <div className="list row">
-      <div className="col-md-6">
+    <div className="d-flex flex-row flex-wrap-reverse justify-content-center bg-light p-3">
+      <div className="mx-auto col-lg-8 col-12">
         <div className="d-flex justify-content-center mb-3">
           <h4 className="text-center">
             {props.admin ? "All jokes" : "My Jokes"}
@@ -126,21 +134,33 @@ export default function JokesEdit(props) {
             <div className={`${dropdown ? "d-block" : ""} dropdown-menu`}>
               <button
                 className="dropdown-item"
-                onClick={() => setJokes(orderPublished)}
+                onClick={() =>
+                  JSON.stringify(jokes) === JSON.stringify(orderUnPublished)
+                    ? setJokes(orderPublished)
+                    : setJokes(orderUnPublished)
+                }
               >
                 Published
               </button>
               <button
                 className="dropdown-item"
-                onClick={() => setJokes(orderNewest)}
+                onClick={() =>
+                  JSON.stringify(jokes) === JSON.stringify(orderOldest)
+                    ? setJokes(orderNewest)
+                    : setJokes(orderOldest)
+                }
               >
-                Newest
+                Date
               </button>
               <button
                 className="dropdown-item"
-                onClick={() => setJokes(orderBest)}
+                onClick={() =>
+                  JSON.stringify(jokes) === JSON.stringify(orderWorst)
+                    ? setJokes(orderBest)
+                    : setJokes(orderWorst)
+                }
               >
-                Best
+                Rating
               </button>
               <button
                 className="dropdown-item"
@@ -152,42 +172,54 @@ export default function JokesEdit(props) {
           </div>
         </div>
 
-        {jokes.map((joke, index) => (
-          <div
-            key={index}
-            onClick={() => setActiveJoke(joke, index)}
-            className={`
-              ${index === currentIndex ? "border border-warning " : ""} mb-3`}
-          >
-            <Joke
-              content={joke.content}
-              author={joke.author}
-              id={joke.id}
-              rating={joke.rating}
-              time={joke.time}
-              allowRate={false}
-            />
-          </div>
-        ))}
-        {props.admin ? (
-          <button
-            className="m-3 btn btn-sm btn-success"
-            onClick={publishAllJokes}
-          >
-            Publish All
-          </button>
-        ) : null}
-        <button
-          className="m-3 btn btn-sm btn-danger"
-          onClick={removeAllTutorials}
+        <div
+          className="border p-3"
+          style={{
+            height: "75vh",
+            overflowY: "auto",
+            direction: "rtl",
+          }}
         >
-          Remove All
-        </button>
+          {jokes.map((joke, index) => (
+            <div
+              key={index}
+              onClick={() => setActiveJoke(joke, index)}
+              style={{ direction: "ltr" }}
+              className={`
+              ${index === currentIndex ? "border border-warning " : ""} mb-3`}
+            >
+              <Joke
+                content={joke.content}
+                author={joke.author}
+                id={joke.id}
+                rating={joke.rating}
+                time={joke.time}
+                allowRate={false}
+              />
+            </div>
+          ))}
+        </div>
+        <div className="text-center">
+          {props.admin ? (
+            <button
+              className="m-3 btn btn-sm btn-success"
+              onClick={publishAllJokes}
+            >
+              Publish All
+            </button>
+          ) : null}
+          <button
+            className="m-3 btn btn-sm btn-danger"
+            onClick={removeAllTutorials}
+          >
+            Remove All
+          </button>
+        </div>
       </div>
 
-      <div className="col-md-6 position-relative mt-5 px-0">
+      <div className="mx-auto mb-3 col-lg-8 col-xl-4 col-12 align-self-center">
         {currentJoke ? (
-          <div className="position-fixed w-25 p-4 border">
+          <div className="p-4 border">
             <h4>Review or change</h4>
             {edit ? (
               <div className="form-group">

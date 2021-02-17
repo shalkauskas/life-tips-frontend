@@ -10,7 +10,7 @@ export default function Joke(props) {
     const retrieveJokes = (id) => {
       DataService.get(id)
         .then((response) => {
-          console.log(response.data);
+          // console.log(response.data);
           setRating(response.data.rating);
         })
         .catch((e) => {

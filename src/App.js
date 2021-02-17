@@ -1,10 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Switch, Route, Link } from "react-router-dom";
 import Index from "./components/Index";
 import AddJoke from "./components/AddJoke";
-import JokesList from "./components/JokesList";
 import Joke from "./components/Joke";
 import PrivateRoute from "./components/PrivateRoute";
 import Login from "./components/Login";
@@ -23,6 +22,13 @@ export default function App() {
     const findBySearch = () => {
       DataService.findBySearch(search)
         .then((response) => {
+          if (window.location.pathname === "/best") {
+            response.data.sort((a, b) => (a.rating < b.rating ? 1 : -1));
+          } else if (window.location.pathname === "/") {
+            response.data.sort((a, b) => (a.time < b.time ? 1 : -1));
+          } else if (window.location.pathname === "/random") {
+            response.data.sort(() => 0.5 - Math.random());
+          } else return response.data;
           setJokes(response.data);
         })
         .catch((e) => {
@@ -59,8 +65,14 @@ export default function App() {
   const findBySearch = () => {
     DataService.findBySearch(search)
       .then((response) => {
+        if (window.location.pathname === "/best") {
+          response.data.sort((a, b) => (a.rating < b.rating ? 1 : -1));
+        } else if (window.location.pathname === "/") {
+          response.data.sort((a, b) => (a.time < b.time ? 1 : -1));
+        } else if (window.location.pathname === "/random") {
+          response.data.sort(() => 0.5 - Math.random());
+        } else return response.data;
         setJokes(response.data);
-        console.log(response.data);
       })
       .catch((e) => {
         console.log(e);
@@ -69,15 +81,10 @@ export default function App() {
   return (
     <div>
       <nav className="navbar navbar-expand navbar-dark bg-dark">
-        <Link to="/" className="navbar-brand">
+        <Link to="/" className="navbar-brand" onClick={findBySearch}>
           DB jokes
         </Link>
         <div className="navbar-nav mr-auto">
-          <li className="nav-item">
-            <Link to={"/explore"} className="nav-link">
-              Explore
-            </Link>
-          </li>
           <li className="nav-item">
             <Link to={"/add"} className="nav-link">
               Add
@@ -93,26 +100,20 @@ export default function App() {
           </li>
         </div>
         <div className="navbar-nav ml-auto">
-          <Link
-            to={`/dashboard`}
-            className={`${isAuthenticated ? "my-auto d-inline " : "d-none"}`}
-          >
-            <span className="mr-3 text-light align-middle">
-              {userdata.displayName}
-            </span>
-            <img
-              src={"favicon.ico"}
-              alt="user profile pic"
-              width="35px"
-              height="35px"
-              className={` rounded-circle mr-3 my-auto`}
-            />
-          </Link>
           {isAuthenticated ? (
             <li className="nav-item">
-              <span onClick={logout} className="nav-link">
-                Logout
-              </span>
+              <Link to={`/dashboard`} className={`my-auto d-inline`}>
+                <span className="mr-3 text-light align-middle">
+                  {userdata.displayName}
+                </span>
+                <img
+                  src={"favicon.ico"}
+                  alt="user profile pic"
+                  width="35px"
+                  height="35px"
+                  className={` rounded-circle mr-3 my-auto`}
+                />
+              </Link>
             </li>
           ) : (
             <li className="nav-item">
@@ -124,27 +125,16 @@ export default function App() {
         </div>
       </nav>
 
-      <div className="container mt-3">
+      <div className="mt-3">
         <Switch>
           <Route
             exact
-            path={"/"}
+            path={["/", "/best", "/random"]}
             render={(props) => (
               <Index
                 {...props}
                 isAuthenticated={isAuthenticated}
                 jokes={jokes}
-              />
-            )}
-          />
-          <Route
-            exact
-            path={"/explore"}
-            render={(props) => (
-              <JokesList
-                {...props}
-                jokes={jokes}
-                isAuthenticated={isAuthenticated}
               />
             )}
           />
@@ -176,6 +166,7 @@ export default function App() {
             component={UserProfile}
             isAuthenticated={isAuthenticated}
             userdata={userdata}
+            jokes={jokes}
             exact
           />
           <Route component={NotFound} />

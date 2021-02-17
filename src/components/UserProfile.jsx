@@ -21,8 +21,11 @@ export default function UserProfile(props) {
     });
   };
   return (
-    <div className="d-flex flex-row-reverse">
-      <div className="card ml-auto" style={{ width: "18rem", height: "25%" }}>
+    <div className="">
+      <div
+        className="card mb-4 flex-shrink-0 mx-auto"
+        style={{ height: "fit-content", width: "18rem" }}
+      >
         <img
           src={"favicon.ico"}
           className="card-img-top rounded-circle w-50 mx-auto mt-3"
@@ -32,7 +35,7 @@ export default function UserProfile(props) {
           <h5 className="card-title mt-5">
             {props.userdata.displayName}
             {adminRole ? (
-              <span class="ml-2 badge badge-secondary">Admin</span>
+              <span className="ml-2 badge badge-secondary">Admin</span>
             ) : null}
           </h5>
           <p className="card-text">{props.userdata.username}</p>
@@ -43,7 +46,7 @@ export default function UserProfile(props) {
           </div>
         </div>
       </div>
-      <JokesEdit admin={adminRole} />
+      <JokesEdit admin={adminRole} jokes={props.jokes} />
     </div>
   );
 }

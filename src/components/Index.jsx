@@ -1,39 +1,47 @@
 import React from "react";
-import DataService from "../services/DataService";
-import Joke from "./Joke";
+import { NavLink } from "react-router-dom";
+import JokesList from "./JokesList";
 export default function Index(props) {
   const [jokes, setJokes] = React.useState([]);
-
   React.useEffect(() => {
-    retrieveJokes();
-  }, []);
-  const retrieveJokes = () => {
-    DataService.getAllPublished()
-      .then((response) => {
-        setJokes(response.data);
-        // console.log(response.data);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  };
+    setJokes(props.jokes);
+  }, [props.jokes]);
+  const orderNewest = [...jokes].sort((a, b) => (a.time < b.time ? 1 : -1));
+  const orderBest = [...jokes].sort((a, b) => (a.rating < b.rating ? 1 : -1));
+  const orderRandom = [...jokes].sort(() => 0.5 - Math.random());
   return (
     <div>
-      <h1 className="text-center">Welcome to Dad's Bad jokes!</h1>
-      <div className="container">
-        {(props.jokes ? props.jokes : jokes).map((joke, index) => (
-          <div key={index} className="my-4">
-            <Joke
-              content={joke.content}
-              author={joke.author}
-              id={joke.id}
-              rating={joke.rating}
-              time={joke.time}
-              isAuthenticated={props.isAuthenticated}
-            />
-          </div>
-        ))}
+      <div className="text-center">
+        <div className="btn-group " role="group" aria-label="Order">
+          <NavLink
+            exact
+            to="/"
+            activeClassName="active"
+            className={`btn btn-outline-secondary`}
+            onClick={() => setJokes(orderNewest)}
+          >
+            New
+          </NavLink>
+          <NavLink
+            to="/best"
+            activeClassName="active"
+            className={`btn btn-outline-secondary`}
+            onClick={() => setJokes(orderBest)}
+          >
+            Best
+          </NavLink>
+          <NavLink
+            to="/random"
+            activeClassName="active"
+            className={`btn btn-outline-secondary`}
+            onClick={() => setJokes(orderRandom)}
+          >
+            Random
+          </NavLink>
+        </div>
       </div>
+
+      <JokesList jokes={jokes} />
     </div>
   );
 }
