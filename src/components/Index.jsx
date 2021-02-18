@@ -5,7 +5,7 @@ export default function Index(props) {
   const [jokes, setJokes] = React.useState([]);
   React.useEffect(() => {
     setJokes(props.jokes);
-  }, [props.jokes]);
+  }, [props.jokes, props.jokes.rating]);
   const orderNewest = [...jokes].sort((a, b) => (a.time < b.time ? 1 : -1));
   const orderBest = [...jokes].sort((a, b) => (a.rating < b.rating ? 1 : -1));
   const orderRandom = [...jokes].sort(() => 0.5 - Math.random());
@@ -41,7 +41,7 @@ export default function Index(props) {
         </div>
       </div>
 
-      <JokesList jokes={jokes} />
+      <JokesList jokes={jokes} isAuthenticated={props.isAuthenticated} />
     </div>
   );
 }

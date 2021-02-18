@@ -20,6 +20,7 @@ const JokesList = (props) => {
               content={joke.content}
               author={joke.author}
               id={joke.id}
+              joke={jokes}
               rating={joke.rating}
               time={joke.time}
               isAuthenticated={props.isAuthenticated}

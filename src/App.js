@@ -13,6 +13,7 @@ import UserProfile from "./components/UserProfile";
 import Register from "./components/Register";
 import Search from "./components/Search";
 import DataService from "./services/DataService";
+import Dashboard from "./components/Dashboard";
 export default function App() {
   const [userdata, setUserdata] = React.useState([]);
   const [isAuthenticated, setAuthenticated] = React.useState(false);
@@ -101,7 +102,7 @@ export default function App() {
                   {userdata.displayName}
                 </span>
                 <img
-                  src={"favicon.ico"}
+                  src={"/favicon.ico"}
                   alt="user profile pic"
                   width="35px"
                   height="35px"
@@ -135,7 +136,9 @@ export default function App() {
           <Route
             exact
             path={"/joke/:id"}
-            render={(props) => <Joke {...props} />}
+            render={(props) => (
+              <Joke {...props} isAuthenticated={isAuthenticated} />
+            )}
           />
           <Route
             exact
@@ -157,6 +160,14 @@ export default function App() {
           <Route exact path="/register" component={Register} />
           <PrivateRoute
             path={`/dashboard`}
+            component={Dashboard}
+            isAuthenticated={isAuthenticated}
+            userdata={userdata}
+            jokes={jokes}
+            exact
+          />
+          <PrivateRoute
+            path={`/dashboard/profile`}
             component={UserProfile}
             isAuthenticated={isAuthenticated}
             userdata={userdata}

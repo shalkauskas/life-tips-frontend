@@ -1,101 +1,105 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import DataService from "../services/DataService";
 export default function Joke(props) {
-  const [rating, setRating] = React.useState(props.rating);
+  const [joke, setJoke] = React.useState([]);
   Joke.defaultProps = {
     allowRate: true,
   };
+  const location = useLocation();
   React.useEffect(() => {
     const retrieveJokes = (id) => {
       DataService.get(id)
         .then((response) => {
-          // console.log(response.data);
-          setRating(response.data.rating);
+          setJoke(response.data);
         })
         .catch((e) => {
           console.log(e);
         });
     };
-    retrieveJokes(props.id || props.location.state.id);
-  }, [props.id]);
+    retrieveJokes(props.id || location.pathname.slice(6));
+  }, [location, props.id]);
+
   const updateRating = (modifier) => {
     console.log(modifier);
     const data = {
-      rating: modifier === "up" ? rating + 1 : rating - 1,
+      rating: modifier === "up" ? joke.rating + 1 : joke.rating - 1,
     };
-    setRating(data.rating);
-    console.log(data);
-    DataService.update(props.id || props.location.state.id, data)
-      .then((response) => {})
+    DataService.update(props.id || joke.id, data)
+      .then((response) => {
+        setJoke(response.data);
+        console.log(response);
+      })
       .catch((e) => {
         console.log(e);
       });
   };
   const ratingHandler = (score) => {
-    props.isAuthenticated || props.location.state.isAuthenticated
+    props.isAuthenticated
       ? updateRating(score)
       : alert("You must be logged in to rate posts!");
   };
-  const jokeId = (props.id || props.location.state.id).replace(/\D/g, "");
+  const jokeId = (props.id || window.location.pathname.slice(6)).replace(
+    /\D/g,
+    ""
+  );
   return (
     <article className="card shadow-sm mx-auto" style={{ maxWidth: "50vw" }}>
       <div className="card-header">
-        {window.location.pathname ===
-        `/joke/${props.id || props.location.state.id}` ? (
-          <Link to="/">
-            <span className="text-success">
-              <u>#{jokeId.slice(jokeId.length - 5)}</u>
-            </span>
-          </Link>
-        ) : (
-          <Link
-            to={{
-              pathname: `/joke/${props.id || props.location.state.id}`,
-              state: {
-                id: props.id,
-                content: props.content,
-                author: props.author,
-                time: props.time,
-                rating: rating,
-                isAuthenticated: props.isAuthenticated,
-              },
-            }}
-          >
-            <span className="text-success">
-              <u>#{jokeId.slice(jokeId.length - 5)}</u>
-            </span>
-          </Link>
-        )}
-
-        <span className="float-right text-muted">
-          {props.time || props.location.state.time}
-        </span>
+        <Link
+          to={{
+            pathname: `/joke/${props.id || joke.id}`,
+          }}
+        >
+          <span className="text-success">
+            <u>#{jokeId.slice(jokeId.length - 5)}</u>
+          </span>
+        </Link>
+        <img
+          alt="share"
+          src="/share.svg"
+          width="16px"
+          height="16px"
+          title="Copy link to clipboard"
+          aria-label="Copy link"
+          className="text-muted ml-3 align-text-top"
+          style={{ cursor: "pointer" }}
+          onClick={() => {
+            navigator.clipboard.writeText(
+              window.location.href + `joke/${props.id || joke.id}`
+            );
+          }}
+        />
+        <span className="float-right text-muted">{joke.time}</span>
       </div>
       <div className="card-body">
-        <p>{props.content || props.location.state.content}</p>
+        <p>{joke.content}</p>
       </div>
-      <div className="card-footer">
+      <div className="card-footer justify-content-between d-flex ">
         <span className="text-muted">
-          <i>{props.author || props.location.state.author}</i>
+          <i>{joke.author}</i>
         </span>
-        <div className="float-right d-flex align-middle">
-          <span
+        <div className="d-flex align-middle align-items-md-center">
+          <img
+            alt="Vote up"
+            src="/up-arrow.svg"
+            width="18px"
+            height="18px"
             onClick={() => ratingHandler("up")}
-            style={{ transform: "rotate(180deg)" }}
             className={`${props.allowRate ? "" : "d-none"}`}
-          >
-            &#8681;
-          </span>
+          />
+
           <p className="mx-2 mb-0 align-self-center">
-            <b>{rating}</b>
+            <b>{joke.rating}</b>
           </p>
-          <span
+          <img
+            alt="Vote down"
+            src="/down-arrow.svg"
+            width="18px"
+            height="18px"
             onClick={() => ratingHandler("down")}
             className={`${props.allowRate ? "" : "d-none"}`}
-          >
-            &#8681;
-          </span>
+          />
         </div>
       </div>
     </article>

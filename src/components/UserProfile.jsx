@@ -1,27 +1,16 @@
 import React from "react";
-import JokesEdit from "./JokesEdit";
 import AuthService from "../services/AuthService";
 export default function UserProfile(props) {
-  const [adminRole, setAdminRole] = React.useState(false);
   const [edit, setEdit] = React.useState(false);
   const [name, setName] = React.useState(props.userdata.displayName);
-  React.useEffect(() => {
-    admin();
-  }, []);
+
   const logout = () => {
     AuthService.logout().then((response) => {
       window.location.reload();
       console.log(response);
     });
   };
-  const admin = () => {
-    AuthService.admin().then((response) => {
-      if (response.data.admin) {
-        setAdminRole(true);
-      }
-      console.log(response);
-    });
-  };
+
   const handleInputChange = (event) => {
     setName(event.target.value);
     console.log(name);
@@ -46,13 +35,13 @@ export default function UserProfile(props) {
       });
   };
   return (
-    <div className="">
+    <div className="bg-light py-5">
       <div
         className="card mb-4 flex-shrink-0 mx-auto"
         style={{ height: "fit-content", width: "18rem" }}
       >
         <img
-          src={"favicon.ico"}
+          src="/favicon.ico"
           className="card-img-top rounded-circle w-50 mx-auto mt-3"
           alt="Profile user pic"
         />
@@ -79,7 +68,7 @@ export default function UserProfile(props) {
           ) : (
             <h5 className="card-title mt-5">
               {props.userdata.displayName}
-              {adminRole ? (
+              {props.admin ? (
                 <span className="ml-2 badge badge-secondary">Admin</span>
               ) : null}
             </h5>
@@ -99,7 +88,6 @@ export default function UserProfile(props) {
           </div>
         </div>
       </div>
-      <JokesEdit admin={adminRole} jokes={props.jokes} />
     </div>
   );
 }
