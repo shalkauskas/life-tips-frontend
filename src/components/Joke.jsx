@@ -39,12 +39,11 @@ export default function Joke(props) {
   };
   const jokeId = (props.id || props.location.state.id).replace(/\D/g, "");
   return (
-    <article className="card shadow-sm">
+    <article className="card shadow-sm mx-auto" style={{ maxWidth: "50vw" }}>
       <div className="card-header">
         {window.location.pathname ===
         `/joke/${props.id || props.location.state.id}` ? (
           <Link to="/">
-            {" "}
             <span className="text-success">
               <u>#{jokeId.slice(jokeId.length - 5)}</u>
             </span>

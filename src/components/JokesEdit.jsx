@@ -118,7 +118,7 @@ export default function JokesEdit(props) {
   const orderAuthor = [...jokes].sort((a, b) => (a.author < b.author ? 1 : -1));
   return (
     <div className="d-flex flex-row flex-wrap-reverse justify-content-center bg-light p-3">
-      <div className="mx-auto col-lg-8 col-12">
+      <div className="mx-auto col-lg-6 col-12">
         <div className="d-flex justify-content-center mb-3">
           <h4 className="text-center">
             {props.admin ? "All jokes" : "My Jokes"}
@@ -217,7 +217,7 @@ export default function JokesEdit(props) {
         </div>
       </div>
 
-      <div className="mx-auto mb-3 col-lg-8 col-xl-4 col-12 align-self-center">
+      <div className="mr-auto mb-3 col-lg-8 col-xl-4 col-12 align-self-center">
         {currentJoke ? (
           <div className="p-4 border">
             <h4>Review or change</h4>

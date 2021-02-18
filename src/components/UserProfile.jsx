@@ -3,6 +3,8 @@ import JokesEdit from "./JokesEdit";
 import AuthService from "../services/AuthService";
 export default function UserProfile(props) {
   const [adminRole, setAdminRole] = React.useState(false);
+  const [edit, setEdit] = React.useState(false);
+  const [name, setName] = React.useState(props.userdata.displayName);
   React.useEffect(() => {
     admin();
   }, []);
@@ -20,6 +22,29 @@ export default function UserProfile(props) {
       console.log(response);
     });
   };
+  const handleInputChange = (event) => {
+    setName(event.target.value);
+    console.log(name);
+  };
+  const updateName = () => {
+    var data = {
+      displayName: name,
+    };
+    AuthService.updateName(data)
+      .then((response) => {
+        console.log(response);
+        if (response.status === 200) {
+          setEdit(!edit);
+          alert("Username successfully changed!");
+          window.location.reload();
+        } else {
+          alert("Error");
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
   return (
     <div className="">
       <div
@@ -32,14 +57,42 @@ export default function UserProfile(props) {
           alt="Profile user pic"
         />
         <div className="card-body text-center">
-          <h5 className="card-title mt-5">
-            {props.userdata.displayName}
-            {adminRole ? (
-              <span className="ml-2 badge badge-secondary">Admin</span>
-            ) : null}
-          </h5>
+          {edit ? (
+            <div className="input-group mb-2">
+              <input
+                value={name}
+                type="text"
+                name="displayName"
+                className="form-control"
+                onChange={handleInputChange}
+              ></input>
+              <div className="input-group-append">
+                <button
+                  onClick={updateName}
+                  className="btn btn-success"
+                  type="button"
+                >
+                  Save
+                </button>
+              </div>
+            </div>
+          ) : (
+            <h5 className="card-title mt-5">
+              {props.userdata.displayName}
+              {adminRole ? (
+                <span className="ml-2 badge badge-secondary">Admin</span>
+              ) : null}
+            </h5>
+          )}
+
           <p className="card-text">{props.userdata.username}</p>
           <div className="d-flex flex-column w-50 mx-auto">
+            <span
+              onClick={() => setEdit(!edit)}
+              className="nav-link btn btn-warning mb-3"
+            >
+              {edit ? "Cancel" : "Edit"}
+            </span>
             <span onClick={logout} className="nav-link btn btn-danger">
               Logout
             </span>
