@@ -44,7 +44,7 @@ export default function Joke(props) {
     ""
   );
   return (
-    <article className="card shadow-sm mx-auto" style={{ maxWidth: "50vw" }}>
+    <article className="card shadow-sm mx-auto">
       <div className="card-header">
         <Link
           to={{

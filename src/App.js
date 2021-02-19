@@ -18,6 +18,7 @@ export default function App() {
   const [userdata, setUserdata] = React.useState([]);
   const [isAuthenticated, setAuthenticated] = React.useState(false);
   const [search, setSearch] = React.useState("");
+  const [showSearch, setShowSearch] = React.useState(false);
   const [jokes, setJokes] = React.useState([]);
   React.useEffect(() => {
     const findBySearch = () => {
@@ -56,6 +57,7 @@ export default function App() {
 
   const reset = () => {
     setSearch("");
+    setShowSearch(false);
   };
   const findBySearch = () => {
     DataService.findBySearch(search)
@@ -74,39 +76,86 @@ export default function App() {
       });
   };
   return (
-    <div>
-      <nav className="navbar navbar-expand navbar-dark bg-dark">
-        <Link to="/" className="navbar-brand" onClick={findBySearch}>
-          DB jokes
+    <div className="bg-light">
+      <nav className="navbar navbar-expand navbar-light bg-white border-bottom pr-sm-1">
+        <Link
+          to="/"
+          className={`navbar-brand mr-sm-1 ${showSearch ? "mr-0" : "mr-3"}`}
+          onClick={findBySearch}
+        >
+          <img
+            alt="Logo"
+            src="/joke.svg"
+            width="26px"
+            height="26px"
+            className="mr-2 align-top"
+          />
+          <b>DB jokes</b>
         </Link>
-        <div className="navbar-nav mr-auto">
-          <li className="nav-item">
+        <div className="navbar-nav mr-auto ml-sm-5">
+          <li className={`${showSearch ? "d-none d-sm-block" : ""} nav-item`}>
             <Link to={"/add"} className="nav-link">
-              Add
+              <img
+                alt="Add"
+                src="/plus.svg"
+                width="14px"
+                height="14px"
+                style={{
+                  filter:
+                    "invert(71%) sepia(7%) saturate(155%) hue-rotate(155deg) brightness(88%) contrast(84%)",
+                  display: "block",
+                  marginLeft: "auto",
+                  marginRight: "auto",
+                }}
+              />
+              Add{" "}
             </Link>
           </li>
           <li className="ml-2 nav-item my-auto">
-            <Search
-              onChangeSearch={onChangeSearch}
-              findBySearch={findBySearch}
-              search={search}
-              reset={reset}
-            />
+            {showSearch ? (
+              <Search
+                onChangeSearch={onChangeSearch}
+                findBySearch={findBySearch}
+                search={search}
+                reset={reset}
+              />
+            ) : (
+              <span className="nav-link" onClick={() => setShowSearch(true)}>
+                <img
+                  alt="Search"
+                  src="/search.svg"
+                  width="14px"
+                  height="14px"
+                  style={{
+                    filter:
+                      "invert(71%) sepia(7%) saturate(155%) hue-rotate(155deg) brightness(88%) contrast(84%)",
+                    display: "block",
+                    marginLeft: "auto",
+                    marginRight: "auto",
+                  }}
+                />
+                Search
+              </span>
+            )}
           </li>
         </div>
-        <div className="navbar-nav ml-auto">
+        <div className="navbar-nav ml-sm-auto mx-1">
           {isAuthenticated ? (
             <li className="nav-item">
               <Link to={`/dashboard`} className={`my-auto d-inline`}>
-                <span className="mr-3 text-light align-middle">
+                <span
+                  className={`mr-sm-3 nav-link align-middle ${
+                    showSearch ? "d-none d-sm-inline-block" : "d-inline-block"
+                  }`}
+                >
                   {userdata.displayName}
                 </span>
                 <img
-                  src={"/favicon.ico"}
+                  src={"/user.svg"}
                   alt="user profile pic"
                   width="35px"
                   height="35px"
-                  className={` rounded-circle mr-3 my-auto`}
+                  className={` rounded-circle mr-sm-3 my-auto`}
                 />
               </Link>
             </li>

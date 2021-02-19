@@ -41,7 +41,7 @@ export default function UserProfile(props) {
         style={{ height: "fit-content", width: "18rem" }}
       >
         <img
-          src="/favicon.ico"
+          src="/user.svg"
           className="card-img-top rounded-circle w-50 mx-auto mt-3"
           alt="Profile user pic"
         />

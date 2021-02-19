@@ -11,9 +11,9 @@ export default function Search(props) {
         onChange={props.onChangeSearch}
       />
 
-      <div className="input-group-append">
+      <div className="input-group-append ">
         <button
-          className="close bg-white px-1"
+          className="close bg-white border-right-0 border border-secondary px-1"
           aria-label="Close"
           onClick={props.reset}
         >
@@ -22,7 +22,7 @@ export default function Search(props) {
           </span>
         </button>
         <button
-          className="btn btn-outline-secondary ml-2"
+          className="btn btn-outline-secondary"
           type="button"
           onClick={props.findBySearch}
         >

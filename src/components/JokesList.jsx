@@ -9,10 +9,6 @@ const JokesList = (props) => {
 
   return (
     <div className="list mt-3">
-      <h4 className="text-center">
-        {/* {best ? "Best jokes" : random ? "Random" : "Fresh"} */}
-      </h4>
-
       <div className="container">
         {jokes.map((joke, index) => (
           <div key={index} className="my-4">

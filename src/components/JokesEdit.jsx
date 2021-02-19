@@ -119,7 +119,7 @@ export default function JokesEdit(props) {
   return (
     <div className="d-flex flex-row flex-wrap-reverse justify-content-center bg-light p-3">
       <div className="col-lg-6 col-12">
-        <div className="d-flex justify-content-center mb-3">
+        <div className="d-flex justify-content-center my-3">
           <h4 className="text-center">
             {props.admin ? "All jokes" : "My Jokes"}
           </h4>
@@ -218,8 +218,8 @@ export default function JokesEdit(props) {
       </div>
 
       <div className="col-lg-8 col-xl-4 col-12">
-        <div className="mb-4">
-          <h4>Review or change</h4>
+        <div className="mb-sm-4">
+          <h4 className="text-center">Review or change</h4>
         </div>
         {currentJoke ? (
           <div className="p-4 border">
@@ -280,7 +280,14 @@ export default function JokesEdit(props) {
                   Save
                 </button>
                 <button
-                  className="badge badge-danger mx-2"
+                  type="submit"
+                  className="badge badge-warning mx-2"
+                  onClick={() => setEdit(false)}
+                >
+                  Cancel
+                </button>
+                <button
+                  className="badge badge-danger mr-2"
                   onClick={deleteJoke}
                 >
                   Delete
@@ -297,8 +304,7 @@ export default function JokesEdit(props) {
           </div>
         ) : (
           <div>
-            <br />
-            <p>Please select...</p>
+            <p className="text-center my-5">Please select...</p>
           </div>
         )}
       </div>

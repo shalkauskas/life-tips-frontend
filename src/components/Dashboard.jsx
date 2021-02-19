@@ -18,10 +18,10 @@ export default function Dashboard(props) {
   };
   return (
     <div>
-      <ul className="nav nav-tabs justify-content-center">
+      <ul className="nav nav-tabs justify-content-center ">
         <li className="nav-item">
           <button
-            className={`nav-link ${editTab ? "active" : ""}`}
+            className={`nav-link ${editTab ? "active bg-light" : ""}`}
             onClick={() => setEditTab(true)}
           >
             Content
@@ -29,7 +29,7 @@ export default function Dashboard(props) {
         </li>
         <li className="nav-item">
           <button
-            className={`nav-link ${editTab ? "" : "active"}`}
+            className={`nav-link ${editTab ? "" : "active bg-light"}`}
             onClick={() => setEditTab(false)}
           >
             Profile
