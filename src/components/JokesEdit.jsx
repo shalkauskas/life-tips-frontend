@@ -175,7 +175,7 @@ export default function JokesEdit(props) {
         <div
           className="border p-3"
           style={{
-            height: "70vh",
+            height: "63vh",
             overflowY: "auto",
             direction: "rtl",
           }}

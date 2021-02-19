@@ -14,6 +14,7 @@ import Register from "./components/Register";
 import Search from "./components/Search";
 import DataService from "./services/DataService";
 import Dashboard from "./components/Dashboard";
+import Footer from "./components/Footer";
 export default function App() {
   const [userdata, setUserdata] = React.useState([]);
   const [isAuthenticated, setAuthenticated] = React.useState(false);
@@ -76,7 +77,7 @@ export default function App() {
       });
   };
   return (
-    <div className="bg-light">
+    <div className="bg-light pb-5 h-100 min-vh-100">
       <nav className="navbar navbar-expand navbar-light bg-white border-bottom pr-sm-1">
         <Link
           to="/"
@@ -169,7 +170,7 @@ export default function App() {
         </div>
       </nav>
 
-      <div className="mt-3">
+      <div className="mt-3 pb-5">
         <Switch>
           <Route
             exact
@@ -226,6 +227,7 @@ export default function App() {
           <Route component={NotFound} />
         </Switch>
       </div>
+      <Footer />
     </div>
   );
 }

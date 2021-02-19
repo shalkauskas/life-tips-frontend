@@ -6,7 +6,10 @@ export default function Joke(props) {
   Joke.defaultProps = {
     allowRate: true,
   };
+  const jokeRatingCheck = localStorage.getItem(joke.id);
   const location = useLocation();
+  const activeVoteStyle =
+    "invert(55%) sepia(26%) saturate(6132%) hue-rotate(332deg) brightness(102%) contrast(101%)";
   React.useEffect(() => {
     const retrieveJokes = (id) => {
       DataService.get(id)
@@ -18,31 +21,39 @@ export default function Joke(props) {
         });
     };
     retrieveJokes(props.id || location.pathname.slice(6));
-  }, [location, props.id]);
+  }, [location, props.id, jokeRatingCheck]);
 
   const updateRating = (modifier) => {
-    console.log(modifier);
-    const data = {
-      rating: modifier === "up" ? joke.rating + 1 : joke.rating - 1,
-    };
-    DataService.update(props.id || joke.id, data)
-      .then((response) => {
-        setJoke(response.data);
-        console.log(response);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+    console.log(jokeRatingCheck);
+    if (modifier === jokeRatingCheck) {
+      console.log("Already voted");
+    } else {
+      localStorage.setItem(joke.id, modifier);
+      const data = {
+        rating: modifier === "up" ? joke.rating + 1 : joke.rating - 1,
+      };
+      DataService.update(props.id || joke.id, data)
+        .then((response) => {
+          setJoke(response.data);
+
+          console.log(response);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    }
+    console.log(modifier, jokeRatingCheck);
   };
   const ratingHandler = (score) => {
-    props.isAuthenticated
-      ? updateRating(score)
-      : alert("You must be logged in to rate posts!");
+    // props.isAuthenticated ?
+    updateRating(score);
+    // : alert("You must be logged in to rate posts!");
   };
   const jokeId = (props.id || window.location.pathname.slice(6)).replace(
     /\D/g,
     ""
   );
+
   return (
     <article className="card shadow-sm mx-auto">
       <div className="card-header">
@@ -87,6 +98,7 @@ export default function Joke(props) {
             height="18px"
             onClick={() => ratingHandler("up")}
             className={`${props.allowRate ? "" : "d-none"}`}
+            style={{ filter: jokeRatingCheck === "up" ? activeVoteStyle : "" }}
           />
 
           <p className="mx-2 mb-0 align-self-center">
@@ -99,6 +111,9 @@ export default function Joke(props) {
             height="18px"
             onClick={() => ratingHandler("down")}
             className={`${props.allowRate ? "" : "d-none"}`}
+            style={{
+              filter: jokeRatingCheck === "down" ? activeVoteStyle : "",
+            }}
           />
         </div>
       </div>
