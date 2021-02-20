@@ -77,7 +77,7 @@ export default function App() {
       });
   };
   return (
-    <div className="bg-light pb-5 h-100 min-vh-100">
+    <div className="bg-light pb-5 h-100 min-vh-100 position-relative">
       <nav className="navbar navbar-expand navbar-light bg-white border-bottom pr-sm-1">
         <Link
           to="/"
@@ -170,7 +170,7 @@ export default function App() {
         </div>
       </nav>
 
-      <div className="mt-3 pb-5">
+      <div className="mt-3">
         <Switch>
           <Route
             exact

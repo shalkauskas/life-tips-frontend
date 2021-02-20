@@ -9,6 +9,7 @@ export default function JokesEdit(props) {
   const [edit, setEdit] = useState(false);
   const [message, setMessage] = useState("");
   const [dropdown, setDropdown] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
   JokesEdit.defaultProps = {
     admin: false,
   };
@@ -42,7 +43,7 @@ export default function JokesEdit(props) {
     setMessage("");
   };
 
-  const removeAllTutorials = () => {
+  const removeAllJokes = () => {
     DataService.removeAll()
       .then((response) => {
         console.log(response.data);
@@ -199,6 +200,45 @@ export default function JokesEdit(props) {
             </div>
           ))}
         </div>
+        <div
+          style={{ top: "35%", left: "0", right: "0", zIndex: "20" }}
+          className={`${
+            showConfirm ? "d-block" : "d-none"
+          } position-absolute border bg-light w-75 mx-auto`}
+        >
+          <div className="modal-header">
+            <h5 className="modal-title">
+              Are you sure you want to delete all your published content?
+            </h5>
+            <button
+              type="button"
+              className="close"
+              aria-label="Close"
+              onClick={() => setShowConfirm(false)}
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div className="modal-body bg-white">
+            <p>This action is non-reversible and all data will be lost.</p>
+          </div>
+          <div className="modal-footer">
+            <button
+              type="button"
+              className="btn btn-secondary"
+              onClick={() => setShowConfirm(false)}
+            >
+              Close
+            </button>
+            <button
+              type="button"
+              className="btn btn-danger"
+              onClick={removeAllJokes}
+            >
+              Confirm delete all
+            </button>
+          </div>
+        </div>
         <div className="text-center">
           {props.admin ? (
             <button
@@ -210,7 +250,7 @@ export default function JokesEdit(props) {
           ) : null}
           <button
             className="m-3 btn btn-sm btn-danger"
-            onClick={removeAllTutorials}
+            onClick={() => setShowConfirm(true)}
           >
             Remove All
           </button>
@@ -304,10 +344,29 @@ export default function JokesEdit(props) {
           </div>
         ) : (
           <div>
+            <p className="lead text-danger text-center">{message}</p>
             <p className="text-center my-5">Please select...</p>
           </div>
         )}
       </div>
+      <div
+        onClick={() => setShowConfirm(false)}
+        style={
+          showConfirm
+            ? {
+                filter: "blur(4px)",
+                opacity: "0.3",
+                backgroundColor: "steelblue",
+                bottom: "0",
+                display: "block",
+                position: "absolute",
+                width: "100%",
+                height: "100%",
+                zIndex: "10",
+              }
+            : { display: "none" }
+        }
+      ></div>
     </div>
   );
 }
