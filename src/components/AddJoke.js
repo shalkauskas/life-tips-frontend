@@ -56,11 +56,8 @@ const AddJoke = (props) => {
   };
 
   return (
-    <div>
-      <h2 className={`${submitted ? "d-none" : ""} mb-5 text-center`}>
-        Put your pun here!
-      </h2>
-      <div className="submit-form">
+    <div className="mt-4 ">
+      <div className="submit-form px-3">
         {submitted ? (
           <div className="text-center">
             <h4>You submitted successfully!</h4>
@@ -69,7 +66,7 @@ const AddJoke = (props) => {
             </button>
           </div>
         ) : (
-          <div>
+          <div className="text-center">
             <div className="form-group">
               <textarea
                 type="text"

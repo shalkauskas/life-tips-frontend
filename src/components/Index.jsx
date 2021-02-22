@@ -1,8 +1,10 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
+import AddJoke from "./AddJoke";
 import JokesList from "./JokesList";
 export default function Index(props) {
   const [jokes, setJokes] = React.useState([]);
+  const [showAdd, setShowAdd] = React.useState(false);
   React.useEffect(() => {
     setJokes(props.jokes);
   }, [props.jokes, props.jokes.rating]);
@@ -11,8 +13,8 @@ export default function Index(props) {
   const orderRandom = [...jokes].sort(() => 0.5 - Math.random());
   return (
     <div>
-      <div className="text-center">
-        <div className="btn-group " role="group" aria-label="Order">
+      <div className="d-flex justify-content-center list px-3">
+        <div className="btn-group w-100" role="group" aria-label="Order">
           <NavLink
             exact
             to="/"
@@ -38,9 +40,28 @@ export default function Index(props) {
           >
             Random
           </NavLink>
+
+          <button
+            className={`ml-5 btn btn-success ${showAdd ? "disabled" : ""}`}
+            onClick={() => setShowAdd(!showAdd)}
+          >
+            <img
+              alt="Add"
+              src="/plus.svg"
+              width="14px"
+              height="14px"
+              style={{
+                filter:
+                  "invert(96%) sepia(97%) saturate(12%) hue-rotate(237deg) brightness(103%) contrast(103%)",
+                display: "inline-block",
+                marginRight: "5px",
+              }}
+            />
+            Add{" "}
+          </button>
         </div>
       </div>
-
+      {showAdd ? <AddJoke /> : null}
       <JokesList jokes={jokes} isAuthenticated={props.isAuthenticated} />
     </div>
   );

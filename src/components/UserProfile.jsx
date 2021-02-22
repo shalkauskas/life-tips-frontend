@@ -3,7 +3,18 @@ import AuthService from "../services/AuthService";
 export default function UserProfile(props) {
   const [edit, setEdit] = React.useState(false);
   const [name, setName] = React.useState(props.userdata.displayName);
-
+  const [adminRole, setAdminRole] = React.useState(false);
+  React.useEffect(() => {
+    admin();
+  }, []);
+  const admin = () => {
+    AuthService.admin().then((response) => {
+      if (response.data.admin) {
+        setAdminRole(true);
+      }
+      console.log(response);
+    });
+  };
   const logout = () => {
     AuthService.logout().then((response) => {
       window.location.reload();
@@ -68,7 +79,7 @@ export default function UserProfile(props) {
           ) : (
             <h5 className="card-title mt-5">
               {props.userdata.displayName}
-              {props.admin ? (
+              {adminRole ? (
                 <span className="ml-2 badge badge-secondary">Admin</span>
               ) : null}
             </h5>
