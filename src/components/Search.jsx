@@ -5,6 +5,7 @@ export default function Search(props) {
     <div className="input-group input-group-sm">
       <form className="form-inline">
         <input
+          style={{ maxWidth: "60%" }}
           type="text"
           className="form-control form-control-sm"
           placeholder=""

@@ -1,5 +1,5 @@
 import React from "react";
-import { NavLink, Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import AddJoke from "./AddJoke";
 import JokesList from "./JokesList";
 export default function Index(props) {
@@ -11,6 +11,8 @@ export default function Index(props) {
   const orderNewest = [...jokes].sort((a, b) => (a.time < b.time ? 1 : -1));
   const orderBest = [...jokes].sort((a, b) => (a.rating < b.rating ? 1 : -1));
   const orderRandom = [...jokes].sort(() => 0.5 - Math.random());
+  // infinite scroll
+
   return (
     <div>
       <div className="d-flex justify-content-center list px-3">
@@ -61,8 +63,13 @@ export default function Index(props) {
           </button>
         </div>
       </div>
-      {showAdd ? <AddJoke /> : null}
+      {showAdd ? <AddJoke close={() => setShowAdd(false)} /> : null}
       <JokesList jokes={jokes} isAuthenticated={props.isAuthenticated} />
+      <div className="text-center pb-3">
+        <button onClick={props.onClick} className="btn btn-lg btn-primary">
+          MORE!
+        </button>
+      </div>
     </div>
   );
 }

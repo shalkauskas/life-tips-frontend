@@ -11,10 +11,6 @@ const getAll = () => {
 const getAllPublished = () => {
   return http.get(`/explore`);
 };
-// Retrieve all User published Jokes
-// const getAllOfUser = (userId) => {
-//   return http.get(`/Jokes/${userId}/update/`, { headers: authHeader() });
-// };
 // Retrieve a single Joke with id
 const get = (id) => {
   return http.get(`/joke/${id}`);
@@ -39,14 +35,13 @@ const removeAll = () => {
   return http.delete(`/joke/update`);
 };
 
-const findBySearch = (query) => {
-  return http.get(`/explore?title=${query}`);
+const findBySearch = (query, page) => {
+  return http.get(`/explore?title=${query}&page=${page}`);
 };
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default {
   getAll,
-  // getAllOfUser,
   getAllPublished,
   get,
   getUpdate,

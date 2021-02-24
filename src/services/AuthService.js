@@ -16,6 +16,9 @@ const admin = () => {
 const updateName = (data) => {
   return http.post(`/dashboard`, data);
 };
+const updatePhoto = (data) => {
+  return http.post(`/dashboard/profile`, data);
+};
 const register = (data) => {
   return http.post("/register", data);
 };
@@ -27,6 +30,7 @@ export default {
   login,
   admin,
   updateName,
+  updatePhoto,
   loginGoogle,
   register,
   logout,

@@ -41,8 +41,8 @@ export default function Login(props) {
     props.history.go(0);
   };
   return (
-    <div className="container mt-5">
-      <h1 className="text-center">Login</h1>
+    <div className="container my-5" style={{ maxWidth: "600px" }}>
+      <h1 className="text-center mb-4">Login</h1>
 
       <div className="col">
         <div className="col">
@@ -82,18 +82,16 @@ export default function Login(props) {
           </div>
         </div>
 
-        <div className="col-sm-4 mx-auto mt-3">
-          <div className="text-center">
-            <a
-              href={`${process.env.REACT_APP_SERVER}/auth/google`}
-              onClick={loginGoogle}
-            >
-              <img src="google-login.svg" alt="google login" width="300px" />
-            </a>
-          </div>
+        <div className="text-center mt-3">
+          <a
+            href={`${process.env.REACT_APP_SERVER}/auth/google`}
+            onClick={loginGoogle}
+          >
+            <img src="google-login.svg" alt="google login" width="300px" />
+          </a>
         </div>
         <hr />
-        <div className="card col-sm-4 mx-auto">
+        <div className="card mx-auto">
           <div className="card-body text-center ">
             {" "}
             <p className="lead">Don't have an account yet?</p>

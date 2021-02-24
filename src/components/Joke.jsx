@@ -3,9 +3,6 @@ import { Link, useLocation } from "react-router-dom";
 import DataService from "../services/DataService";
 export default function Joke(props) {
   const [joke, setJoke] = React.useState([]);
-  Joke.defaultProps = {
-    allowRate: true,
-  };
   const jokeRatingCheck = localStorage.getItem(joke.id);
   const location = useLocation();
   const activeVoteStyle =
@@ -24,14 +21,7 @@ export default function Joke(props) {
   }, [location, props.id, jokeRatingCheck]);
 
   const updateRating = (modifier) => {
-    console.log(jokeRatingCheck);
-    if (modifier === jokeRatingCheck) {
-      console.log("Already voted");
-    } else {
-      localStorage.setItem(joke.id, modifier);
-      const data = {
-        rating: modifier === "up" ? joke.rating + 1 : joke.rating - 1,
-      };
+    const updateRatingAPI = (data) => {
       DataService.update(props.id || joke.id, data)
         .then((response) => {
           setJoke(response.data);
@@ -41,8 +31,37 @@ export default function Joke(props) {
         .catch((e) => {
           console.log(e);
         });
+    };
+    console.log(jokeRatingCheck);
+    if (modifier === jokeRatingCheck) {
+      if (modifier === "up") {
+        localStorage.setItem(joke.id, "");
+        const data = {
+          rating: joke.rating - 1,
+        };
+        updateRatingAPI(data);
+      } else if (modifier === "down") {
+        localStorage.setItem(joke.id, "");
+        const data = {
+          rating: joke.rating + 1,
+        };
+        updateRatingAPI(data);
+      } else {
+        console.log("Already voted");
+      }
+    } else {
+      localStorage.setItem(joke.id, modifier);
+      const data = {
+        rating:
+          modifier === "up"
+            ? joke.rating + 1
+            : "down"
+            ? joke.rating - 1
+            : joke.rating,
+      };
+      updateRatingAPI(data);
+      console.log(modifier, jokeRatingCheck);
     }
-    console.log(modifier, jokeRatingCheck);
   };
   const ratingHandler = (score) => {
     // props.isAuthenticated ?
@@ -56,7 +75,7 @@ export default function Joke(props) {
 
   return (
     <article className="card shadow-sm mx-auto">
-      <div className="card-header">
+      <div className="card-header" onClick={() => console.log(jokeRatingCheck)}>
         <Link
           to={{
             pathname: `/joke/${props.id || joke.id}`,
@@ -97,7 +116,7 @@ export default function Joke(props) {
             width="18px"
             height="18px"
             onClick={() => ratingHandler("up")}
-            className={`${props.allowRate ? "" : "d-none"}`}
+            className={``}
             style={{ filter: jokeRatingCheck === "up" ? activeVoteStyle : "" }}
           />
 
@@ -110,7 +129,7 @@ export default function Joke(props) {
             width="18px"
             height="18px"
             onClick={() => ratingHandler("down")}
-            className={`${props.allowRate ? "" : "d-none"}`}
+            className={``}
             style={{
               filter: jokeRatingCheck === "down" ? activeVoteStyle : "",
             }}

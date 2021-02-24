@@ -43,7 +43,6 @@ const AddJoke = (props) => {
           userId: response.data.userId,
         });
         setSubmitted(true);
-        console.log(response.data);
       })
       .catch((e) => {
         console.log(e);
@@ -59,8 +58,18 @@ const AddJoke = (props) => {
     <div className="mt-4 ">
       <div className="submit-form px-3">
         {submitted ? (
-          <div className="text-center">
-            <h4>You submitted successfully!</h4>
+          <div className="text-center alert alert-success ">
+            <button
+              className="close p-1 position-absolute"
+              style={{ right: "0", top: "0" }}
+              aria-label="Close"
+              onClick={props.close}
+            >
+              <span aria-hidden="true" className="">
+                &times;
+              </span>
+            </button>
+            <h4>You submitted successfully! </h4>
             <button className="btn btn-success" onClick={newJoke}>
               Add another
             </button>
@@ -82,6 +91,9 @@ const AddJoke = (props) => {
 
             <button onClick={saveJoke} className="btn btn-success">
               Submit
+            </button>
+            <button onClick={props.close} className="btn btn-danger ml-3">
+              Close
             </button>
           </div>
         )}

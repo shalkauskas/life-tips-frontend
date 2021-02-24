@@ -16,20 +16,17 @@ export default function Register(props) {
     };
     AuthService.register(data)
       .then((response) => {
-        //    setUserData({
-        //      username: response.data.username,
-        //      password: response.data.password,
-        //    });
-        response.data.success
-          ? props.history.push("/")
-          : props.history.push("/register");
+        response.data.success ? onRegister() : props.history.push("/register");
         console.log(response.data);
       })
       .catch((e) => {
         console.log(e);
       });
   };
-
+  const onRegister = () => {
+    props.history.push("/");
+    props.history.go(0);
+  };
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setUserData({ ...userdata, [name]: value });
@@ -41,33 +38,38 @@ export default function Register(props) {
     });
   };
   return (
-    <div className="container mt-5">
-      <h1 className="text-center">Register</h1>
+    <div className="container mt-5" style={{ maxWidth: "600px" }}>
+      <h1 className="text-center mb-4">Register</h1>
 
       <div className="col">
-        <div className="col">
+        <div className="">
           <div className="card">
             <div className="card-body">
               {/* <!-- Makes POST request to /register route --> */}
               <div className="submit-form">
                 <div className="form-group">
-                  <label htmlFor="displayName">Name</label>
+                  <label htmlFor="displayName">Name*</label>
                   <input
                     type="text"
                     id="displayName"
-                    className="form-control"
+                    className={`form-control ${
+                      userdata.displayName.length > 1 ? "is-valid" : ""
+                    }`}
                     name="displayName"
                     value={userdata.displayName}
                     onChange={handleInputChange}
                     autoComplete="name"
+                    max="20"
                     required
                   />
                 </div>
                 <div className="form-group">
-                  <label htmlFor="email">Email</label>
+                  <label htmlFor="email">Email*</label>
                   <input
                     type="email"
-                    className="form-control"
+                    className={`form-control ${
+                      userdata.username.includes("@" && ".") ? "is-valid" : ""
+                    }`}
                     name="username"
                     value={userdata.username}
                     onChange={handleInputChange}
@@ -75,15 +77,22 @@ export default function Register(props) {
                   />
                 </div>
                 <div className="form-group">
-                  <label htmlFor="password">Password</label>
+                  <label htmlFor="password">Password*</label>
+
                   <input
                     type="password"
-                    className="form-control"
+                    className={`form-control ${
+                      userdata.password.length >= 6 ? "is-valid" : ""
+                    }`}
                     name="password"
+                    min="6"
                     value={userdata.password}
                     onChange={handleInputChange}
                     required
                   />
+                  <small id="passwordHelpBlock" class="form-text text-muted">
+                    Your password must be at least 6 characters long.
+                  </small>
                 </div>
                 <button className="btn btn-dark float-right" onClick={saveUser}>
                   Register
@@ -93,7 +102,7 @@ export default function Register(props) {
           </div>
         </div>
 
-        <div className="col-sm-4 mx-auto mt-3">
+        <div className="text-center mt-3">
           <div className="text-center">
             <a
               href={`${process.env.REACT_APP_SERVER}/auth/google`}

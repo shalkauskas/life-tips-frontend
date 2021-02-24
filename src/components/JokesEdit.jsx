@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import DataService from "../services/DataService";
 import Joke from "./Joke";
-
+import AuthService from "../services/AuthService";
+import AddJoke from "./AddJoke";
 export default function JokesEdit(props) {
   const [jokes, setJokes] = useState([]);
   const [currentJoke, setCurrentJoke] = useState(null);
@@ -10,6 +11,8 @@ export default function JokesEdit(props) {
   const [message, setMessage] = useState("");
   const [dropdown, setDropdown] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+  const [adminRole, setAdminRole] = React.useState(false);
+  const [showAdd, setShowAdd] = React.useState(false);
   JokesEdit.defaultProps = {
     admin: false,
   };
@@ -29,6 +32,13 @@ export default function JokesEdit(props) {
   }, [retrieveTutorials, message]);
   useEffect(() => {
     setJokes(props.jokes);
+    AuthService.admin().then((response) => {
+      if (response.data.admin) {
+        setAdminRole(true);
+      } else {
+        console.log(response);
+      }
+    });
   }, [props.jokes]);
 
   const refreshList = () => {
@@ -122,7 +132,7 @@ export default function JokesEdit(props) {
       <div className="col-lg-6 col-12">
         <div className="d-flex justify-content-center my-3">
           <h4 className="text-center">
-            {props.admin ? "All jokes" : "My Jokes"}
+            {adminRole ? "All jokes" : "My Jokes"}
           </h4>
           <div className="dropdown ml-4">
             <button
@@ -199,6 +209,34 @@ export default function JokesEdit(props) {
               />
             </div>
           ))}
+          {jokes.length < 1 ? (
+            <div style={{ direction: "ltr" }}>
+              <h5 className="alert alert-warning text-center">
+                You don't have any added content yet. Want to submit a joke?
+                <button
+                  className={`ml-5 btn btn-success ${
+                    showAdd ? "disabled" : ""
+                  }`}
+                  onClick={() => setShowAdd(!showAdd)}
+                >
+                  <img
+                    alt="Add"
+                    src="/plus.svg"
+                    width="14px"
+                    height="14px"
+                    style={{
+                      filter:
+                        "invert(96%) sepia(97%) saturate(12%) hue-rotate(237deg) brightness(103%) contrast(103%)",
+                      display: "inline-block",
+                      marginRight: "5px",
+                    }}
+                  />
+                  Add{" "}
+                </button>
+              </h5>
+              {showAdd ? <AddJoke close={() => setShowAdd(false)} /> : null}
+            </div>
+          ) : null}
         </div>
         <div
           style={{ top: "35%", left: "0", right: "0", zIndex: "20" }}
@@ -240,7 +278,7 @@ export default function JokesEdit(props) {
           </div>
         </div>
         <div className="text-center">
-          {props.admin ? (
+          {adminRole ? (
             <button
               className="m-3 btn btn-sm btn-success"
               onClick={publishAllJokes}
@@ -248,12 +286,14 @@ export default function JokesEdit(props) {
               Publish All
             </button>
           ) : null}
-          <button
-            className="m-3 btn btn-sm btn-danger"
-            onClick={() => setShowConfirm(true)}
-          >
-            Remove All
-          </button>
+          {jokes.length < 1 ? null : (
+            <button
+              className="m-3 btn btn-sm btn-danger"
+              onClick={() => setShowConfirm(true)}
+            >
+              Remove All
+            </button>
+          )}
         </div>
       </div>
 
@@ -291,10 +331,27 @@ export default function JokesEdit(props) {
               </label>{" "}
               {currentJoke.published ? "Published" : "Pending"}
             </div>
-            <p className="lead text-danger">{message}</p>
+            <div
+              className={`alert alert-success ${
+                message.length < 1 ? "d-none" : "d-block"
+              }`}
+            >
+              <button
+                className="close p-1 position-absolute"
+                style={{ right: "0", top: "0" }}
+                aria-label="Close"
+                onClick={() => setMessage("")}
+              >
+                <span aria-hidden="true" className="">
+                  &times;
+                </span>
+              </button>
+              <p className="lead text-secondary ">{message}</p>
+            </div>
+
             {edit ? (
               <div>
-                {props.admin ? (
+                {adminRole ? (
                   currentJoke.published ? (
                     <button
                       className="badge badge-primary mr-2"

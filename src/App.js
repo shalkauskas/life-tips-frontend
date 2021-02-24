@@ -23,18 +23,22 @@ export default function App() {
   const [showSearch, setShowSearch] = React.useState(false);
   const [jokes, setJokes] = React.useState([]);
   const [dropdown, setDropdown] = React.useState(false);
+  const [page, setPage] = React.useState(0);
   React.useEffect(() => {
     const findBySearch = () => {
-      DataService.findBySearch(search)
+      DataService.findBySearch(search, page)
         .then((response) => {
+          console.log(response.data);
           if (window.location.pathname === "/best") {
-            response.data.sort((a, b) => (a.rating < b.rating ? 1 : -1));
+            response.data.jokes.sort((a, b) => (a.rating < b.rating ? 1 : -1));
           } else if (window.location.pathname === "/") {
-            response.data.sort((a, b) => (a.time < b.time ? 1 : -1));
+            response.data.jokes.sort((a, b) => (a.time < b.time ? 1 : -1));
           } else if (window.location.pathname === "/random") {
-            response.data.sort(() => 0.5 - Math.random());
+            response.data.jokes.sort(() => 0.5 - Math.random());
           } else return response.data;
-          setJokes(response.data);
+          response.data.totalPages > page
+            ? setJokes((prevState) => [...prevState, ...response.data.jokes])
+            : console.log("Thats it!");
         })
         .catch((e) => {
           console.log(e);
@@ -50,7 +54,7 @@ export default function App() {
       .catch((e) => {
         console.log(e);
       });
-  }, [isAuthenticated, search]);
+  }, [isAuthenticated, page, search]);
   // logout
   const logout = () => {
     AuthService.logout().then((response) => {
@@ -72,13 +76,13 @@ export default function App() {
     DataService.findBySearch(search)
       .then((response) => {
         if (window.location.pathname === "/best") {
-          response.data.sort((a, b) => (a.rating < b.rating ? 1 : -1));
+          response.data.jokes.sort((a, b) => (a.rating < b.rating ? 1 : -1));
         } else if (window.location.pathname === "/") {
-          response.data.sort((a, b) => (a.time < b.time ? 1 : -1));
+          response.data.jokes.sort((a, b) => (a.time < b.time ? 1 : -1));
         } else if (window.location.pathname === "/random") {
-          response.data.sort(() => 0.5 - Math.random());
-        } else return response.data;
-        setJokes(response.data);
+          response.data.jokes.sort(() => 0.5 - Math.random());
+        } else return response.data.jokes;
+        setJokes(response.data.jokes);
       })
       .catch((e) => {
         console.log(e);
@@ -99,10 +103,10 @@ export default function App() {
             height="26px"
             className="mr-2 align-top"
           />
-          <b>DB jokes</b>
+          {showSearch ? "" : "DB jokes"}
         </Link>
-        <div className="navbar-nav ml-sm-auto mx-1">
-          <li className="ml-2 nav-item my-auto">
+        <div className="navbar-nav ml-auto mx-1">
+          <li className="ml-auto nav-item my-auto" style={{ maxWidth: "75%" }}>
             {showSearch ? (
               <Search
                 onChangeSearch={onChangeSearch}
@@ -129,15 +133,16 @@ export default function App() {
               </span>
             )}
           </li>
-          {isAuthenticated ? (
-            <li className="nav-item mr-2">
+
+          <li className="nav-item">
+            {isAuthenticated ? (
               <div className="dropdown">
                 <button
                   className={`my-auto d-inline btn dropdown-toggle`}
                   onClick={() => setDropdown(!dropdown)}
                 >
                   <img
-                    src={"/user.svg"}
+                    src={userdata.photoUrl || "/user.svg"}
                     alt="user profile pic"
                     width="35px"
                     height="35px"
@@ -167,25 +172,25 @@ export default function App() {
                   </button>
                 </div>
               </div>
-            </li>
-          ) : (
-            <li className="nav-item">
-              <Link to={"/login"} className="nav-link">
-                <img
-                  src="/enter.svg"
-                  alt="login"
-                  width="15px"
-                  height="15px"
-                  className="d-block mx-auto"
-                  style={{
-                    filter:
-                      "invert(71%) sepia(7%) saturate(155%) hue-rotate(155deg) brightness(88%) contrast(84%)",
-                  }}
-                />
-                Log in
-              </Link>
-            </li>
-          )}
+            ) : (
+              <div>
+                <Link to={"/login"} className="nav-link">
+                  <img
+                    src="/enter.svg"
+                    alt="login"
+                    width="15px"
+                    height="15px"
+                    className="d-block mx-auto"
+                    style={{
+                      filter:
+                        "invert(71%) sepia(7%) saturate(155%) hue-rotate(155deg) brightness(88%) contrast(84%)",
+                    }}
+                  />
+                  Log in
+                </Link>
+              </div>
+            )}
+          </li>
         </div>
       </nav>
 
@@ -199,6 +204,7 @@ export default function App() {
                 {...props}
                 isAuthenticated={isAuthenticated}
                 jokes={jokes}
+                onClick={() => setPage(page + 1)}
               />
             )}
           />
@@ -247,6 +253,7 @@ export default function App() {
         </Switch>
       </div>
       <ScrollButton />
+
       <Footer />
     </div>
   );

@@ -26,6 +26,10 @@ html, body, #app, #app>div {
      max-width: 300px;
      margin: auto;
    }
+   .dropdown-toggle::after {
+     vertical-align: middle !important;
+   }
+   /* scroll to top button */
    .scrollTop {
     bottom: 60px;
     animation: fadeIn 0.3s;
