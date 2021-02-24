@@ -13,10 +13,7 @@ const loginGoogle = () => {
 const admin = () => {
   return http.get(`/admin`);
 };
-const updateName = (data) => {
-  return http.post(`/dashboard`, data);
-};
-const updatePhoto = (data) => {
+const updateUser = (data) => {
   return http.post(`/dashboard/profile`, data);
 };
 const register = (data) => {
@@ -29,8 +26,7 @@ export default {
   index,
   login,
   admin,
-  updateName,
-  updatePhoto,
+  updateUser,
   loginGoogle,
   register,
   logout,

@@ -8,8 +8,8 @@ const getAll = () => {
   return http.get(`/joke/update/`);
 };
 // Retrieve all Published Jokes
-const getAllPublished = () => {
-  return http.get(`/explore`);
+const getAllPublished = (page) => {
+  return http.get(`/explore?page=${page}`);
 };
 // Retrieve a single Joke with id
 const get = (id) => {

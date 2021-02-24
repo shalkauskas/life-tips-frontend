@@ -16,45 +16,44 @@ import DataService from "./services/DataService";
 import Footer from "./components/Footer";
 import JokesEdit from "./components/JokesEdit";
 import ScrollButton from "./components/ScrollButton";
-export default function App() {
+import SearchResult from "./components/SearchResult";
+export default function App(props) {
   const [userdata, setUserdata] = React.useState([]);
   const [isAuthenticated, setAuthenticated] = React.useState(false);
-  const [search, setSearch] = React.useState("");
   const [showSearch, setShowSearch] = React.useState(false);
   const [jokes, setJokes] = React.useState([]);
   const [dropdown, setDropdown] = React.useState(false);
   const [page, setPage] = React.useState(0);
   React.useEffect(() => {
-    const findBySearch = () => {
-      DataService.findBySearch(search, page)
-        .then((response) => {
-          console.log(response.data);
-          if (window.location.pathname === "/best") {
-            response.data.jokes.sort((a, b) => (a.rating < b.rating ? 1 : -1));
-          } else if (window.location.pathname === "/") {
-            response.data.jokes.sort((a, b) => (a.time < b.time ? 1 : -1));
-          } else if (window.location.pathname === "/random") {
-            response.data.jokes.sort(() => 0.5 - Math.random());
-          } else return response.data;
-          response.data.totalPages > page
-            ? setJokes((prevState) => [...prevState, ...response.data.jokes])
-            : console.log("Thats it!");
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    };
+    DataService.getAllPublished(page)
+      .then((response) => {
+        console.log(response.data);
+        if (window.location.pathname === "/best") {
+          response.data.jokes.sort((a, b) => (a.rating < b.rating ? 1 : -1));
+        } else if (window.location.pathname === "/") {
+          response.data.jokes.sort((a, b) => (a.time < b.time ? 1 : -1));
+        } else if (window.location.pathname === "/random") {
+          response.data.jokes.sort(() => 0.5 - Math.random());
+        } else return response.data;
+        response.data.totalPages > page
+          ? setJokes((prevState) => [...prevState, ...response.data.jokes])
+          : console.log("Thats it!");
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }, [page]);
+  React.useEffect(() => {
     AuthService.index()
       .then((response) => {
         console.log(response);
         setAuthenticated(response.data.isAuthenticated);
-        findBySearch();
         isAuthenticated ? setUserdata(response.data.user) : setUserdata([]);
       })
       .catch((e) => {
         console.log(e);
       });
-  }, [isAuthenticated, page, search]);
+  }, [isAuthenticated]);
   // logout
   const logout = () => {
     AuthService.logout().then((response) => {
@@ -62,39 +61,12 @@ export default function App() {
       console.log(response);
     });
   };
-  // search
-  const onChangeSearch = (e) => {
-    const search = e.target.value;
-    setSearch(search);
-  };
-
-  const reset = () => {
-    setSearch("");
-    setShowSearch(false);
-  };
-  const findBySearch = () => {
-    DataService.findBySearch(search)
-      .then((response) => {
-        if (window.location.pathname === "/best") {
-          response.data.jokes.sort((a, b) => (a.rating < b.rating ? 1 : -1));
-        } else if (window.location.pathname === "/") {
-          response.data.jokes.sort((a, b) => (a.time < b.time ? 1 : -1));
-        } else if (window.location.pathname === "/random") {
-          response.data.jokes.sort(() => 0.5 - Math.random());
-        } else return response.data.jokes;
-        setJokes(response.data.jokes);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  };
   return (
     <div className="bg-light pb-5 h-100 min-vh-100 position-relative">
       <nav className="navbar navbar-expand navbar-light bg-white border-bottom pr-sm-1 fixed-top">
         <Link
           to="/"
           className={`navbar-brand mr-sm-1 ${showSearch ? "mr-0" : "mr-3"}`}
-          onClick={findBySearch}
         >
           <img
             alt="Logo"
@@ -103,17 +75,12 @@ export default function App() {
             height="26px"
             className="mr-2 align-top"
           />
-          {showSearch ? "" : "DB jokes"}
+          DB jokes
         </Link>
         <div className="navbar-nav ml-auto mx-1">
           <li className="ml-auto nav-item my-auto" style={{ maxWidth: "75%" }}>
             {showSearch ? (
-              <Search
-                onChangeSearch={onChangeSearch}
-                findBySearch={findBySearch}
-                search={search}
-                reset={reset}
-              />
+              <Search setShowSearch={setShowSearch} />
             ) : (
               <span className="nav-link" onClick={() => setShowSearch(true)}>
                 <img
@@ -213,6 +180,13 @@ export default function App() {
             path={"/joke/:id"}
             render={(props) => (
               <Joke {...props} isAuthenticated={isAuthenticated} />
+            )}
+          />
+          <Route
+            exact
+            path={"/search"}
+            render={(props) => (
+              <SearchResult {...props} isAuthenticated={isAuthenticated} />
             )}
           />
           <Route

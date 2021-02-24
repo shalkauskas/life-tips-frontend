@@ -2,34 +2,16 @@ import axios from "axios";
 import React from "react";
 import AuthService from "../services/AuthService";
 export default function UserProfile(props) {
-  const [edit, setEdit] = React.useState(false);
   const [name, setName] = React.useState(props.userdata.displayName);
   const [userpic, setUserpic] = React.useState(props.userdata.photoUrl);
-  const [adminRole, setAdminRole] = React.useState(false);
-  React.useEffect(() => {
-    admin();
-  }, []);
-  const admin = () => {
-    AuthService.admin().then((response) => {
-      if (response.data.admin) {
-        setAdminRole(true);
-      } else {
-        console.log(response);
-      }
-    });
-  };
-  const logout = () => {
-    AuthService.logout().then((response) => {
-      window.location.reload();
-      console.log(response);
-    });
-  };
-
+  const [activeButton, setActiveButton] = React.useState(false);
   const handleInputChange = (event) => {
+    setActiveButton(true);
     setName(event.target.value);
     console.log(name);
   };
   const handleImageUpload = (e) => {
+    setActiveButton(true);
     const [file] = e.target.files;
     const formData = new FormData();
     formData.append("file", file);
@@ -51,22 +33,16 @@ export default function UserProfile(props) {
           const data = response.data;
           const fileURL = data.secure_url;
           setUserpic(fileURL);
-          AuthService.updatePhoto({ photoUrl: fileURL }).then((response) => {
-            console.log(response);
-          });
           console.log(data);
         });
     }
   };
-  const updateName = () => {
-    var data = {
-      displayName: name,
-    };
-    AuthService.updateName(data)
+  const updateUser = () => {
+    AuthService.updateUser({ displayName: name, photoUrl: userpic })
       .then((response) => {
         console.log(response);
         if (response.status === 200) {
-          setEdit(!edit);
+          setName(response.data.displayName);
           alert("Your profile has been successfully updated!");
           window.location.reload();
         } else {
@@ -77,74 +53,91 @@ export default function UserProfile(props) {
         console.log(e);
       });
   };
+  const reset = () => {
+    setName(props.userdata.displayName);
+    setUserpic(props.userdata.photoUrl);
+    setActiveButton(false);
+  };
   return (
     <div className="bg-light py-5">
       <div
         className="card mb-4 flex-shrink-0 mx-auto"
         style={{ height: "fit-content", width: "18rem" }}
       >
-        <img
-          src={userpic || "/user.svg"}
-          className="card-img-top rounded-circle w-50 mx-auto mt-3"
-          alt="Profile user pic"
-        />
         <div className="card-body text-center">
-          {edit ? (
-            <>
-              <div className="custom-file mb-2">
-                <input
-                  type="file"
-                  className="custom-file-input"
-                  id="customFile"
-                  accept="image/*"
-                  multiple={false}
-                  onChange={handleImageUpload}
+          {/* image */}
+          <div className="upload-new mb-2 position-relative">
+            <input
+              type="file"
+              className="d-none"
+              id="customFile"
+              accept="image/*"
+              multiple={false}
+              onChange={handleImageUpload}
+            />
+            <img
+              src={userpic || "/user.svg"}
+              className="card-img-top rounded-circle d-block mx-auto mt-3 "
+              alt="Profile user pic"
+            />
+            <div
+              className=" position-absolute text-white rounded-circle d-flex"
+              style={{
+                bottom: "0",
+                left: "0",
+                top: "0",
+                right: "0",
+                opacity: "0.9",
+                zIndex: "10",
+                overflow: "hidden",
+              }}
+            >
+              <label
+                className="text-center mb-0 pb-3 pt-2 bg-secondary align-self-end w-100 upload"
+                htmlFor="customFile"
+                style={{ cursor: "pointer" }}
+              >
+                Upload{" "}
+                <img
+                  src="/edit.svg"
+                  alt="Upload new"
+                  width="20px"
+                  className="ml-2 align-text-top"
+                  style={{
+                    filter:
+                      "invert(100%) sepia(3%) saturate(13%) hue-rotate(81deg) brightness(106%) contrast(106%)",
+                  }}
                 />
-                <label
-                  className="custom-file-label text-left"
-                  htmlFor="customFile"
-                >
-                  Upload new user pic
-                </label>
-              </div>
-              <div className="input-group mb-2">
-                <input
-                  value={name}
-                  type="text"
-                  name="displayName"
-                  className="form-control"
-                  onChange={handleInputChange}
-                ></input>
-                <div className="input-group-append">
-                  <button
-                    onClick={updateName}
-                    className="btn btn-success"
-                    type="button"
-                  >
-                    Save
-                  </button>
-                </div>
-              </div>{" "}
-            </>
-          ) : (
-            <h5 className="card-title mt-5">
-              {props.userdata.displayName}
-              {adminRole ? (
-                <span className="ml-2 badge badge-secondary">Admin</span>
-              ) : null}
-            </h5>
-          )}
-
+              </label>
+            </div>
+          </div>
+          {/*  */}
+          <div className="input-group mb-2">
+            <input
+              value={name}
+              type="text"
+              name="displayName"
+              className="form-control"
+              onChange={handleInputChange}
+            ></input>
+          </div>{" "}
           <p className="card-text">{props.userdata.username}</p>
           <div className="d-flex flex-column w-50 mx-auto">
-            <span
-              onClick={() => setEdit(!edit)}
-              className="nav-link btn btn-warning mb-3"
+            <button
+              onClick={updateUser}
+              className={`${
+                activeButton ? "" : "disabled"
+              } nav-link btn btn-success mb-3`}
             >
-              {edit ? "Cancel" : "Edit"}
-            </span>
-            <span onClick={logout} className="nav-link btn btn-danger">
-              Logout
+              Save
+            </button>
+            <span
+              className={`${
+                activeButton ? "" : "disabled"
+              } nav-link btn btn-warning`}
+              onClick={reset}
+            >
+              Cancel
             </span>
           </div>
         </div>
