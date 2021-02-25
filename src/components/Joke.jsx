@@ -1,3 +1,4 @@
+import Tooltip from "./Tooltip";
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import DataService from "../services/DataService";
@@ -26,13 +27,13 @@ export default function Joke(props) {
         .then((response) => {
           setJoke(response.data);
 
-          console.log(response);
+          // console.log(response);
         })
         .catch((e) => {
           console.log(e);
         });
     };
-    console.log(jokeRatingCheck);
+    // console.log(jokeRatingCheck);
     if (modifier === jokeRatingCheck) {
       if (modifier === "up") {
         localStorage.setItem(joke.id, "");
@@ -47,7 +48,7 @@ export default function Joke(props) {
         };
         updateRatingAPI(data);
       } else {
-        console.log("Already voted");
+        // console.log("Already voted");
       }
     } else {
       localStorage.setItem(joke.id, modifier);
@@ -60,7 +61,7 @@ export default function Joke(props) {
             : joke.rating,
       };
       updateRatingAPI(data);
-      console.log(modifier, jokeRatingCheck);
+      // console.log(modifier, jokeRatingCheck);
     }
   };
   const ratingHandler = (score) => {
@@ -72,9 +73,13 @@ export default function Joke(props) {
     /\D/g,
     ""
   );
-
+  const shareButton = () => {
+    navigator.clipboard.writeText(
+      window.location.href + `joke/${props.id || joke.id}`
+    );
+  };
   return (
-    <article className="card shadow-sm mx-auto">
+    <article className="card shadow-sm mx-auto list">
       <div className="card-header" onClick={() => console.log(jokeRatingCheck)}>
         <Link
           to={{
@@ -85,21 +90,19 @@ export default function Joke(props) {
             <u>#{jokeId.slice(jokeId.length - 5)}</u>
           </span>
         </Link>
-        <img
-          alt="share"
-          src="/share.svg"
-          width="16px"
-          height="16px"
-          title="Copy link to clipboard"
-          aria-label="Copy link"
-          className="text-muted ml-3 align-text-top"
-          style={{ cursor: "pointer" }}
-          onClick={() => {
-            navigator.clipboard.writeText(
-              window.location.href + `joke/${props.id || joke.id}`
-            );
-          }}
-        />
+        <Tooltip content="Copy link to clipboard" direction="right" delay="0">
+          <img
+            alt="share"
+            src="/share.svg"
+            width="16px"
+            height="16px"
+            aria-label="Copy link"
+            className="text-muted ml-3 align-text-top"
+            style={{ cursor: "pointer" }}
+            onClick={shareButton}
+          />
+        </Tooltip>
+
         <span className="float-right text-muted">{joke.time}</span>
       </div>
       <div className="card-body">

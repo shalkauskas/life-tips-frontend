@@ -25,7 +25,7 @@ export default function Search(props) {
   const reset = () => {
     setSearch("");
     props.setShowSearch(false);
-    history.push("/");
+    // history.push("/");
   };
   return (
     <div className="input-group input-group-sm">

@@ -59,10 +59,10 @@ export default function UserProfile(props) {
     setActiveButton(false);
   };
   return (
-    <div className="bg-light py-5">
+    <div className="bg-light mt-5">
       <div
-        className="card mb-4 flex-shrink-0 mx-auto"
-        style={{ height: "fit-content", width: "18rem" }}
+        className="card py-4 px-1 flex-shrink-0 mx-auto"
+        style={{ height: "fit-content", width: "20rem" }}
       >
         <div className="card-body text-center">
           {/* image */}
@@ -112,33 +112,54 @@ export default function UserProfile(props) {
             </div>
           </div>
           {/*  */}
-          <div className="input-group mb-2">
+          <div className="form-group mb-4 text-left">
+            <label className="my-2" htmlFor="displayName">
+              Name{" "}
+              <img
+                src="/edit.svg"
+                alt="Upload new"
+                width="12px"
+                className="align-text-top"
+              />
+            </label>
             <input
               value={name}
               type="text"
               name="displayName"
+              id="displayName"
               className="form-control"
               onChange={handleInputChange}
-            ></input>
+            />
+            <label className="my-2" htmlFor="email">
+              {" "}
+              Email{" "}
+            </label>
+            <input
+              value={props.userdata.username}
+              type="text"
+              id="email"
+              disabled
+              readonly
+              className="form-control"
+            />
           </div>{" "}
-          <p className="card-text">{props.userdata.username}</p>
           <div className="d-flex flex-column w-50 mx-auto">
             <button
               onClick={updateUser}
               className={`${
                 activeButton ? "" : "disabled"
-              } nav-link btn btn-success mb-3`}
+              } nav-link btn btn-success mb-3 text-white`}
             >
               Save
             </button>
-            <span
+            <button
               className={`${
                 activeButton ? "" : "disabled"
-              } nav-link btn btn-warning`}
+              } nav-link btn btn-outline-danger`}
               onClick={reset}
             >
               Cancel
-            </span>
+            </button>
           </div>
         </div>
       </div>

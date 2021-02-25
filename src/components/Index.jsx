@@ -1,18 +1,61 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import AddJoke from "./AddJoke";
 import JokesList from "./JokesList";
+import DataService from "../services/DataService";
 export default function Index(props) {
   const [jokes, setJokes] = React.useState([]);
   const [showAdd, setShowAdd] = React.useState(false);
-  React.useEffect(() => {
-    setJokes(props.jokes);
-  }, [props.jokes, props.jokes.rating]);
-  const orderNewest = [...jokes].sort((a, b) => (a.time < b.time ? 1 : -1));
-  const orderBest = [...jokes].sort((a, b) => (a.rating < b.rating ? 1 : -1));
-  const orderRandom = [...jokes].sort(() => 0.5 - Math.random());
-  // infinite scroll
+  const [loading, setLoading] = React.useState(false);
+  const [hasNextPage, setHasNextPage] = React.useState(false);
+  const [page, setPage] = React.useState(0);
+  const [order, setOrder] = React.useState("new");
 
+  // infinite scroll
+  const ref = React.useRef();
+  let location = useLocation();
+  React.useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          // props.onClick();
+          // console.log("It works!");
+        }
+      },
+      {
+        root: null,
+        rootMargin: "0px",
+        threshold: 0.1,
+      }
+    );
+    if (ref.current) {
+      observer.observe(ref.current);
+    }
+  }, [props, ref]);
+  React.useEffect(() => {
+    setLoading(true);
+    console.log(location.pathname);
+    location.pathname === "/"
+      ? setOrder("new")
+      : location.pathname === "/best"
+      ? setOrder("best")
+      : setOrder("random");
+    DataService.getAllPublished(page, order)
+      .then((response) => {
+        setLoading(false);
+        console.log(response.data);
+        setHasNextPage(response.data.hasNextPage);
+        setJokes(response.data.jokes);
+        // response.data.totalPages > page && response.data.order === order
+        //   ? setJokes((prevState) => [...prevState, ...response.data.jokes])
+        //   : response.data.totalPages > page && response.data.order != order
+        //   ? setJokes(response.data.jokes)
+        //   : console.log("That's it!");
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }, [page, location, order]);
   return (
     <div>
       <div className="d-flex justify-content-center list px-3">
@@ -22,7 +65,7 @@ export default function Index(props) {
             to="/"
             activeClassName="active"
             className={`btn btn-outline-secondary`}
-            onClick={() => setJokes(orderNewest)}
+            // onClick={() => setOrder("new")}
           >
             New
           </NavLink>
@@ -30,7 +73,7 @@ export default function Index(props) {
             to="/best"
             activeClassName="active"
             className={`btn btn-outline-secondary`}
-            onClick={() => setJokes(orderBest)}
+            // onClick={() => setOrder("best")}
           >
             Best
           </NavLink>
@@ -38,7 +81,7 @@ export default function Index(props) {
             to="/random"
             activeClassName="active"
             className={`btn btn-outline-secondary`}
-            onClick={() => setJokes(orderRandom)}
+            // onClick={() => setOrder("random")}
           >
             Random
           </NavLink>
@@ -65,8 +108,20 @@ export default function Index(props) {
       </div>
       {showAdd ? <AddJoke close={() => setShowAdd(false)} /> : null}
       <JokesList jokes={jokes} isAuthenticated={props.isAuthenticated} />
+      {loading ? (
+        <div className="d-flex justify-content-center mt-5 align-items-center">
+          <div className="spinner-border mr-4" role="status"></div>
+          <strong>Loading...</strong>
+        </div>
+      ) : null}
       <div className="text-center pb-3">
-        <button onClick={props.onClick} className="btn btn-lg btn-primary">
+        <button
+          ref={ref}
+          onClick={() => setPage(page + 1)}
+          className={`${
+            hasNextPage ? "" : "d-none"
+          } btn btn-lg btn-outline-secondary`}
+        >
           MORE!
         </button>
       </div>

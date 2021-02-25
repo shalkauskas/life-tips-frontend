@@ -402,7 +402,9 @@ export default function JokesEdit(props) {
         ) : (
           <div>
             <p className="lead text-danger text-center">{message}</p>
-            <p className="text-center my-5">Please select...</p>
+            <p className="text-center my-5 alert alert-info">
+              Please select a joke to edit...
+            </p>
           </div>
         )}
       </div>

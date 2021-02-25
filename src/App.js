@@ -12,7 +12,7 @@ import NotFound from "./components/NotFound";
 import UserProfile from "./components/UserProfile";
 import Register from "./components/Register";
 import Search from "./components/Search";
-import DataService from "./services/DataService";
+
 import Footer from "./components/Footer";
 import JokesEdit from "./components/JokesEdit";
 import ScrollButton from "./components/ScrollButton";
@@ -21,28 +21,8 @@ export default function App(props) {
   const [userdata, setUserdata] = React.useState([]);
   const [isAuthenticated, setAuthenticated] = React.useState(false);
   const [showSearch, setShowSearch] = React.useState(false);
-  const [jokes, setJokes] = React.useState([]);
   const [dropdown, setDropdown] = React.useState(false);
-  const [page, setPage] = React.useState(0);
-  React.useEffect(() => {
-    DataService.getAllPublished(page)
-      .then((response) => {
-        console.log(response.data);
-        if (window.location.pathname === "/best") {
-          response.data.jokes.sort((a, b) => (a.rating < b.rating ? 1 : -1));
-        } else if (window.location.pathname === "/") {
-          response.data.jokes.sort((a, b) => (a.time < b.time ? 1 : -1));
-        } else if (window.location.pathname === "/random") {
-          response.data.jokes.sort(() => 0.5 - Math.random());
-        } else return response.data;
-        response.data.totalPages > page
-          ? setJokes((prevState) => [...prevState, ...response.data.jokes])
-          : console.log("Thats it!");
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  }, [page]);
+
   React.useEffect(() => {
     AuthService.index()
       .then((response) => {
@@ -63,7 +43,10 @@ export default function App(props) {
   };
   return (
     <div className="bg-light pb-5 h-100 min-vh-100 position-relative">
-      <nav className="navbar navbar-expand navbar-light bg-white border-bottom pr-sm-1 fixed-top">
+      <nav
+        className="navbar navbar-expand navbar-light bg-white border-bottom pr-sm-1 fixed-top"
+        onMouseLeave={() => setDropdown(false)}
+      >
         <Link
           to="/"
           className={`navbar-brand mr-sm-1 ${showSearch ? "mr-0" : "mr-3"}`}
@@ -164,34 +147,29 @@ export default function App(props) {
       <div className="mt-5 pt-5">
         <Switch>
           <Route
-            exact
             path={["/", "/best", "/random"]}
+            exact
             render={(props) => (
-              <Index
-                {...props}
-                isAuthenticated={isAuthenticated}
-                jokes={jokes}
-                onClick={() => setPage(page + 1)}
-              />
+              <Index {...props} isAuthenticated={isAuthenticated} />
             )}
           />
           <Route
-            exact
             path={"/joke/:id"}
+            exact
             render={(props) => (
               <Joke {...props} isAuthenticated={isAuthenticated} />
             )}
           />
           <Route
-            exact
             path={"/search"}
+            exact
             render={(props) => (
               <SearchResult {...props} isAuthenticated={isAuthenticated} />
             )}
           />
           <Route
-            exact
             path="/add"
+            exact
             render={(props) => (
               <AddJoke
                 {...props}
@@ -201,8 +179,8 @@ export default function App(props) {
             )}
           />
           <Route
-            exact
             path="/login"
+            exact
             component={Login}
             isAuthenticated={isAuthenticated}
           />
@@ -212,7 +190,6 @@ export default function App(props) {
             component={JokesEdit}
             isAuthenticated={isAuthenticated}
             userdata={userdata}
-            jokes={jokes}
             exact
           />
           <PrivateRoute
@@ -220,7 +197,6 @@ export default function App(props) {
             component={UserProfile}
             isAuthenticated={isAuthenticated}
             userdata={userdata}
-            jokes={jokes}
             exact
           />
           <Route component={NotFound} />
