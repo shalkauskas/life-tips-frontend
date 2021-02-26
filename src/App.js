@@ -24,16 +24,19 @@ export default function App(props) {
   const [dropdown, setDropdown] = React.useState(false);
 
   React.useEffect(() => {
-    AuthService.index()
-      .then((response) => {
-        console.log(response);
-        setAuthenticated(response.data.isAuthenticated);
-        isAuthenticated ? setUserdata(response.data.user) : setUserdata([]);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  }, [isAuthenticated]);
+    async function authorize() {
+      await AuthService.index()
+        .then((response) => {
+          console.log(response);
+          setAuthenticated(response.data.isAuthenticated);
+          setUserdata(response.data.user);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    }
+    authorize();
+  }, []);
   // logout
   const logout = () => {
     AuthService.logout().then((response) => {

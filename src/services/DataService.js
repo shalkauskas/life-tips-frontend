@@ -4,8 +4,8 @@ const create = (data) => {
   return http.post("/joke", data);
 };
 // Retrieve all Jokes
-const getAll = () => {
-  return http.get(`/joke/update/`);
+const getAll = (page, order) => {
+  return http.get(`/joke/update?page=${page}&order=${order}`);
 };
 // Retrieve all Published Jokes
 const getAllPublished = (page, order) => {

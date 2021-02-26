@@ -139,7 +139,7 @@ export default function UserProfile(props) {
               type="text"
               id="email"
               disabled
-              readonly
+              readOnly
               className="form-control"
             />
           </div>{" "}

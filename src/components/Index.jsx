@@ -33,29 +33,31 @@ export default function Index(props) {
     }
   }, [props, ref]);
   React.useEffect(() => {
-    setLoading(true);
-    console.log(location.pathname);
     location.pathname === "/"
       ? setOrder("new")
       : location.pathname === "/best"
       ? setOrder("best")
       : setOrder("random");
-    DataService.getAllPublished(page, order)
-      .then((response) => {
-        setLoading(false);
-        console.log(response.data);
-        setHasNextPage(response.data.hasNextPage);
-        setJokes(response.data.jokes);
-        // response.data.totalPages > page && response.data.order === order
-        //   ? setJokes((prevState) => [...prevState, ...response.data.jokes])
-        //   : response.data.totalPages > page && response.data.order != order
-        //   ? setJokes(response.data.jokes)
-        //   : console.log("That's it!");
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  }, [page, location, order]);
+    setJokes([]);
+    setPage(0);
+  }, [location]);
+  React.useEffect(() => {
+    setLoading(true);
+    async function fetchJokes() {
+      await DataService.getAllPublished(page, order)
+        .then((response) => {
+          setLoading(false);
+          console.log(response.data);
+          setHasNextPage(response.data.hasNextPage);
+          setJokes((prevState) => [...prevState, ...response.data.jokes]);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    }
+    fetchJokes();
+  }, [page, order]);
+
   return (
     <div>
       <div className="d-flex justify-content-center list px-3">

@@ -9,16 +9,18 @@ export default function Joke(props) {
   const activeVoteStyle =
     "invert(55%) sepia(26%) saturate(6132%) hue-rotate(332deg) brightness(102%) contrast(101%)";
   React.useEffect(() => {
+    let mounted = true;
     const retrieveJokes = (id) => {
       DataService.get(id)
         .then((response) => {
-          setJoke(response.data);
+          if (mounted) setJoke(response.data);
         })
         .catch((e) => {
           console.log(e);
         });
     };
     retrieveJokes(props.id || location.pathname.slice(6));
+    return () => (mounted = false);
   }, [location, props.id, jokeRatingCheck]);
 
   const updateRating = (modifier) => {
