@@ -1,4 +1,15 @@
+import DataService from "../../services/DataService";
 export default function ConfirmationModal(props) {
+  const removeAllJokes = () => {
+    DataService.removeAll()
+      .then((response) => {
+        console.log(response.data);
+        props.refreshList();
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
   return (
     <div
       style={{ top: "35%", left: "0", right: "0", zIndex: "20" }}
@@ -33,7 +44,7 @@ export default function ConfirmationModal(props) {
         <button
           type="button"
           className="btn btn-danger"
-          onClick={props.removeAllJokes}
+          onClick={removeAllJokes}
         >
           Confirm delete all
         </button>

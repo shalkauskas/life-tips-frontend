@@ -1,8 +1,11 @@
 import React from "react";
 import { NavLink, useLocation } from "react-router-dom";
-import AddJoke from "./AddJoke";
-import JokesList from "./JokesList";
+import AddJoke from "../components/AddJoke";
+import JokesList from "../components/JokesList";
 import DataService from "../services/DataService";
+import Spinner from "../components/Spinner";
+import LoadMoreButton from "../components/LoadMoreButton";
+import AddButton from "../components/AddButton";
 export default function Index(props) {
   const [jokes, setJokes] = React.useState([]);
   const [showAdd, setShowAdd] = React.useState(false);
@@ -88,44 +91,19 @@ export default function Index(props) {
             Random
           </NavLink>
 
-          <button
-            className={`ml-5 btn btn-success ${showAdd ? "disabled" : ""}`}
-            onClick={() => setShowAdd(!showAdd)}
-          >
-            <img
-              alt="Add"
-              src="/plus.svg"
-              width="14px"
-              height="14px"
-              style={{
-                filter:
-                  "invert(96%) sepia(97%) saturate(12%) hue-rotate(237deg) brightness(103%) contrast(103%)",
-                display: "inline-block",
-                marginRight: "5px",
-              }}
-            />
-            Add{" "}
-          </button>
+          <AddButton showAdd={showAdd} setShowAdd={setShowAdd} />
         </div>
       </div>
       {showAdd ? <AddJoke close={() => setShowAdd(false)} /> : null}
       <JokesList jokes={jokes} isAuthenticated={props.isAuthenticated} />
-      {loading ? (
-        <div className="d-flex justify-content-center mt-5 align-items-center">
-          <div className="spinner-border mr-4" role="status"></div>
-          <strong>Loading...</strong>
-        </div>
-      ) : null}
-      <div className="text-center pb-3">
-        <button
-          ref={ref}
-          onClick={() => setPage(page + 1)}
-          className={`${
-            hasNextPage ? "" : "d-none"
-          } btn btn-lg btn-outline-secondary`}
-        >
-          MORE!
-        </button>
+      <Spinner loading={loading} />
+
+      <div className="text-center pb-3" ref={ref}>
+        <LoadMoreButton
+          page={page}
+          setPage={setPage}
+          hasNextPage={hasNextPage}
+        />
       </div>
     </div>
   );

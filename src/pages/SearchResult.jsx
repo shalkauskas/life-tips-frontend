@@ -1,4 +1,4 @@
-import JokesList from "./JokesList";
+import JokesList from "../components/JokesList";
 
 import React from "react";
 export default function SearchResult(props) {

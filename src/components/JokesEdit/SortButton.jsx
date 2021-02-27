@@ -33,7 +33,7 @@ export default function SortButton(props) {
   return (
     <div className="dropdown ml-4">
       <button
-        onClick={() => setDropdown(!props.dropdown)}
+        onClick={() => setDropdown(!dropdown)}
         className="btn btn-sm btn-info dropdown-toggle"
         type="button"
       >
@@ -59,12 +59,14 @@ export default function SortButton(props) {
         >
           Rating
         </button>
-        <button
-          className="dropdown-item"
-          onClick={() => setOrder(orderAuthor, orderAuthorReverse)}
-        >
-          By author
-        </button>
+        {props.adminRole ? (
+          <button
+            className="dropdown-item"
+            onClick={() => setOrder(orderAuthor, orderAuthorReverse)}
+          >
+            By author
+          </button>
+        ) : null}
       </div>
     </div>
   );
