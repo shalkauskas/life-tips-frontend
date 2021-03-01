@@ -4,7 +4,7 @@ import ConfirmationModal from "../../components/JokesEdit/ConfirmationModal";
 import SortButton from "./SortButton";
 import JokesEditAllButtons from "../../components/JokesEdit/JokesEditAllButtons";
 import Spinner from "../../components/Spinner";
-import LoadMoreButton from "../../components/LoadMoreButton";
+import LoadMoreButton from "../LoadMoreButton";
 import AddButton from "../../components/AddButton";
 import Joke from "../../components/Joke";
 import DataService from "../../services/DataService";
@@ -20,7 +20,8 @@ export default function JokeEditList(props) {
   const ref = useRef();
   useEffect(() => {
     async function fetchJokes() {
-      await DataService.getAll(props.page, "new")
+      setLoading(true);
+      await DataService.getAll(page, "new")
         .then((response) => {
           setLoading(false);
           console.log(response);
@@ -32,12 +33,12 @@ export default function JokeEditList(props) {
         });
     }
     fetchJokes();
-  }, [props.page, props.message]);
+  }, [page, props.message]);
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
-          setPage(page + 1);
+        if (entry.isIntersecting && hasNextPage) {
+          setPage((prevValue) => prevValue + 1);
         }
       },
       {
@@ -48,8 +49,11 @@ export default function JokeEditList(props) {
     );
     if (ref.current) {
       observer.observe(ref.current);
+    } else if (!hasNextPage) {
+      observer.unobserve(ref.current);
     }
-  }, [page, ref]);
+    return () => observer.disconnect();
+  }, [hasNextPage, ref]);
   const setActiveJoke = (joke, index) => {
     props.setCurrentJoke(joke);
     setCurrentIndex(index);

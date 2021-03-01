@@ -90,7 +90,10 @@ export default function Register(props) {
                     onChange={handleInputChange}
                     required
                   />
-                  <small id="passwordHelpBlock" class="form-text text-muted">
+                  <small
+                    id="passwordHelpBlock"
+                    className="form-text text-muted"
+                  >
                     Your password must be at least 6 characters long.
                   </small>
                 </div>

@@ -7,7 +7,6 @@ export default function Login(props) {
     password: "",
   };
   const [userdata, setUserData] = React.useState(initialUserData);
-  const [submitted, setSubmitted] = React.useState(false);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -28,8 +27,6 @@ export default function Login(props) {
       .catch((e) => {
         console.log(e);
       });
-    setSubmitted(true);
-    console.log(submitted);
   };
   const loginGoogle = () => {
     AuthService.loginGoogle().then((response) => {

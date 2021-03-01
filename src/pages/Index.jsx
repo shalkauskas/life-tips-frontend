@@ -20,9 +20,8 @@ export default function Index(props) {
   React.useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
-          // props.onClick();
-          // console.log("It works!");
+        if (entry.isIntersecting && hasNextPage) {
+          // setPage((prevValue) => prevValue + 1);
         }
       },
       {
@@ -33,8 +32,11 @@ export default function Index(props) {
     );
     if (ref.current) {
       observer.observe(ref.current);
+    } else if (!hasNextPage) {
+      observer.unobserve(ref.current);
     }
-  }, [props, ref]);
+    return () => observer.disconnect();
+  }, [hasNextPage, props, ref]);
   React.useEffect(() => {
     location.pathname === "/"
       ? setOrder("new")
@@ -98,7 +100,7 @@ export default function Index(props) {
       <JokesList jokes={jokes} isAuthenticated={props.isAuthenticated} />
       <Spinner loading={loading} />
 
-      <div className="text-center pb-3" ref={ref}>
+      <div className={`${loading ? "d-none" : ""} text-center pb-3`} ref={ref}>
         <LoadMoreButton
           page={page}
           setPage={setPage}
