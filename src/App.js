@@ -16,6 +16,7 @@ import JokesEdit from "./pages/JokesEdit";
 import ScrollButton from "./components/ScrollButton";
 import SearchResult from "./pages/SearchResult";
 import Header from "./components/Header";
+import About from "./pages/About";
 export default function App(props) {
   const [userdata, setUserdata] = React.useState([]);
   const [isAuthenticated, setAuthenticated] = React.useState(false);
@@ -25,6 +26,10 @@ export default function App(props) {
       await AuthService.index()
         .then((response) => {
           console.log(response);
+          localStorage.setItem(
+            `isAuthenticated`,
+            response.data.isAuthenticated
+          );
           setAuthenticated(response.data.isAuthenticated);
           setUserdata(response.data.user);
         })
@@ -34,13 +39,15 @@ export default function App(props) {
     }
     authorize();
   }, []);
+  const session = localStorage.getItem(`isAuthenticated`);
 
   return (
     <div className="bg-light pb-5 h-100 min-vh-100 position-relative">
       <Header userdata={userdata} isAuthenticated={isAuthenticated} />
 
-      <div className="mt-5 pt-5">
+      <div className="pb-5" style={{ paddingTop: "6rem" }}>
         <Switch>
+          <Route path={"/about"} component={About} />
           <Route
             path={["/", "/best", "/random"]}
             exact
@@ -83,14 +90,14 @@ export default function App(props) {
           <PrivateRoute
             path={`/dashboard`}
             component={JokesEdit}
-            isAuthenticated={isAuthenticated}
+            isAuthenticated={session}
             userdata={userdata}
             exact
           />
           <PrivateRoute
             path={`/dashboard/profile`}
             component={UserProfile}
-            isAuthenticated={isAuthenticated}
+            isAuthenticated={session}
             userdata={userdata}
             exact
           />

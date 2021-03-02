@@ -5,55 +5,26 @@ html, body, #app, #app>div {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
   'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
   sans-serif;
--webkit-font-smoothing: antialiased;
--moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 #root {
   min-height: 100vh;
 }
 .list {
-     text-align: left;
-     max-width: 750px;
-     margin: auto;
-   }
-   
-   .submit-form {
-     max-width: 750px;
-     margin: auto;
-   }
-   
-   .edit-form {
-     max-width: 300px;
-     margin: auto;
-   }
-   .dropdown-toggle::after {
-     vertical-align: middle !important;
-   }
-   /* scroll to top button */
-   .scrollTop {
-    bottom: 60px;
-    animation: fadeIn 0.3s;
-    transition: opacity 0.4s;
-    opacity: 0.5;
-    right: 20px;
-  }
-  .moveUp {
-    transition: transform 0.3s linear;
-    transform: translateY(30px);
-  }
-  .moveDown {
-    transition: transform 0.3s linear;
-    transform: translateY(-110px);
-  }
-  .scrollTop:hover {
-    opacity: 1;
-  }
-
-  @keyframes fadeIn {
-    0% {
-      opacity: 0;
-    }
-    100% {
-      opacity: 0.5;
-    }
-  }
+  text-align: left;
+  max-width: 750px;
+  margin: auto; 
+}
+.submit-form {
+  max-width: 750px;
+  margin: auto;
+}
+.edit-form {
+  max-width: 300px;
+  margin: auto;
+}
+.dropdown-toggle::after {
+  vertical-align: middle !important;
+}
+ 

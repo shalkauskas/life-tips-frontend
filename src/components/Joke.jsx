@@ -28,14 +28,12 @@ export default function Joke(props) {
       DataService.update(props.id || joke.id, data)
         .then((response) => {
           setJoke(response.data);
-
-          // console.log(response);
+          // console.log(response.data);
         })
         .catch((e) => {
           console.log(e);
         });
     };
-    // console.log(jokeRatingCheck);
     if (modifier === jokeRatingCheck) {
       if (modifier === "up") {
         localStorage.setItem(joke.id, "");
@@ -53,18 +51,32 @@ export default function Joke(props) {
         // console.log("Already voted");
       }
     } else {
-      localStorage.setItem(joke.id, modifier);
-      const data = {
-        rating:
-          modifier === "up"
-            ? joke.rating + 1
-            : "down"
-            ? joke.rating - 1
-            : joke.rating,
-      };
-      updateRatingAPI(data);
-      // console.log(modifier, jokeRatingCheck);
+      if (jokeRatingCheck === "up") {
+        localStorage.setItem(joke.id, "");
+        const data = {
+          rating: joke.rating - 1,
+        };
+        updateRatingAPI(data);
+      } else if (jokeRatingCheck === "down") {
+        localStorage.setItem(joke.id, "");
+        const data = {
+          rating: joke.rating + 1,
+        };
+        updateRatingAPI(data);
+      } else {
+        localStorage.setItem(joke.id, modifier);
+        const data = {
+          rating:
+            modifier === "up"
+              ? joke.rating + 1
+              : "down"
+              ? joke.rating - 1
+              : joke.rating,
+        };
+        updateRatingAPI(data);
+      }
     }
+    // console.log(modifier, jokeRatingCheck);
   };
   const ratingHandler = (score) => {
     // props.isAuthenticated ?

@@ -32,7 +32,7 @@ export default function Header(props) {
       <div className="navbar-nav ml-auto mx-1">
         <li className="ml-auto nav-item my-auto" style={{ maxWidth: "75%" }}>
           {showSearch ? (
-            <Search setShowSearch={setShowSearch} />
+            <Search setShowSearch={setShowSearch} showSearch={showSearch} />
           ) : (
             <span className="nav-link" onClick={() => setShowSearch(true)}>
               <img

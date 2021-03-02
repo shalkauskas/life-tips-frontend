@@ -38,7 +38,7 @@ export default function Login(props) {
     props.history.go(0);
   };
   return (
-    <div className="container my-5" style={{ maxWidth: "600px" }}>
+    <div className="container" style={{ maxWidth: "600px" }}>
       <h1 className="text-center mb-4">Login</h1>
 
       <div className="col">

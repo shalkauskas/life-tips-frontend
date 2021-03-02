@@ -1,4 +1,5 @@
 import React from "react";
+import "./ScrollButton.css";
 import useDocumentScrollThrottled from "../services/useDocumentScrollThrottled";
 import smoothscroll from "smoothscroll-polyfill";
 export default function ScrollButton() {
@@ -16,7 +17,7 @@ export default function ScrollButton() {
       <img
         src="/scrollToTop.png"
         alt="Scroll up"
-        className={`scrollTop cursor-pointer position-fixed z-50`}
+        className={`scrollTop cursor-pointer position-fixed`}
         onClick={scrollTop}
         style={{
           height: 40,

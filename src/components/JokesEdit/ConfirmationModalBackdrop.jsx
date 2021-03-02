@@ -8,11 +8,13 @@ export default function ConfirmationModalBackdrop(props) {
               filter: "blur(4px)",
               opacity: "0.3",
               backgroundColor: "steelblue",
-              bottom: "0",
+              top: "0",
+              left: "0",
               display: "block",
-              position: "absolute",
+              position: "fixed",
               width: "100%",
-              height: "100%",
+              height: "100vh",
+              minHeight: "100%",
               zIndex: "10",
             }
           : { display: "none" }

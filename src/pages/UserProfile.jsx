@@ -1,14 +1,24 @@
 import axios from "axios";
 import React from "react";
 import AuthService from "../services/AuthService";
+import ConfirmationModalBackdrop from "../components/JokesEdit/ConfirmationModalBackdrop";
+import UpdateConfirmation from "../components/UpdateConfirmation";
 export default function UserProfile(props) {
-  const [name, setName] = React.useState(props.userdata.displayName);
-  const [userpic, setUserpic] = React.useState(props.userdata.photoUrl);
+  const [name, setName] = React.useState("");
+  const [userpic, setUserpic] = React.useState("");
   const [activeButton, setActiveButton] = React.useState(false);
+  const [showConfirm, setShowConfirm] = React.useState(false);
+  React.useEffect(() => {
+    props.userdata.displayName
+      ? setName(props.userdata.displayName)
+      : setName("");
+    props.userdata.photoUrl
+      ? setUserpic(props.userdata.photoUrl)
+      : setUserpic("");
+  }, [props.userdata.displayName, props.userdata.photoUrl]);
   const handleInputChange = (event) => {
     setActiveButton(true);
     setName(event.target.value);
-    console.log(name);
   };
   const handleImageUpload = (e) => {
     setActiveButton(true);
@@ -43,8 +53,11 @@ export default function UserProfile(props) {
         console.log(response);
         if (response.status === 200) {
           setName(response.data.displayName);
-          alert("Your profile has been successfully updated!");
-          window.location.reload();
+          setShowConfirm(true);
+          setTimeout(() => {
+            setShowConfirm(false);
+            window.location.reload();
+          }, 1000);
         } else {
           alert("Error");
         }
@@ -135,7 +148,9 @@ export default function UserProfile(props) {
               Email{" "}
             </label>
             <input
-              value={props.userdata.username}
+              value={
+                props.userdata.username ? props.userdata.username : "email"
+              }
               type="text"
               id="email"
               disabled
@@ -162,6 +177,14 @@ export default function UserProfile(props) {
             </button>
           </div>
         </div>
+        <UpdateConfirmation
+          showConfirm={showConfirm}
+          setShowConfirm={setShowConfirm}
+        />
+        <ConfirmationModalBackdrop
+          showConfirm={showConfirm}
+          setShowConfirm={setShowConfirm}
+        />
       </div>
     </div>
   );

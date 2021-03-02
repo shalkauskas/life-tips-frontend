@@ -1,0 +1,29 @@
+  /* scroll to top button */
+  .scrollTop {
+     bottom: 60px;
+     animation: fadeIn 0.3s;
+     transition: opacity 0.4s;
+     opacity: 0.5;
+     right: 20px;
+     z-index: 10;
+   }
+   .moveUp {
+     transition: transform 0.3s linear;
+     transform: translateY(30px);
+   }
+   .moveDown {
+     transition: transform 0.3s linear;
+     transform: translateY(-110px);
+   }
+   .scrollTop:hover {
+     opacity: 1;
+   }
+ 
+   @keyframes fadeIn {
+     0% {
+       opacity: 0;
+     }
+     100% {
+       opacity: 0.5;
+     }
+   }

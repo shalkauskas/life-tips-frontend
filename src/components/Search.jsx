@@ -8,19 +8,20 @@ export default function Search(props) {
     setSearch(search);
   };
   let history = useHistory();
-  const findBySearch = () => {
-    DataService.findBySearch(search)
-      .then((response) => {
-        console.log(response);
-        history.push({
-          pathname: "/search",
-          search: `?query=${search}`,
-          state: { result: response.data.jokes },
+  const findBySearch = (event) => {
+    if (event.key === "Enter" || event.type === "click")
+      DataService.findBySearch(search)
+        .then((response) => {
+          console.log(response);
+          history.push({
+            pathname: "/search",
+            search: `?query=${search}`,
+            state: { result: response.data.jokes },
+          });
+        })
+        .catch((e) => {
+          console.log(e);
         });
-      })
-      .catch((e) => {
-        console.log(e);
-      });
   };
   const reset = () => {
     setSearch("");
@@ -28,7 +29,10 @@ export default function Search(props) {
     // history.push("/");
   };
   return (
-    <div className="input-group input-group-sm">
+    <div
+      className={`input-group input-group-sm `}
+      style={{ transition: "all 2s", width: props.showSearch ? "100%" : "0px" }}
+    >
       <form className="form-inline">
         <input
           style={{ maxWidth: "60%" }}
@@ -37,6 +41,7 @@ export default function Search(props) {
           placeholder=""
           value={search}
           onChange={onChangeSearch}
+          onKeyPress={findBySearch}
         />
 
         <div className="input-group-append ">
