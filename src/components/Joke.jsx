@@ -111,7 +111,7 @@ export default function Joke(props) {
             width="16px"
             height="16px"
             aria-label="Copy link"
-            className="text-muted ml-3 align-text-top"
+            className="text-muted ml-2 align-text-top"
             style={{ cursor: "pointer" }}
             onClick={shareButton}
           />
@@ -134,11 +134,14 @@ export default function Joke(props) {
             height="18px"
             onClick={() => ratingHandler("up")}
             className={``}
-            style={{ filter: jokeRatingCheck === "up" ? activeVoteStyle : "" }}
+            style={{
+              filter: jokeRatingCheck === "up" ? activeVoteStyle : "",
+              display: props.allowRate ? "none" : "block",
+            }}
           />
 
           <p className="mx-2 mb-0 align-self-center">
-            <b>{joke.rating}</b>
+            <b>[{joke.rating}]</b>
           </p>
           <img
             alt="Vote down"
@@ -149,6 +152,7 @@ export default function Joke(props) {
             className={``}
             style={{
               filter: jokeRatingCheck === "down" ? activeVoteStyle : "",
+              display: props.allowRate ? "none" : "block",
             }}
           />
         </div>

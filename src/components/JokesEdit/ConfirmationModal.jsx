@@ -15,7 +15,7 @@ export default function ConfirmationModal(props) {
       style={{ top: "35%", left: "0", right: "0", zIndex: "20" }}
       className={`${
         props.showConfirm ? "d-block" : "d-none"
-      } position-absolute border bg-light w-75 mx-auto`}
+      } position-absolute border bg-light w-sm-75 w-100 mx-auto`}
     >
       <div className="modal-header">
         <h5 className="modal-title">

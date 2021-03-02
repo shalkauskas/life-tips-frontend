@@ -34,7 +34,26 @@ export default function JokeEditList(props) {
         });
     }
     fetchJokes();
-  }, [page, props.message]);
+  }, [page]);
+  useEffect(() => {
+    async function fetchJokes() {
+      setLoading(true);
+      await DataService.getAll(0, "new")
+        .then((response) => {
+          setLoading(false);
+          console.log(response);
+          setHasNextPage(response.data.hasNextPage);
+          setJokes([...response.data.jokes]);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    }
+    if (props.update) {
+      setJokes([]);
+      fetchJokes();
+    }
+  }, [props.update]);
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -95,7 +114,7 @@ export default function JokeEditList(props) {
               id={joke.id}
               rating={joke.rating}
               time={joke.time}
-              allowRate={false}
+              allowRate={true}
             />
           </div>
         ))}

@@ -29,10 +29,7 @@ export default function Search(props) {
     // history.push("/");
   };
   return (
-    <div
-      className={`input-group input-group-sm `}
-      style={{ transition: "all 2s", width: props.showSearch ? "100%" : "0px" }}
-    >
+    <div className={`input-group input-group-sm `}>
       <form className="form-inline">
         <input
           style={{ maxWidth: "60%" }}

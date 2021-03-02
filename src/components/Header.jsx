@@ -27,10 +27,12 @@ export default function Header(props) {
           height="26px"
           className="mr-2 align-top"
         />
-        DB jokes
+        <span className={`${showSearch ? "d-none d-sm-inline-block" : ""}`}>
+          DB jokes
+        </span>
       </Link>
       <div className="navbar-nav ml-auto mx-1">
-        <li className="ml-auto nav-item my-auto" style={{ maxWidth: "75%" }}>
+        <li className="ml-auto nav-item my-auto" style={{ maxWidth: "80%" }}>
           {showSearch ? (
             <Search setShowSearch={setShowSearch} showSearch={showSearch} />
           ) : (

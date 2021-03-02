@@ -26,7 +26,7 @@ export default function JokesEdit(props) {
       <JokeEditList
         adminRole={adminRole}
         refreshList={refreshList}
-        message={message}
+        update={message.length > 1 ? true : false}
         setMessage={setMessage}
         setCurrentJoke={setCurrentJoke}
       />
