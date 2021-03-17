@@ -1,13 +1,43 @@
-import Tooltip from "./Tooltip";
 import React from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import Card from "@material-ui/core/Card";
+import CardActions from "@material-ui/core/CardActions";
+import CardContent from "@material-ui/core/CardContent";
+import ShareIcon from "@material-ui/icons/Share";
+import IconButton from "@material-ui/core/IconButton";
+import ThumbUpIcon from "@material-ui/icons/ThumbUp";
+import ThumbDownIcon from "@material-ui/icons/ThumbDown";
+import Typography from "@material-ui/core/Typography";
+import Tooltip from "@material-ui/core/Tooltip";
 import { Link, useLocation } from "react-router-dom";
 import DataService from "../services/DataService";
+import Grid from "@material-ui/core/Grid";
+import { green, red } from "@material-ui/core/colors";
+import { Button } from "@material-ui/core";
+const useStyles = makeStyles({
+  root: {
+    minWidth: 275,
+    maxWidth: 600,
+    marginLeft: "auto",
+    marginRight: "auto",
+  },
+  id: {
+    color: green[400],
+    fontSize: "16px",
+  },
+  time: {
+    textAlign: "center",
+  },
+  footer: {
+    padding: "1rem",
+  },
+});
+
 export default function Joke(props) {
+  const classes = useStyles();
   const [joke, setJoke] = React.useState([]);
   const jokeRatingCheck = localStorage.getItem(joke.id);
   const location = useLocation();
-  const activeVoteStyle =
-    "invert(55%) sepia(26%) saturate(6132%) hue-rotate(332deg) brightness(102%) contrast(101%)";
   React.useEffect(() => {
     let mounted = true;
     const retrieveJokes = (id) => {
@@ -92,71 +122,86 @@ export default function Joke(props) {
       window.location.href + `joke/${props.id || joke.id}`
     );
   };
+
   return (
-    <article className="card shadow-sm mx-auto list">
-      <div className="card-header" onClick={() => console.log(jokeRatingCheck)}>
-        <Link
-          to={{
-            pathname: `/joke/${props.id || joke.id}`,
-          }}
-        >
-          <span className="text-success">
-            <u>#{jokeId.slice(jokeId.length - 5)}</u>
-          </span>
-        </Link>
-        <Tooltip content="Copy link to clipboard" direction="right" delay="0">
-          <img
-            alt="share"
-            src="/share.svg"
-            width="16px"
-            height="16px"
-            aria-label="Copy link"
-            className="text-muted ml-2 align-text-top"
-            style={{ cursor: "pointer" }}
-            onClick={shareButton}
-          />
-        </Tooltip>
+    <Card className={classes.root}>
+      <CardContent>
+        <Grid container alignItems="center">
+          <Grid item xs={6}>
+            <Button
+              className={classes.id}
+              color="secondary"
+              to={{
+                pathname: `/joke/${props.id || joke.id}`,
+              }}
+              component={Link}
+            >
+              <u>#{jokeId.slice(jokeId.length - 5)}</u>
+            </Button>
+            <Tooltip title="Copy link">
+              <IconButton aria-label="Share" size="small" onClick={shareButton}>
+                <ShareIcon />
+              </IconButton>
+            </Tooltip>
+          </Grid>
+          <Grid item xs={6}>
+            <Typography align="right" color="textSecondary">
+              {joke.time}
+            </Typography>
+          </Grid>
+        </Grid>
 
-        <span className="float-right text-muted">{joke.time}</span>
-      </div>
-      <div className="card-body">
-        <p>{joke.content}</p>
-      </div>
-      <div className="card-footer justify-content-between d-flex ">
-        <span className="text-muted">
-          <i>{joke.author}</i>
-        </span>
-        <div className="d-flex align-middle align-items-md-center">
-          <img
-            alt="Vote up"
-            src="/up-arrow.svg"
-            width="18px"
-            height="18px"
-            onClick={() => ratingHandler("up")}
-            className={``}
-            style={{
-              filter: jokeRatingCheck === "up" ? activeVoteStyle : "",
-              display: props.allowRate ? "none" : "block",
-            }}
-          />
-
-          <p className="mx-2 mb-0 align-self-center">
-            <b>[{joke.rating}]</b>
-          </p>
-          <img
-            alt="Vote down"
-            src="/down-arrow.svg"
-            width="18px"
-            height="18px"
-            onClick={() => ratingHandler("down")}
-            className={``}
-            style={{
-              filter: jokeRatingCheck === "down" ? activeVoteStyle : "",
-              display: props.allowRate ? "none" : "block",
-            }}
-          />
-        </div>
-      </div>
-    </article>
+        <Typography variant="h5" component="h2">
+          TITLE
+        </Typography>
+        <Typography variant="body1" component="p">
+          {joke.content}
+        </Typography>
+      </CardContent>
+      <CardActions className={classes.footer}>
+        <Grid container alignItems="center">
+          <Grid item xs={7} sm={8} md={9}>
+            <Typography color="textSecondary">By {joke.author}</Typography>
+          </Grid>
+          <Grid item xs>
+            <Grid container alignItems="center" className={classes.time}>
+              <Grid item xs>
+                <IconButton
+                  aria-label="Like"
+                  onClick={() => ratingHandler("up")}
+                >
+                  <ThumbUpIcon
+                    style={{
+                      color: jokeRatingCheck === "up" ? green[500] : "",
+                    }}
+                  />
+                </IconButton>
+              </Grid>
+              <Grid item xs>
+                <Typography
+                  color="textSecondary"
+                  align="center"
+                  variant="subtitle1"
+                >
+                  [{joke.rating}]
+                </Typography>
+              </Grid>
+              <Grid item xs>
+                <IconButton
+                  aria-label="Dislike"
+                  onClick={() => ratingHandler("down")}
+                >
+                  <ThumbDownIcon
+                    style={{
+                      color: jokeRatingCheck === "down" ? red[900] : "",
+                    }}
+                  />
+                </IconButton>
+              </Grid>
+            </Grid>
+          </Grid>
+        </Grid>
+      </CardActions>
+    </Card>
   );
 }

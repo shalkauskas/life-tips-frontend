@@ -1,22 +1,28 @@
+import Button from "@material-ui/core/Button";
+import { makeStyles } from "@material-ui/core/styles";
+import Icon from "@material-ui/core/Icon";
+import { green, grey } from "@material-ui/core/colors";
 export default function AddButton(props) {
+  const useStyles = makeStyles((theme) => ({
+    button: {
+      margin: theme.spacing(1),
+      backgroundColor: props.showAdd ? green[300] : green[500],
+      color: grey[50],
+      "&:hover": {
+        backgroundColor: green[300],
+      },
+    },
+  }));
+  const classes = useStyles();
   return (
-    <button
-      className={`ml-5 btn btn-success ${props.showAdd ? "disabled" : ""}`}
+    <Button
+      variant="contained"
+      size="large"
+      className={classes.button}
+      endIcon={<Icon>add_circle</Icon>}
       onClick={() => props.setShowAdd(!props.showAdd)}
     >
-      <img
-        alt="Add"
-        src="/plus.svg"
-        width="14px"
-        height="14px"
-        style={{
-          filter:
-            "invert(96%) sepia(97%) saturate(12%) hue-rotate(237deg) brightness(103%) contrast(103%)",
-          display: "inline-block",
-          marginRight: "5px",
-        }}
-      />
-      Add{" "}
-    </button>
+      Add
+    </Button>
   );
 }

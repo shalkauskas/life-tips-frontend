@@ -1,11 +1,15 @@
 import React from "react";
-import { NavLink, useLocation } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 import AddJoke from "../components/AddJoke";
 import JokesList from "../components/JokesList";
 import DataService from "../services/DataService";
 import Spinner from "../components/Spinner";
 import LoadMoreButton from "../components/LoadMoreButton";
 import AddButton from "../components/AddButton";
+import Tabs from "@material-ui/core/Tabs";
+import Tab from "@material-ui/core/Tab";
+import { makeStyles } from "@material-ui/core/styles";
+import Collapse from "@material-ui/core/Collapse";
 export default function Index(props) {
   const [jokes, setJokes] = React.useState([]);
   const [showAdd, setShowAdd] = React.useState(false);
@@ -62,41 +66,38 @@ export default function Index(props) {
     }
     fetchJokes();
   }, [page, order]);
+  // Tabs
+  const useStyles = makeStyles({
+    root: {
+      flexGrow: 1,
+    },
+  });
+  const classes = useStyles();
+  const [value, setValue] = React.useState(0);
 
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
   return (
     <div>
       <div className="d-flex justify-content-center list px-3">
-        <div className="btn-group w-100" role="group" aria-label="Order">
-          <NavLink
-            exact
-            to="/"
-            activeClassName="active"
-            className={`btn btn-outline-secondary`}
-            // onClick={() => setOrder("new")}
-          >
-            New
-          </NavLink>
-          <NavLink
-            to="/best"
-            activeClassName="active"
-            className={`btn btn-outline-secondary`}
-            // onClick={() => setOrder("best")}
-          >
-            Best
-          </NavLink>
-          <NavLink
-            to="/random"
-            activeClassName="active"
-            className={`btn btn-outline-secondary`}
-            // onClick={() => setOrder("random")}
-          >
-            Random
-          </NavLink>
+        <Tabs
+          value={value}
+          onChange={handleChange}
+          indicatorColor="primary"
+          textColor="primary"
+          centered
+        >
+          <Tab label=" New" to="/" component={Link} />
+          <Tab label="Best" to="/best" component={Link} />
+          <Tab label="Random" to="/random" component={Link} />
+        </Tabs>
 
-          <AddButton showAdd={showAdd} setShowAdd={setShowAdd} />
-        </div>
+        <AddButton showAdd={showAdd} setShowAdd={setShowAdd} />
       </div>
-      {showAdd ? <AddJoke close={() => setShowAdd(false)} /> : null}
+      <Collapse in={showAdd}>
+        <AddJoke close={() => setShowAdd(false)} />
+      </Collapse>
       <JokesList jokes={jokes} isAuthenticated={props.isAuthenticated} />
       <Spinner loading={loading} />
 

@@ -6,7 +6,7 @@ export default function LoadMoreButton(props) {
         props.hasNextPage ? "" : "d-none"
       } btn btn-lg btn-outline-secondary`}
     >
-      MORE!
+      View more
     </button>
   );
 }

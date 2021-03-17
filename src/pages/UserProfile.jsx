@@ -54,10 +54,7 @@ export default function UserProfile(props) {
         if (response.status === 200) {
           setName(response.data.displayName);
           setShowConfirm(true);
-          setTimeout(() => {
-            setShowConfirm(false);
-            window.location.reload();
-          }, 1000);
+          window.location.reload();
         } else {
           alert("Error");
         }
