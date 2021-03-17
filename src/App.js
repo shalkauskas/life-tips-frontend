@@ -15,7 +15,7 @@ import Footer from "./components/Footer";
 import JokesEdit from "./pages/JokesEdit";
 import ScrollButton from "./components/ScrollButton";
 import SearchResult from "./pages/SearchResult";
-import Header from "./components/Header";
+import Header from "./components/Header/Header";
 import About from "./pages/About";
 export default function App(props) {
   const [userdata, setUserdata] = React.useState([]);

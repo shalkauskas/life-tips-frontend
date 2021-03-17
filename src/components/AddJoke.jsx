@@ -5,10 +5,10 @@ import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
 import { green, grey } from "@material-ui/core/colors";
 import { Container } from "@material-ui/core";
-import { Alert, AlertTitle } from "@material-ui/lab";
-import IconButton from "@material-ui/core/IconButton";
+import { Alert } from "@material-ui/lab?Alert";
+
 import Collapse from "@material-ui/core/Collapse";
-import CloseIcon from "@material-ui/icons/Close";
+
 const AddJoke = (props) => {
   const useStyles = makeStyles((theme) => ({
     button: {
