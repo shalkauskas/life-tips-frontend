@@ -1,35 +1,67 @@
-import { Link } from "react-router-dom";
+import { Container, Typography } from "@material-ui/core";
+import Link from "@material-ui/core/Link";
+import { makeStyles } from "@material-ui/core/styles";
+import { Link as RouterLink } from "react-router-dom";
+import { grey } from "@material-ui/core/colors";
+const useStyles = makeStyles((theme) => ({
+  root: {
+    display: "flex",
+    flexDirection: "column",
+    minHeight: "100vh",
+  },
+  main: {
+    marginTop: theme.spacing(8),
+    marginBottom: theme.spacing(2),
+  },
+  footer: {
+    padding: theme.spacing(3, 2),
+    marginTop: "auto",
+    backgroundColor: theme.palette.grey[200],
+  },
+  wrapper: {
+    display: "flex",
+    alignItems: "center",
+    flexDirection: "column",
+  },
+  links: {
+    display: "flex",
+    justifyContent: "space-evenly",
+    flexDirection: "row",
+    color: grey[600],
+    maxWidth: "300px",
+  },
+}));
 export default function Footer() {
   const date = new Date().getFullYear();
+  const classes = useStyles();
   return (
-    <footer
-      className="bg-light position-absolute w-100 border-top"
-      style={{ bottom: 0 }}
-    >
-      <div className="py-3 text-center text-monospace">
-        Made by Ihor Shalkauskas © {date}
-        <div style={{ fontSize: "14px" }}>
-          <Link to="/about" className="text-muted">
+    <footer className={classes.footer}>
+      <Container className={classes.wrapper}>
+        <Typography variant="body1">
+          Made by Ihor Shalkauskas © {date}
+        </Typography>
+        <Container className={classes.links}>
+          <Link to="/about" component={RouterLink} color="inherit">
             <u>About</u>
           </Link>
-          <a
+          <Link
             href="https://shalkauskas.com"
             target="_blank"
             rel="noreferrer"
-            className="text-muted mx-3"
+            color="inherit"
           >
             <u>Portfolio</u>
-          </a>
-          <a
+          </Link>
+          <Link
             href="https://github.com/shalkauskas"
             target="_blank"
             rel="noreferrer"
-            className="text-muted"
+            color="inherit"
           >
             <u>GitHub</u>
-          </a>
-        </div>
-      </div>
+          </Link>
+        </Container>
+      </Container>
     </footer>
   );
 }

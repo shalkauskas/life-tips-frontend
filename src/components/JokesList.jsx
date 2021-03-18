@@ -8,23 +8,21 @@ const JokesList = (props) => {
   }, [props.jokes]);
 
   return (
-    <div className="list mt-3">
-      <div className="container">
-        {jokes.map((joke, index) => (
-          <div key={index} className="my-4">
-            <Joke
-              content={joke.content}
-              author={joke.author}
-              id={joke.id}
-              joke={jokes}
-              rating={joke.rating}
-              time={joke.time}
-              isAuthenticated={props.isAuthenticated}
-            />
-          </div>
-        ))}
-      </div>
-    </div>
+    <>
+      {jokes.map((joke, index) => (
+        <div key={index}>
+          <Joke
+            content={joke.content}
+            author={joke.author}
+            id={joke.id}
+            joke={jokes}
+            rating={joke.rating}
+            time={joke.time}
+            isAuthenticated={props.isAuthenticated}
+          />
+        </div>
+      ))}
+    </>
   );
 };
 

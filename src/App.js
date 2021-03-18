@@ -9,7 +9,7 @@ import PrivateRoute from "./components/PrivateRoute";
 import Login from "./pages/Login";
 import AuthService from "./services/AuthService";
 import NotFound from "./pages/NotFound";
-import UserProfile from "./pages/UserProfile";
+import UserProfile from "./pages/UserProfileNew";
 import Register from "./pages/Register";
 import Footer from "./components/Footer";
 import JokesEdit from "./pages/JokesEdit";
@@ -42,7 +42,7 @@ export default function App(props) {
   const session = localStorage.getItem(`isAuthenticated`);
 
   return (
-    <div className="bg-light pb-5 h-100 min-vh-100 position-relative">
+    <div className="bg-light h-100 min-vh-100 position-relative">
       <Header userdata={userdata} isAuthenticated={isAuthenticated} />
 
       <div className="pb-5" style={{ paddingTop: "6rem" }}>

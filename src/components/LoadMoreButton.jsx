@@ -1,12 +1,13 @@
+import Button from "@material-ui/core/Button";
 export default function LoadMoreButton(props) {
   return (
-    <button
+    <Button
+      variant="outlined"
+      size="large"
       onClick={() => props.setPage(props.page + 1)}
-      className={`${
-        props.hasNextPage ? "" : "d-none"
-      } btn btn-lg btn-outline-secondary`}
+      style={{ display: !props.hasNextPage && "none" }}
     >
       View more
-    </button>
+    </Button>
   );
 }

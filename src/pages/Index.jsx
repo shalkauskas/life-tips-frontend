@@ -3,13 +3,26 @@ import { useLocation, Link } from "react-router-dom";
 import AddJoke from "../components/AddJoke";
 import JokesList from "../components/JokesList";
 import DataService from "../services/DataService";
-import Spinner from "../components/Spinner";
+import Skeleton from "../components/Skeleton";
 import LoadMoreButton from "../components/LoadMoreButton";
 import AddButton from "../components/AddButton";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import { makeStyles } from "@material-ui/core/styles";
 import Collapse from "@material-ui/core/Collapse";
+import Container from "@material-ui/core/Container";
+
+const useStyles = makeStyles({
+  list: {
+    maxWidth: "750px",
+    minWidth: "275px",
+    textAlign: "left",
+  },
+  tabs: {
+    display: "flex",
+    justifyContent: "center",
+  },
+});
 export default function Index(props) {
   const [jokes, setJokes] = React.useState([]);
   const [showAdd, setShowAdd] = React.useState(false);
@@ -17,7 +30,8 @@ export default function Index(props) {
   const [hasNextPage, setHasNextPage] = React.useState(false);
   const [page, setPage] = React.useState(0);
   const [order, setOrder] = React.useState("new");
-
+  const classes = useStyles();
+  const [value, setValue] = React.useState(0);
   // infinite scroll
   const ref = React.useRef();
   let location = useLocation();
@@ -67,20 +81,13 @@ export default function Index(props) {
     fetchJokes();
   }, [page, order]);
   // Tabs
-  const useStyles = makeStyles({
-    root: {
-      flexGrow: 1,
-    },
-  });
-  const classes = useStyles();
-  const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
   return (
-    <div>
-      <div className="d-flex justify-content-center list px-3">
+    <Container className={classes.list}>
+      <Container className={classes.tabs} disableGutters>
         <Tabs
           value={value}
           onChange={handleChange}
@@ -92,14 +99,15 @@ export default function Index(props) {
           <Tab label="Best" to="/best" component={Link} />
           <Tab label="Random" to="/random" component={Link} />
         </Tabs>
-
         <AddButton showAdd={showAdd} setShowAdd={setShowAdd} />
-      </div>
+      </Container>
+
       <Collapse in={showAdd}>
         <AddJoke close={() => setShowAdd(false)} />
       </Collapse>
+
       <JokesList jokes={jokes} isAuthenticated={props.isAuthenticated} />
-      <Spinner loading={loading} />
+      {loading && <Skeleton />}
 
       <div className={`${loading ? "d-none" : ""} text-center pb-3`} ref={ref}>
         <LoadMoreButton
@@ -108,6 +116,6 @@ export default function Index(props) {
           hasNextPage={hasNextPage}
         />
       </div>
-    </div>
+    </Container>
   );
 }

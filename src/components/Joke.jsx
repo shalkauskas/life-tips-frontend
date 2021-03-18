@@ -20,6 +20,8 @@ const useStyles = makeStyles({
     maxWidth: 600,
     marginLeft: "auto",
     marginRight: "auto",
+    marginTop: "1rem",
+    marginBottom: "1rem",
   },
   id: {
     color: green[400],

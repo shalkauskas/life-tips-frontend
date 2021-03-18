@@ -4,7 +4,7 @@ import ConfirmationModal from "../../components/JokesEdit/ConfirmationModal";
 import ConfirmationModalBackdrop from "./ConfirmationModalBackdrop";
 import SortButton from "./SortButton";
 import JokesEditAllButtons from "../../components/JokesEdit/JokesEditAllButtons";
-import Spinner from "../../components/Spinner";
+import Spinner from "../../components/Skeleton";
 import LoadMoreButton from "../LoadMoreButton";
 import AddButton from "../../components/AddButton";
 import Joke from "../../components/Joke";
