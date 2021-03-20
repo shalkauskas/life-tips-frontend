@@ -9,7 +9,7 @@ import PrivateRoute from "./components/PrivateRoute";
 import Login from "./pages/Login";
 import AuthService from "./services/AuthService";
 import NotFound from "./pages/NotFound";
-import UserProfile from "./pages/UserProfileNew";
+import UserProfile from "./pages/UserProfile";
 import Register from "./pages/Register";
 import Footer from "./components/Footer";
 import JokesEdit from "./pages/JokesEdit";
@@ -67,17 +67,6 @@ export default function App(props) {
             exact
             render={(props) => (
               <SearchResult {...props} isAuthenticated={isAuthenticated} />
-            )}
-          />
-          <Route
-            path="/add"
-            exact
-            render={(props) => (
-              <AddJoke
-                {...props}
-                author={userdata.displayName}
-                userId={userdata.id}
-              />
             )}
           />
           <Route

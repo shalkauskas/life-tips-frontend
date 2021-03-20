@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import AddJoke from "../../components/AddJoke";
-import ConfirmationModal from "../../components/JokesEdit/ConfirmationModal";
-import ConfirmationModalBackdrop from "./ConfirmationModalBackdrop";
+import DeleteConfirmation from "../../components/JokesEdit/DeleteConfirmation";
 import SortButton from "./SortButton";
 import JokesEditAllButtons from "../../components/JokesEdit/JokesEditAllButtons";
 import Spinner from "../../components/Skeleton";
@@ -114,11 +113,11 @@ export default function JokeEditList(props) {
               id={joke.id}
               rating={joke.rating}
               time={joke.time}
-              allowRate={true}
+              edit
             />
           </div>
         ))}
-        <Spinner loading={loading} />
+        {loading && <Spinner />}
         <div
           ref={ref}
           style={{ direction: "ltr" }}
@@ -140,7 +139,7 @@ export default function JokeEditList(props) {
           </div>
         ) : null}
       </div>
-      <ConfirmationModal
+      <DeleteConfirmation
         showConfirm={showConfirm}
         setShowConfirm={setShowConfirm}
         refreshList={props.refreshList}
@@ -151,10 +150,6 @@ export default function JokeEditList(props) {
         setShowConfirm={setShowConfirm}
         refreshList={props.refreshList}
         setMessage={props.setMessage}
-      />
-      <ConfirmationModalBackdrop
-        showConfirm={showConfirm}
-        setShowConfirm={setShowConfirm}
       />
     </div>
   );

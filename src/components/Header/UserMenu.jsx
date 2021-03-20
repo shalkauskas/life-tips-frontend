@@ -53,10 +53,10 @@ export default function UserMenu(props) {
         onClose={handleClose}
       >
         <MenuItem component={Link} to="/dashboard">
-          Profile
+          My content
         </MenuItem>
         <MenuItem component={Link} to="/dashboard/profile">
-          My account
+          Profile
         </MenuItem>
         <Divider />
         <MenuItem onClick={logout}>Logout</MenuItem>

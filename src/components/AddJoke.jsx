@@ -6,9 +6,9 @@ import { makeStyles } from "@material-ui/core/styles";
 import { green, grey } from "@material-ui/core/colors";
 import { Container } from "@material-ui/core";
 import { Alert } from "@material-ui/lab?Alert";
-
+import Checkbox from "@material-ui/core/Checkbox";
 import Collapse from "@material-ui/core/Collapse";
-
+import FormControlLabel from "@material-ui/core/FormControlLabel";
 const AddJoke = (props) => {
   const useStyles = makeStyles((theme) => ({
     button: {
@@ -21,6 +21,7 @@ const AddJoke = (props) => {
     },
     textField: {
       backgroundColor: "#FFFFFF",
+      marginBottom: "1rem",
     },
     container: {
       textAlign: "center",
@@ -28,6 +29,7 @@ const AddJoke = (props) => {
     },
   }));
   const classes = useStyles();
+
   const time = new Date().toLocaleString([], {
     year: "numeric",
     month: "numeric",
@@ -37,8 +39,9 @@ const AddJoke = (props) => {
   });
   const initialJokeState = {
     id: null,
+    title: "",
     content: "",
-    published: false,
+    published: true,
     author: "Anonymous",
     userId: "0",
     rating: "0",
@@ -46,14 +49,16 @@ const AddJoke = (props) => {
   };
   const [joke, setJoke] = useState(initialJokeState);
   const [submitted, setSubmitted] = useState(false);
-
+  const [checked, setChecked] = React.useState(false);
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setJoke({ ...joke, [name]: value });
   };
   const saveJoke = () => {
     var data = {
+      title: joke.title,
       content: joke.content,
+      published: joke.published,
       author: props.author,
       userId: props.userId,
       time: time,
@@ -63,6 +68,7 @@ const AddJoke = (props) => {
         setJoke({
           id: response.data.id,
           rating: response.data.rating,
+          title: response.data.title,
           content: response.data.content,
           published: response.data.published,
           author: response.data.author,
@@ -100,13 +106,41 @@ const AddJoke = (props) => {
           <TextField
             className={classes.textField}
             fullWidth
+            required
+            multiline
+            rows={1}
+            name="title"
+            label="Title"
+            value={joke.title}
+            onChange={handleInputChange}
+            variant="outlined"
+          />
+          <TextField
+            className={classes.textField}
+            fullWidth
             multiline
             rows={7}
             name="content"
+            label="Text (Optional)"
             value={joke.content}
             onChange={handleInputChange}
             variant="outlined"
           />
+          {/* <FormControlLabel
+            style={{
+              width: "100%",
+              display: props.userId ? "block" : "none",
+            }}
+            control={
+              <Checkbox
+                checked={checked}
+                onChange={() => setChecked(!checked)}
+                color="primary"
+                inputProps={{ "aria-label": "secondary checkbox" }}
+              />
+            }
+            label="Send anonymous"
+          /> */}
 
           <Button
             variant="contained"
