@@ -96,7 +96,6 @@ export default function JokeEditList(props) {
         style={{
           height: "63vh",
           overflowY: "auto",
-          direction: "rtl",
         }}
       >
         {jokes.map((joke, index) => (

@@ -1,24 +1,25 @@
 import DataService from "../../services/DataService";
-export default function JokesEditButtons(props) {
-  const updatePublished = (status) => {
-    var data = {
-      id: props.currentJoke.id,
-      title: props.currentJoke.title,
-      description: props.currentJoke.description,
-      published: status,
-    };
-
-    DataService.update(props.currentJoke.id, data)
-      .then((response) => {
-        props.setCurrentJoke({ ...props.currentJoke, published: status });
-        console.log(response.data);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  };
+import IconButton from "@material-ui/core/IconButton";
+import EditIcon from "@material-ui/icons/Edit";
+import DeleteIcon from "@material-ui/icons/Delete";
+import { Container } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
+import { blue, red } from "@material-ui/core/colors";
+const useStyles = makeStyles({
+  buttonGroup: {
+    textAlign: "end",
+  },
+  deleteButton: {
+    "&:hover": { color: red[400] },
+  },
+  editButton: {
+    "&:hover": { color: blue[500] },
+  },
+});
+export default function JokeEditButtons(props) {
+  const classes = useStyles();
   const deleteJoke = () => {
-    DataService.remove(props.currentJoke.id)
+    DataService.remove(props.jokeId)
       .then((response) => {
         console.log(response.data);
         props.refreshList();
@@ -27,65 +28,24 @@ export default function JokesEditButtons(props) {
         console.log(e);
       });
   };
-  const updateJoke = () => {
-    DataService.update(props.currentJoke.id, props.currentJoke)
-      .then((response) => {
-        console.log(response.data);
-        props.setMessage("Your content was updated successfully!");
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-    props.setEdit(!props.edit);
-  };
   return (
-    <>
-      {props.edit ? (
-        <div>
-          {props.adminRole ? (
-            props.currentJoke.published ? (
-              <button
-                className="badge badge-primary mr-2"
-                onClick={() => updatePublished(false)}
-              >
-                UnPublish
-              </button>
-            ) : (
-              <button
-                className="badge badge-primary mr-2"
-                onClick={() => updatePublished(true)}
-              >
-                Publish
-              </button>
-            )
-          ) : null}
-
-          <button
-            type="submit"
-            className="badge badge-success"
-            onClick={updateJoke}
-          >
-            Save
-          </button>
-          <button
-            type="submit"
-            className="badge badge-warning mx-2"
-            onClick={() => props.setEdit(false)}
-          >
-            Cancel
-          </button>
-          <button className="badge badge-danger mr-2" onClick={deleteJoke}>
-            Delete
-          </button>
-        </div>
-      ) : (
-        <button
-          onClick={() => props.setEdit(!props.edit)}
-          className="badge badge-warning"
-        >
-          Edit
-        </button>
-      )}
-    </>
+    <Container className={classes.buttonGroup}>
+      <IconButton
+        onClick={() => props.setEditMode(!props.editMode)}
+        aria-label="edit"
+        component="span"
+        className={classes.editButton}
+      >
+        <EditIcon />
+      </IconButton>
+      <IconButton
+        onClick={deleteJoke}
+        aria-label="delete"
+        component="span"
+        className={classes.deleteButton}
+      >
+        <DeleteIcon />
+      </IconButton>
+    </Container>
   );
 }

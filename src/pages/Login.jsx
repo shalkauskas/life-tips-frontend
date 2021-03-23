@@ -41,17 +41,18 @@ export default function Login(props) {
     const { name, value } = event.target;
     setUserData({ ...userdata, [name]: value });
   };
-  const loginUser = () => {
+  const loginUser = (event) => {
+    event.preventDefault();
     var data = {
       username: userdata.username,
       password: userdata.password,
     };
     AuthService.login(data)
       .then((response) => {
+        console.log(response.data.isAuthenticated);
         response.data.isAuthenticated
           ? onLogin()
           : props.history.push("/login");
-        console.log(response.data);
       })
       .catch((e) => {
         console.log(e);

@@ -3,7 +3,6 @@ import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Switch, Route } from "react-router-dom";
 import Index from "./pages/Index";
-import AddJoke from "./components/AddJoke";
 import Joke from "./components/Joke";
 import PrivateRoute from "./components/PrivateRoute";
 import Login from "./pages/Login";

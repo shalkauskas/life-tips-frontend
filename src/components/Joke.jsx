@@ -6,6 +6,7 @@ import { useLocation } from "react-router-dom";
 import DataService from "../services/DataService";
 import JokeHeader from "./Joke/JokeHeader";
 import JokeContent from "./Joke/JokeContent";
+import JokeContentEdit from "./Joke/JokeContentEdit";
 import JokeFooter from "./Joke/JokeFooter";
 
 const useStyles = makeStyles({
@@ -22,6 +23,7 @@ const useStyles = makeStyles({
 export default function Joke(props) {
   const classes = useStyles();
   const [joke, setJoke] = React.useState([]);
+  const [editMode, setEditMode] = React.useState(false);
   const jokeRatingCheck = localStorage.getItem(joke.id);
   const location = useLocation();
   React.useEffect(() => {
@@ -42,8 +44,18 @@ export default function Joke(props) {
   return (
     <Card className={classes.root}>
       <CardContent>
-        <JokeHeader joke={joke} id={props.id} edit={props.edit} />
-        <JokeContent joke={joke} />
+        <JokeHeader
+          joke={joke}
+          id={props.id}
+          edit={props.edit}
+          editMode={editMode}
+          setEditMode={setEditMode}
+        />
+        {editMode ? (
+          <JokeContentEdit joke={joke} />
+        ) : (
+          <JokeContent joke={joke} />
+        )}
       </CardContent>
       <JokeFooter
         joke={joke}

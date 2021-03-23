@@ -7,7 +7,7 @@ import { green } from "@material-ui/core/colors";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import IconButton from "@material-ui/core/IconButton";
-import JokeEditButtons from "../JokesEdit/JokeEditButtonsNew";
+import JokeEditButtons from "../JokesEdit/JokeEditButtons";
 const useStyles = makeStyles({
   root: {
     minWidth: 275,
@@ -50,14 +50,19 @@ export default function JokeHeader(props) {
           <u>#{jokeId.slice(jokeId.length - 5)}</u>
         </Button>
         <Tooltip title="Copy link">
-          <IconButton aria-label="Share" size="small" onClick={shareButton}>
+          <IconButton aria-label="Share" onClick={shareButton}>
             <ShareIcon />
           </IconButton>
         </Tooltip>
       </Grid>
       <Grid item xs={6}>
         {props.edit ? (
-          <JokeEditButtons />
+          <JokeEditButtons
+            jokeId={props.joke.id}
+            editMode={props.editMode}
+            setEditMode={props.setEditMode}
+            refreshList={props.refreshList}
+          />
         ) : (
           <Typography align="right" color="textSecondary">
             {props.joke.time}
