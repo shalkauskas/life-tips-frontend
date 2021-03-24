@@ -8,7 +8,7 @@ import JokeHeader from "./Joke/JokeHeader";
 import JokeContent from "./Joke/JokeContent";
 import JokeContentEdit from "./Joke/JokeContentEdit";
 import JokeFooter from "./Joke/JokeFooter";
-
+import Collapse from "@material-ui/core/Collapse";
 const useStyles = makeStyles({
   root: {
     minWidth: 275,
@@ -51,8 +51,9 @@ export default function Joke(props) {
           editMode={editMode}
           setEditMode={setEditMode}
         />
+
         {editMode ? (
-          <JokeContentEdit joke={joke} />
+          <JokeContentEdit joke={joke} setEditMode={setEditMode} />
         ) : (
           <JokeContent joke={joke} />
         )}

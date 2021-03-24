@@ -54,13 +54,14 @@ const AddJoke = (props) => {
     const { name, value } = event.target;
     setJoke({ ...joke, [name]: value });
   };
+  const user = JSON.parse(localStorage.getItem(`user`));
   const saveJoke = () => {
     var data = {
       title: joke.title,
       content: joke.content,
       published: joke.published,
-      author: props.author,
-      userId: props.userId,
+      author: user && !checked ? user.displayName : joke.author,
+      userId: user ? user.id : joke.userId,
       time: time,
     };
     DataService.create(data)
@@ -126,10 +127,10 @@ const AddJoke = (props) => {
             onChange={handleInputChange}
             variant="outlined"
           />
-          {/* <FormControlLabel
+          <FormControlLabel
             style={{
               width: "100%",
-              display: props.userId ? "block" : "none",
+              display: user ? "block" : "none",
             }}
             control={
               <Checkbox
@@ -140,7 +141,7 @@ const AddJoke = (props) => {
               />
             }
             label="Send anonymous"
-          /> */}
+          />
 
           <Button
             variant="contained"

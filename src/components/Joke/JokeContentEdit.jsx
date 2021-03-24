@@ -1,12 +1,13 @@
 import React from "react";
 import Container from "@material-ui/core/Container";
 import TextField from "@material-ui/core/TextField";
-import IconButton from "@material-ui/core/IconButton";
-import CheckCircleIcon from "@material-ui/icons/CheckCircle";
+import Button from "@material-ui/core/Button";
+import SaveIcon from "@material-ui/icons/Save";
 import CancelIcon from "@material-ui/icons/Cancel";
 import { green, grey } from "@material-ui/core/colors";
 import { makeStyles } from "@material-ui/core/styles";
 import DataService from "../../services/DataService";
+
 const useStyles = makeStyles((theme) => ({
   wrapper: {
     marginTop: "1rem",
@@ -17,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
   buttons: {
     textAlign: "center",
     position: "absolute",
-    top: "-64px",
+    top: "-60px",
     left: "0",
     right: "0",
     width: "fit-content",
@@ -39,6 +40,7 @@ export default function JokeContentEdit(props) {
   };
   const reset = () => {
     setJoke(initialJokeState);
+    props.setEditMode(false);
   };
   const updatePublished = (status) => {
     var data = {
@@ -57,16 +59,29 @@ export default function JokeContentEdit(props) {
   return (
     <Container disableGutters className={classes.wrapper}>
       <div className={classes.buttons}>
-        <IconButton
+        <Button
           aria-label="Save"
-          style={{ color: green[500] }}
+          variant="contained"
+          style={{
+            backgroundColor: green[500],
+            color: "#FFFFFF",
+            minWidth: "7rem",
+            marginRight: "1rem",
+          }}
           onClick={updatePublished}
+          startIcon={<SaveIcon />}
         >
-          <CheckCircleIcon />
-        </IconButton>
-        <IconButton aria-label="Cancel" color="secondary" onClick={reset}>
-          <CancelIcon />
-        </IconButton>
+          Save
+        </Button>
+        <Button
+          aria-label="Cancel"
+          color="secondary"
+          variant="outlined"
+          onClick={reset}
+          startIcon={<CancelIcon />}
+        >
+          Cancel
+        </Button>
       </div>
       <TextField
         error={joke.title.length < 1 ? true : false}

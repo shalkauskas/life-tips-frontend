@@ -5,7 +5,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import { amber, grey } from "@material-ui/core/colors";
+import { green, amber, grey } from "@material-ui/core/colors";
 import { makeStyles } from "@material-ui/core/styles";
 import DataService from "../../services/DataService";
 const useStyles = makeStyles({
@@ -13,10 +13,10 @@ const useStyles = makeStyles({
     textAlign: "center",
   },
   button: {
-    backgroundColor: amber[700],
-    color: grey[50],
+    color: green[700],
     "&:hover": {
-      backgroundColor: amber[900],
+      backgroundColor: green[900],
+      color: grey[50],
     },
   },
   buttonGroup: {
@@ -40,6 +40,16 @@ export default function UpdateConfirmation(props) {
         console.log(e);
       });
   };
+  const deleteJoke = () => {
+    DataService.remove(props.jokeId)
+      .then((response) => {
+        console.log(response.data);
+        props.refreshList();
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
   return (
     <div>
       <Dialog
@@ -48,7 +58,8 @@ export default function UpdateConfirmation(props) {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle className={classes.title}>
-          Are you sure you want to delete all your published content?
+          Are you sure you want to delete
+          {props.deleteAll ? " all your published content?" : " this post?"}
         </DialogTitle>
         <DialogContent>
           <DialogContentText
@@ -62,18 +73,18 @@ export default function UpdateConfirmation(props) {
         </DialogContent>
         <DialogActions className={classes.buttonGroup}>
           <Button
-            onClick={removeAllJokes}
-            className={classes.button}
-            variant="contained"
-          >
-            Confirm delete all
-          </Button>
-          <Button
-            onClick={() => props.setShowConfirm(false)}
+            onClick={props.deleteAll ? removeAllJokes : deleteJoke}
             variant="contained"
             color="secondary"
           >
-            Cancel
+            {props.deleteAll ? "Confirm delete all" : "Yes, delete"}
+          </Button>
+          <Button
+            onClick={() => props.setShowConfirm(false)}
+            variant="outlined"
+            className={classes.button}
+          >
+            No, keep it
           </Button>
         </DialogActions>
       </Dialog>

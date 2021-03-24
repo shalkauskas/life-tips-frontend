@@ -20,6 +20,7 @@ export default function UserMenu(props) {
   const logout = () => {
     AuthService.logout().then((response) => {
       localStorage.setItem(`isAuthenticated`, false);
+      localStorage.removeItem(`user`);
       window.location.reload();
       console.log(response);
     });

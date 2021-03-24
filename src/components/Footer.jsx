@@ -15,7 +15,10 @@ const useStyles = makeStyles((theme) => ({
   },
   footer: {
     padding: theme.spacing(3, 2),
-    marginTop: "auto",
+    position: "absolute",
+    bottom: 0,
+    right: 0,
+    left: 0,
     backgroundColor: theme.palette.grey[200],
   },
   wrapper: {

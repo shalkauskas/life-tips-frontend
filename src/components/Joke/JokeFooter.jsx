@@ -7,6 +7,7 @@ import CardActions from "@material-ui/core/CardActions";
 import { green, red } from "@material-ui/core/colors";
 import DataService from "../../services/DataService";
 import { makeStyles } from "@material-ui/core/styles";
+import Tooltip from "@material-ui/core/Tooltip";
 const useStyles = makeStyles({
   footer: {
     padding: "1rem",
@@ -79,9 +80,11 @@ export default function JokeFooter(props) {
       <Grid container alignItems="center">
         <Grid item xs={7} sm={8} md={9}>
           {props.edit ? (
-            <Typography align="left" color="textSecondary">
-              {props.joke.time}
-            </Typography>
+            <Tooltip title="Date added" placement="left">
+              <Typography align="left" color="textSecondary">
+                {props.joke.time}
+              </Typography>
+            </Tooltip>
           ) : (
             <Typography color="textSecondary">
               By {props.joke.author}
@@ -105,13 +108,15 @@ export default function JokeFooter(props) {
               )}
             </Grid>
             <Grid item xs>
-              <Typography
-                color="textSecondary"
-                align="center"
-                variant="subtitle1"
-              >
-                [{props.joke.rating}]
-              </Typography>
+              <Tooltip title="Rating">
+                <Typography
+                  color="textSecondary"
+                  align="center"
+                  variant="subtitle1"
+                >
+                  [{props.joke.rating}]
+                </Typography>
+              </Tooltip>
             </Grid>
             <Grid item xs>
               {!props.edit && (

@@ -3,7 +3,11 @@ import Typography from "@material-ui/core/Typography";
 export default function JokeContent(props) {
   return (
     <Container disableGutters style={{ marginTop: "1rem" }}>
-      <Typography variant="h5" component="h2">
+      <Typography
+        variant="h5"
+        component="h2"
+        style={{ marginBottom: "0.5rem" }}
+      >
         {props.joke.title}
       </Typography>
       <Typography variant="body1" component="p">

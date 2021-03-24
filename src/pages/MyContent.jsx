@@ -1,23 +1,51 @@
 import React, { useState, useEffect, useRef } from "react";
-import AddJoke from "../../components/AddJoke";
-import DeleteConfirmation from "../../components/JokesEdit/DeleteConfirmation";
-import SortButton from "./SortButton";
-import JokesEditAllButtons from "../../components/JokesEdit/JokesEditAllButtons";
-import Spinner from "../../components/Skeleton";
-import LoadMoreButton from "../LoadMoreButton";
-import AddButton from "../../components/AddButton";
-import Joke from "../../components/Joke";
-import DataService from "../../services/DataService";
-
-export default function JokeEditList(props) {
+import AuthService from "../services/AuthService";
+import AddJoke from "../components/AddJoke";
+import DeleteConfirmation from "../components/JokesEdit/DeleteConfirmation";
+import SortButton from "../components/JokesEdit/SortButton";
+import JokesEditAllButtons from "../components/JokesEdit/JokesEditAllButtons";
+import Skeleton from "../components/Skeleton";
+import LoadMoreButton from "../components/LoadMoreButton";
+import AddButton from "../components/AddButton";
+import Joke from "../components/Joke";
+import DataService from "../services/DataService";
+import { Container, Paper, Typography } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
+import Collapse from "@material-ui/core/Collapse";
+import amber from "@material-ui/core/colors/amber";
+const useStyles = makeStyles((theme) => ({
+  header: {
+    display: "flex",
+    justifyContent: "center",
+    marginBottom: "1rem",
+  },
+  alert: {
+    textAlign: "center",
+    backgroundColor: amber[300],
+    padding: "1rem",
+  },
+}));
+export default function JokesEdit() {
+  const classes = useStyles();
+  const [message, setMessage] = useState("");
+  const [adminRole, setAdminRole] = useState(false);
   const [jokes, setJokes] = useState([]);
   const [showAdd, setShowAdd] = useState(false);
   const [loading, setLoading] = useState(false);
   const [hasNextPage, setHasNextPage] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
-  const [currentIndex, setCurrentIndex] = useState(-1);
   const [page, setPage] = useState(0);
   const ref = useRef();
+  const update = message.length > 1 ? true : false;
+  useEffect(() => {
+    AuthService.admin().then((response) => {
+      if (response.data.admin) {
+        setAdminRole(true);
+      } else {
+        console.log(response);
+      }
+    });
+  }, []);
   useEffect(() => {
     async function fetchJokes() {
       setLoading(true);
@@ -48,11 +76,11 @@ export default function JokeEditList(props) {
           console.log(e);
         });
     }
-    if (props.update) {
+    if (update) {
       setJokes([]);
       fetchJokes();
     }
-  }, [props.update]);
+  }, [update]);
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -73,39 +101,22 @@ export default function JokeEditList(props) {
     }
     return () => observer.disconnect();
   }, [hasNextPage, ref]);
-  const setActiveJoke = (joke, index) => {
-    props.setCurrentJoke(joke);
-    setCurrentIndex(index);
-    props.setMessage("");
-  };
   return (
-    <div className="col-lg-6 col-12">
-      <div className="d-flex justify-content-center my-3">
-        <h4 className="text-center">
-          {props.adminRole ? "All jokes" : "My Jokes"}
-        </h4>
-        <SortButton
-          jokes={jokes}
-          setJokes={setJokes}
-          adminRole={props.adminRole}
-        />
-      </div>
-
+    <div>
+      <Container className={classes.header}>
+        <Typography variant="h5">My content</Typography>
+        <SortButton jokes={jokes} setJokes={setJokes} adminRole={adminRole} />
+      </Container>
       <div
-        className="border p-3"
         style={{
-          height: "63vh",
-          overflowY: "auto",
+          minWidth: 300,
+          maxWidth: 650,
+          marginLeft: "auto",
+          marginRight: "auto",
         }}
       >
         {jokes.map((joke, index) => (
-          <div
-            key={index}
-            onClick={() => setActiveJoke(joke, index)}
-            style={{ direction: "ltr" }}
-            className={`
-                ${index === currentIndex ? "border border-warning " : ""} mb-3`}
-          >
+          <div key={index}>
             <Joke
               content={joke.content}
               author={joke.author}
@@ -116,12 +127,8 @@ export default function JokeEditList(props) {
             />
           </div>
         ))}
-        {loading && <Spinner />}
-        <div
-          ref={ref}
-          style={{ direction: "ltr" }}
-          className="text-center pb-3"
-        >
+        {loading && <Skeleton />}
+        <div ref={ref} style={{ textAlign: "center", paddingBottom: "1rem" }}>
           <LoadMoreButton
             hasNextPage={hasNextPage}
             page={page}
@@ -129,27 +136,31 @@ export default function JokeEditList(props) {
           />
         </div>
         {jokes.length < 1 ? (
-          <div style={{ direction: "ltr" }}>
-            <h5 className="alert alert-warning text-center">
-              You don't have any added content yet. Want to submit a joke?
+          <div>
+            <Paper elevation={3} className={classes.alert}>
+              <Typography variant="h6">
+                You don't have any added content yet. Want to submit a post?
+              </Typography>
+
               <AddButton showAdd={showAdd} setShowAdd={setShowAdd} />
-            </h5>
-            {showAdd ? <AddJoke close={() => setShowAdd(false)} /> : null}
+            </Paper>
+            <Collapse in={showAdd}>
+              <AddJoke close={() => setShowAdd(false)} />
+            </Collapse>
           </div>
         ) : null}
       </div>
       <DeleteConfirmation
         showConfirm={showConfirm}
         setShowConfirm={setShowConfirm}
-        refreshList={props.refreshList}
+        deleteAll
       />
-      <JokesEditAllButtons
-        adminRole={props.adminRole}
+      {/* <JokesEditAllButtons
+        adminRole={adminRole}
         jokes={jokes}
         setShowConfirm={setShowConfirm}
-        refreshList={props.refreshList}
-        setMessage={props.setMessage}
-      />
+        setMessage={setMessage}
+      /> */}
     </div>
   );
 }

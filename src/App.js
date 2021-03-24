@@ -11,7 +11,7 @@ import NotFound from "./pages/NotFound";
 import UserProfile from "./pages/UserProfile";
 import Register from "./pages/Register";
 import Footer from "./components/Footer";
-import JokesEdit from "./pages/JokesEdit";
+import JokesEdit from "./pages/MyContent";
 import ScrollButton from "./components/ScrollButton";
 import SearchResult from "./pages/SearchResult";
 import Header from "./components/Header/Header";
@@ -27,8 +27,10 @@ export default function App(props) {
           console.log(response);
           localStorage.setItem(
             `isAuthenticated`,
-            response.data.isAuthenticated
+            JSON.stringify(response.data.isAuthenticated)
           );
+          isAuthenticated &&
+            localStorage.setItem(`user`, JSON.stringify(response.data.user));
           setAuthenticated(response.data.isAuthenticated);
           setUserdata(response.data.user);
         })
@@ -37,14 +39,15 @@ export default function App(props) {
         });
     }
     authorize();
-  }, []);
-  const session = localStorage.getItem(`isAuthenticated`);
-
+  }, [isAuthenticated]);
+  const session = JSON.parse(localStorage.getItem(`isAuthenticated`));
+  // const user = JSON.parse(localStorage.getItem(`user`));
+  // console.log(user);
   return (
-    <div className="bg-light h-100 min-vh-100 position-relative">
+    <div style={{ position: "relative", paddingBottom: "8rem" }}>
       <Header userdata={userdata} isAuthenticated={isAuthenticated} />
 
-      <div className="pb-5" style={{ paddingTop: "6rem" }}>
+      <div style={{ paddingTop: "6rem" }}>
         <Switch>
           <Route path={"/about"} component={About} />
           <Route

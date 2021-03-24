@@ -7,7 +7,7 @@ import { green } from "@material-ui/core/colors";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import IconButton from "@material-ui/core/IconButton";
-import JokeEditButtons from "../JokesEdit/JokeEditButtons";
+import JokeEditButtons from "./JokeEditButtons";
 const useStyles = makeStyles({
   root: {
     minWidth: 275,
