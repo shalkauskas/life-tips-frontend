@@ -13,13 +13,39 @@ import Collapse from "@material-ui/core/Collapse";
 import Container from "@material-ui/core/Container";
 
 export default function Index(props) {
-  const [posts, setPosts] = React.useState([]);
   const [showAdd, setShowAdd] = React.useState(false);
-  const [loading, setLoading] = React.useState(false);
   const [hasNextPage, setHasNextPage] = React.useState(false);
   const [page, setPage] = React.useState(0);
   const [order, setOrder] = React.useState("new");
   const [submitted, setSubmitted] = React.useState(false);
+  // reducer
+  const reduce = (state, action) => {
+    switch (action.type) {
+      case "OnSuccess":
+        return {
+          loading: false,
+          posts: action.payload,
+          error: "",
+        };
+      case "OnFailure":
+        return {
+          loading: false,
+          posts: {},
+          error: "Something went wrong",
+        };
+
+      default:
+        return state;
+    }
+  };
+  const initialState = {
+    posts: [],
+    loading: true,
+    error: "",
+  };
+  const [state, dispatch] = React.useReducer(reduce, initialState);
+
+  // styles
   const useStyles = makeStyles({
     list: {
       maxWidth: "750px",
@@ -33,11 +59,10 @@ export default function Index(props) {
     loadMoreWrapper: {
       textAlign: "center",
       paddingBottom: "1rem",
-      display: loading ? "none" : "",
+      display: state.loading ? "none" : "",
     },
   });
   const classes = useStyles();
-  const [value, setValue] = React.useState(0);
 
   // infinite scroll
   const ref = React.useRef();
@@ -68,27 +93,27 @@ export default function Index(props) {
       : location.pathname === "/best"
       ? setOrder("best")
       : setOrder("random");
-    setPosts([]);
     setPage(0);
   }, [location]);
   React.useEffect(() => {
-    setLoading(true);
     async function fetchPosts() {
       await DataService.getAllPublished(page, order)
         .then((response) => {
-          setLoading(false);
           console.log(response.data);
           setHasNextPage(response.data.hasNextPage);
-          setPosts((prevState) => [...prevState, ...response.data.posts]);
+          dispatch({ type: "OnSuccess", payload: response.data.posts });
           setSubmitted(false);
         })
         .catch((e) => {
           console.log(e);
+          dispatch({ type: "OnFailure" });
         });
     }
     fetchPosts();
   }, [page, order, submitted]);
+  console.log(state);
   // Tabs
+  const [value, setValue] = React.useState(0);
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -113,8 +138,8 @@ export default function Index(props) {
         <AddPost close={() => setShowAdd(false)} setSubmitted={setSubmitted} />
       </Collapse>
 
-      <PostsList posts={posts} isAuthenticated={props.isAuthenticated} />
-      {loading && <Skeleton />}
+      <PostsList posts={state.posts} isAuthenticated={props.isAuthenticated} />
+      {state.loading && <Skeleton />}
 
       <div ref={ref} className={classes.loadMoreWrapper}>
         <LoadMoreButton

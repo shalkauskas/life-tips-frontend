@@ -8,6 +8,7 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import { green, amber, grey } from "@material-ui/core/colors";
 import { makeStyles } from "@material-ui/core/styles";
 import DataService from "../../services/DataService";
+import { RefreshContext } from "../../pages/MyContent";
 const useStyles = makeStyles({
   title: {
     textAlign: "center",
@@ -29,12 +30,13 @@ const useStyles = makeStyles({
   },
 });
 export default function UpdateConfirmation(props) {
+  const [, setRefresh] = React.useContext(RefreshContext);
   const classes = useStyles();
   const removeAllPosts = () => {
     DataService.removeAll()
       .then((response) => {
         console.log(response.data);
-        props.refreshList();
+        setRefresh(true);
       })
       .catch((e) => {
         console.log(e);
@@ -45,7 +47,8 @@ export default function UpdateConfirmation(props) {
       .then((response) => {
         console.log(response.data);
         props.setShowConfirm(false);
-        props.refreshList();
+
+        setRefresh(true);
       })
       .catch((e) => {
         console.log(e);

@@ -21,9 +21,6 @@ const useStyles = makeStyles({
 export default function PostEditButtons(props) {
   const classes = useStyles();
   const [showConfirm, setShowConfirm] = React.useState(false);
-  const refreshList = () => {
-    props.refreshList();
-  };
   return (
     <Container className={classes.buttonGroup}>
       <Tooltip title="Edit">
@@ -50,7 +47,6 @@ export default function PostEditButtons(props) {
         showConfirm={showConfirm}
         setShowConfirm={setShowConfirm}
         postId={props.postId}
-        refreshList={refreshList}
       />
     </Container>
   );

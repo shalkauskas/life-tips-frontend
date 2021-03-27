@@ -20,7 +20,6 @@ export default function PostFooter(props) {
       DataService.update(props.id || props.post.id, data)
         .then((response) => {
           props.setPost(response.data);
-          // console.log(response.data);
         })
         .catch((e) => {
           console.log(e);

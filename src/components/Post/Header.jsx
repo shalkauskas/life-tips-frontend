@@ -36,9 +36,6 @@ export default function PostHeader(props) {
       window.location.href + `post/${props.id || props.post.id}`
     );
   };
-  const refreshList = () => {
-    props.refreshList();
-  };
   return (
     <Grid container alignItems="center">
       <Grid item xs={6}>
@@ -64,7 +61,6 @@ export default function PostHeader(props) {
             postId={props.post.id}
             editMode={props.editMode}
             setEditMode={props.setEditMode}
-            refreshList={refreshList}
           />
         ) : (
           <Typography align="right" color="textSecondary">

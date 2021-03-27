@@ -7,7 +7,7 @@ import CancelIcon from "@material-ui/icons/Cancel";
 import { green } from "@material-ui/core/colors";
 import { makeStyles } from "@material-ui/core/styles";
 import DataService from "../../services/DataService";
-
+import { RefreshContext } from "../../pages/MyContent";
 const useStyles = makeStyles((theme) => ({
   wrapper: {
     marginTop: "1rem",
@@ -45,6 +45,7 @@ export default function PostContentEdit(props) {
   const [post, setPost] = React.useState(initialPostState);
   const [error, setError] = React.useState(false);
   const [editActive, setEditActive] = React.useState(false);
+  const [, setUpdate] = React.useContext(RefreshContext);
   const handleInputChange = (event) => {
     post.title.length > 1 && setError(false);
     const { name, value } = event.target;
@@ -70,7 +71,7 @@ export default function PostContentEdit(props) {
           title: response.data.title,
           content: response.data.content,
         });
-        props.setMessage("Your post has been updated!");
+        setUpdate({ refresh: true, message: "Saved" });
       })
       .catch((e) => {
         post.title.length < 1 ? setError(true) : alert(e);

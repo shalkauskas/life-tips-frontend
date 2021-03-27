@@ -4,8 +4,8 @@ export default function PostsEditAllButtons(props) {
     DataService.updateMany()
       .then((response) => {
         console.log(response.data);
-        props.refreshList();
-        props.setMessage("All posts have been published!");
+        // replace with context
+        // props.refreshList();
       })
       .catch((e) => {
         console.log(e);

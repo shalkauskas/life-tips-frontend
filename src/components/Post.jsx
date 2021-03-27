@@ -8,11 +8,7 @@ import PostHeader from "./Post/Header";
 import PostContent from "./Post/Content";
 import PostContentEdit from "./Post/ContentEdit";
 import PostFooter from "./Post/Footer";
-import Snackbar from "@material-ui/core/Snackbar";
-import MuiAlert from "@material-ui/lab/Alert";
-function Alert(props) {
-  return <MuiAlert elevation={6} variant="filled" {...props} />;
-}
+
 const useStyles = makeStyles({
   root: {
     minWidth: 275,
@@ -28,7 +24,7 @@ export default function Post(props) {
   const classes = useStyles();
   const [post, setPost] = React.useState([]);
   const [editMode, setEditMode] = React.useState(false);
-  const [showDeleteConfirm, setShowDeleteConfirm] = React.useState(false);
+
   const postRatingCheck = localStorage.getItem(post.id);
   const location = useLocation();
   React.useEffect(() => {
@@ -46,15 +42,9 @@ export default function Post(props) {
     return () => (mounted = false);
   }, [location, props.id, postRatingCheck]);
   const refreshList = () => {
-    setShowDeleteConfirm(true);
+    props.refreshList();
   };
-  const handleClose = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
 
-    setShowDeleteConfirm(false);
-  };
   return (
     <>
       <Card className={classes.root}>
@@ -86,15 +76,6 @@ export default function Post(props) {
           edit={props.edit}
         />
       </Card>
-      <Snackbar
-        open={showDeleteConfirm}
-        autoHideDuration={6000}
-        onClose={handleClose}
-      >
-        <Alert onClose={handleClose} severity="error">
-          Your post has been deleted!
-        </Alert>
-      </Snackbar>
     </>
   );
 }
