@@ -4,7 +4,7 @@ import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import SaveIcon from "@material-ui/icons/Save";
 import CancelIcon from "@material-ui/icons/Cancel";
-import { green, grey } from "@material-ui/core/colors";
+import { green } from "@material-ui/core/colors";
 import { makeStyles } from "@material-ui/core/styles";
 import DataService from "../../services/DataService";
 
@@ -25,35 +25,55 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: "auto",
     marginRight: "auto",
   },
+  saveButton: {
+    backgroundColor: green[500],
+    color: "#FFFFFF",
+    minWidth: "7rem",
+    marginRight: "1rem",
+    "&:hover": {
+      backgroundColor: green[300],
+    },
+  },
 }));
-export default function JokeContentEdit(props) {
+export default function PostContentEdit(props) {
   const classes = useStyles();
-  const initialJokeState = {
-    id: props.joke.id,
-    title: props.joke.title,
-    content: props.joke.content,
+  const initialPostState = {
+    id: props.post.id,
+    title: props.post.title,
+    content: props.post.content,
   };
-  const [joke, setJoke] = React.useState(initialJokeState);
+  const [post, setPost] = React.useState(initialPostState);
+  const [error, setError] = React.useState(false);
+  const [editActive, setEditActive] = React.useState(false);
   const handleInputChange = (event) => {
+    post.title.length > 1 && setError(false);
     const { name, value } = event.target;
-    setJoke({ ...joke, [name]: value });
+    setPost({ ...post, [name]: value });
+    setEditActive(true);
   };
   const reset = () => {
-    setJoke(initialJokeState);
+    setPost(initialPostState);
     props.setEditMode(false);
   };
   const updatePublished = (status) => {
     var data = {
-      id: joke.id,
-      title: joke.title,
-      content: joke.content,
+      id: post.id,
+      title: post.title,
+      content: post.content,
     };
-    DataService.update(props.joke.id, data)
+    DataService.update(props.post.id, data)
       .then((response) => {
         console.log(response.data);
+        props.setEditMode(false);
+        setPost({
+          ...post,
+          title: response.data.title,
+          content: response.data.content,
+        });
+        props.setMessage("Your post has been updated!");
       })
       .catch((e) => {
-        console.log(e);
+        post.title.length < 1 ? setError(true) : alert(e);
       });
   };
   return (
@@ -62,14 +82,10 @@ export default function JokeContentEdit(props) {
         <Button
           aria-label="Save"
           variant="contained"
-          style={{
-            backgroundColor: green[500],
-            color: "#FFFFFF",
-            minWidth: "7rem",
-            marginRight: "1rem",
-          }}
+          className={classes.saveButton}
           onClick={updatePublished}
           startIcon={<SaveIcon />}
+          disabled={!editActive || error ? true : false}
         >
           Save
         </Button>
@@ -84,22 +100,23 @@ export default function JokeContentEdit(props) {
         </Button>
       </div>
       <TextField
-        error={joke.title.length < 1 ? true : false}
         style={{ marginBottom: "1rem" }}
         id="title"
         name="title"
         label="Title"
-        value={joke.title}
+        value={post.title}
         onChange={handleInputChange}
         variant="outlined"
-        helperText={joke.title.length < 1 ? "Title cannot be empty" : ""}
+        error={error}
+        helperText={error ? "Title cannot be empty" : ""}
         multiline
+        required
       />
       <TextField
         id="content"
         name="content"
         label="Content"
-        value={joke.content}
+        value={post.content}
         onChange={handleInputChange}
         variant="outlined"
         multiline

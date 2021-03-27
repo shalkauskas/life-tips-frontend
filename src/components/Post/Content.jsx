@@ -1,6 +1,6 @@
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
-export default function JokeContent(props) {
+export default function PostContent(props) {
   return (
     <Container disableGutters style={{ marginTop: "1rem" }}>
       <Typography
@@ -8,10 +8,10 @@ export default function JokeContent(props) {
         component="h2"
         style={{ marginBottom: "0.5rem" }}
       >
-        {props.joke.title}
+        {props.post.title}
       </Typography>
       <Typography variant="body1" component="p">
-        {props.joke.content}
+        {props.post.content}
       </Typography>
     </Container>
   );

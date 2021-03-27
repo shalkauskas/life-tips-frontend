@@ -1,7 +1,7 @@
 import React from "react";
 import { useLocation, Link } from "react-router-dom";
-import AddJoke from "../components/AddJoke";
-import JokesList from "../components/JokesList";
+import AddPost from "../components/AddPost";
+import PostsList from "../components/PostsList";
 import DataService from "../services/DataService";
 import Skeleton from "../components/Skeleton";
 import LoadMoreButton from "../components/LoadMoreButton";
@@ -12,26 +12,33 @@ import { makeStyles } from "@material-ui/core/styles";
 import Collapse from "@material-ui/core/Collapse";
 import Container from "@material-ui/core/Container";
 
-const useStyles = makeStyles({
-  list: {
-    maxWidth: "750px",
-    minWidth: "275px",
-    textAlign: "left",
-  },
-  tabs: {
-    display: "flex",
-    justifyContent: "center",
-  },
-});
 export default function Index(props) {
-  const [jokes, setJokes] = React.useState([]);
+  const [posts, setPosts] = React.useState([]);
   const [showAdd, setShowAdd] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   const [hasNextPage, setHasNextPage] = React.useState(false);
   const [page, setPage] = React.useState(0);
   const [order, setOrder] = React.useState("new");
+  const [submitted, setSubmitted] = React.useState(false);
+  const useStyles = makeStyles({
+    list: {
+      maxWidth: "750px",
+      minWidth: "275px",
+      textAlign: "left",
+    },
+    tabs: {
+      display: "flex",
+      justifyContent: "center",
+    },
+    loadMoreWrapper: {
+      textAlign: "center",
+      paddingBottom: "1rem",
+      display: loading ? "none" : "",
+    },
+  });
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
+
   // infinite scroll
   const ref = React.useRef();
   let location = useLocation();
@@ -61,27 +68,27 @@ export default function Index(props) {
       : location.pathname === "/best"
       ? setOrder("best")
       : setOrder("random");
-    setJokes([]);
+    setPosts([]);
     setPage(0);
   }, [location]);
   React.useEffect(() => {
     setLoading(true);
-    async function fetchJokes() {
+    async function fetchPosts() {
       await DataService.getAllPublished(page, order)
         .then((response) => {
           setLoading(false);
           console.log(response.data);
           setHasNextPage(response.data.hasNextPage);
-          setJokes((prevState) => [...prevState, ...response.data.jokes]);
+          setPosts((prevState) => [...prevState, ...response.data.posts]);
+          setSubmitted(false);
         })
         .catch((e) => {
           console.log(e);
         });
     }
-    fetchJokes();
-  }, [page, order]);
+    fetchPosts();
+  }, [page, order, submitted]);
   // Tabs
-
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -103,13 +110,13 @@ export default function Index(props) {
       </Container>
 
       <Collapse in={showAdd}>
-        <AddJoke close={() => setShowAdd(false)} />
+        <AddPost close={() => setShowAdd(false)} setSubmitted={setSubmitted} />
       </Collapse>
 
-      <JokesList jokes={jokes} isAuthenticated={props.isAuthenticated} />
+      <PostsList posts={posts} isAuthenticated={props.isAuthenticated} />
       {loading && <Skeleton />}
 
-      <div className={`${loading ? "d-none" : ""} text-center pb-3`} ref={ref}>
+      <div ref={ref} className={classes.loadMoreWrapper}>
         <LoadMoreButton
           page={page}
           setPage={setPage}

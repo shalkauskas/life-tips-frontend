@@ -10,26 +10,27 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
+import LoginGoogle from "./LoginGoogle";
+const useStyles = makeStyles((theme) => ({
+  paper: {
+    marginTop: theme.spacing(8),
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
+  avatar: {
+    margin: theme.spacing(1),
+    backgroundColor: theme.palette.secondary.main,
+  },
+  form: {
+    width: "100%", // Fix IE 11 issue.
+    marginTop: theme.spacing(3),
+  },
+  submit: {
+    margin: theme.spacing(3, 0, 2),
+  },
+}));
 export default function Register(props) {
-  const useStyles = makeStyles((theme) => ({
-    paper: {
-      marginTop: theme.spacing(8),
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-    },
-    avatar: {
-      margin: theme.spacing(1),
-      backgroundColor: theme.palette.secondary.main,
-    },
-    form: {
-      width: "100%", // Fix IE 11 issue.
-      marginTop: theme.spacing(3),
-    },
-    submit: {
-      margin: theme.spacing(3, 0, 2),
-    },
-  }));
   const classes = useStyles();
   const initialUserData = {
     displayName: "",
@@ -59,12 +60,6 @@ export default function Register(props) {
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setUserData({ ...userdata, [name]: value });
-  };
-
-  const loginGoogle = () => {
-    AuthService.loginGoogle().then((response) => {
-      console.log(response);
-    });
   };
   return (
     <Container component="main" maxWidth="xs">
@@ -139,16 +134,7 @@ export default function Register(props) {
           </Grid>
         </form>
       </div>
-      <div className="text-center mt-3">
-        <div className="text-center">
-          <a
-            href={`${process.env.REACT_APP_SERVER}/auth/google`}
-            onClick={loginGoogle}
-          >
-            <img src="google-login.svg" alt="google login" width="300px" />
-          </a>
-        </div>
-      </div>
+      <LoginGoogle />
     </Container>
   );
 }

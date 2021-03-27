@@ -1,18 +1,22 @@
 import React, { useState, useEffect, useRef } from "react";
-import AuthService from "../services/AuthService";
-import AddJoke from "../components/AddJoke";
-import DeleteConfirmation from "../components/JokesEdit/DeleteConfirmation";
-import SortButton from "../components/JokesEdit/SortButton";
-import JokesEditAllButtons from "../components/JokesEdit/JokesEditAllButtons";
+// import AuthService from "../services/AuthService";
+// import SortButton from "../components/PostsEdit/SortButton";
+import AddPost from "../components/AddPost";
+import DeleteConfirmation from "../components/PostEdit/DeleteConfirmation";
 import Skeleton from "../components/Skeleton";
 import LoadMoreButton from "../components/LoadMoreButton";
 import AddButton from "../components/AddButton";
-import Joke from "../components/Joke";
+import Post from "../components/Post";
 import DataService from "../services/DataService";
 import { Container, Paper, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import Collapse from "@material-ui/core/Collapse";
 import amber from "@material-ui/core/colors/amber";
+import Snackbar from "@material-ui/core/Snackbar";
+import MuiAlert from "@material-ui/lab/Alert";
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 const useStyles = makeStyles((theme) => ({
   header: {
     display: "flex",
@@ -25,60 +29,64 @@ const useStyles = makeStyles((theme) => ({
     padding: "1rem",
   },
 }));
-export default function JokesEdit() {
+export default function PostsEdit() {
   const classes = useStyles();
-  const [message, setMessage] = useState("");
-  const [adminRole, setAdminRole] = useState(false);
-  const [jokes, setJokes] = useState([]);
-  const [showAdd, setShowAdd] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [hasNextPage, setHasNextPage] = useState(false);
-  const [showConfirm, setShowConfirm] = useState(false);
-  const [page, setPage] = useState(0);
   const ref = useRef();
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
+  const [showUpdateConfirm, setShowUpdateConfirm] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  // const [adminRole, setAdminRole] = useState(false);
+  const [showAdd, setShowAdd] = useState(false);
+  const [hasNextPage, setHasNextPage] = useState(false);
+  const [page, setPage] = useState(0);
   const update = message.length > 1 ? true : false;
+
+  // useEffect(() => {
+  //   AuthService.admin().then((response) => {
+  //     if (response.data.admin) {
+  //       setAdminRole(true);
+  //     } else {
+  //       console.log(response);
+  //     }
+  //   });
+  // }, []);
   useEffect(() => {
-    AuthService.admin().then((response) => {
-      if (response.data.admin) {
-        setAdminRole(true);
-      } else {
-        console.log(response);
-      }
-    });
-  }, []);
-  useEffect(() => {
-    async function fetchJokes() {
+    async function fetchPosts() {
       setLoading(true);
       await DataService.getAll(page, "new")
         .then((response) => {
           setLoading(false);
           console.log(response);
           setHasNextPage(response.data.hasNextPage);
-          setJokes((prevState) => [...prevState, ...response.data.jokes]);
+          setPosts((prevState) => [...prevState, ...response.data.posts]);
         })
         .catch((e) => {
           console.log(e);
         });
     }
-    fetchJokes();
+    fetchPosts();
   }, [page]);
   useEffect(() => {
-    async function fetchJokes() {
+    async function fetchPosts() {
       setLoading(true);
       await DataService.getAll(0, "new")
         .then((response) => {
           setLoading(false);
           console.log(response);
           setHasNextPage(response.data.hasNextPage);
-          setJokes([...response.data.jokes]);
+          setPosts([...response.data.posts]);
         })
         .catch((e) => {
           console.log(e);
         });
     }
     if (update) {
-      setJokes([]);
-      fetchJokes();
+      setPosts([]);
+      fetchPosts();
+      setMessage("");
+      setShowUpdateConfirm(true);
     }
   }, [update]);
   useEffect(() => {
@@ -101,11 +109,18 @@ export default function JokesEdit() {
     }
     return () => observer.disconnect();
   }, [hasNextPage, ref]);
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setShowUpdateConfirm(false);
+  };
   return (
     <div>
       <Container className={classes.header}>
         <Typography variant="h5">My content</Typography>
-        <SortButton jokes={jokes} setJokes={setJokes} adminRole={adminRole} />
+        {/* <SortButton posts={posts} setPosts={setPosts} adminRole={adminRole} /> */}
       </Container>
       <div
         style={{
@@ -115,16 +130,9 @@ export default function JokesEdit() {
           marginRight: "auto",
         }}
       >
-        {jokes.map((joke, index) => (
+        {posts.map((post, index) => (
           <div key={index}>
-            <Joke
-              content={joke.content}
-              author={joke.author}
-              id={joke.id}
-              rating={joke.rating}
-              time={joke.time}
-              edit
-            />
+            <Post id={post.id} setMessage={setMessage} edit />
           </div>
         ))}
         {loading && <Skeleton />}
@@ -135,7 +143,7 @@ export default function JokesEdit() {
             setPage={setPage}
           />
         </div>
-        {jokes.length < 1 ? (
+        {posts.length < 1 && (
           <div>
             <Paper elevation={3} className={classes.alert}>
               <Typography variant="h6">
@@ -145,19 +153,28 @@ export default function JokesEdit() {
               <AddButton showAdd={showAdd} setShowAdd={setShowAdd} />
             </Paper>
             <Collapse in={showAdd}>
-              <AddJoke close={() => setShowAdd(false)} />
+              <AddPost close={() => setShowAdd(false)} />
             </Collapse>
           </div>
-        ) : null}
+        )}
       </div>
       <DeleteConfirmation
-        showConfirm={showConfirm}
-        setShowConfirm={setShowConfirm}
+        showConfirm={showDeleteConfirm}
+        setShowConfirm={setShowDeleteConfirm}
         deleteAll
       />
-      {/* <JokesEditAllButtons
+      <Snackbar
+        open={showUpdateConfirm}
+        autoHideDuration={6000}
+        onClose={handleClose}
+      >
+        <Alert onClose={handleClose} severity="success">
+          Your post has been updated!
+        </Alert>
+      </Snackbar>
+      {/* <PostsEditAllButtons
         adminRole={adminRole}
-        jokes={jokes}
+        posts={posts}
         setShowConfirm={setShowConfirm}
         setMessage={setMessage}
       /> */}

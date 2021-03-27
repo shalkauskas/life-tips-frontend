@@ -7,7 +7,7 @@ import { green } from "@material-ui/core/colors";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import IconButton from "@material-ui/core/IconButton";
-import JokeEditButtons from "./JokeEditButtons";
+import PostEditButtons from "./EditButtons";
 const useStyles = makeStyles({
   root: {
     minWidth: 275,
@@ -25,16 +25,19 @@ const useStyles = makeStyles({
     textAlign: "center",
   },
 });
-export default function JokeHeader(props) {
+export default function PostHeader(props) {
   const classes = useStyles();
-  const jokeId = (props.id || window.location.pathname.slice(6)).replace(
+  const postId = (props.id || window.location.pathname.slice(6)).replace(
     /\D/g,
     ""
   );
   const shareButton = () => {
     navigator.clipboard.writeText(
-      window.location.href + `joke/${props.id || props.joke.id}`
+      window.location.href + `post/${props.id || props.post.id}`
     );
+  };
+  const refreshList = () => {
+    props.refreshList();
   };
   return (
     <Grid container alignItems="center">
@@ -43,11 +46,11 @@ export default function JokeHeader(props) {
           className={classes.id}
           color="secondary"
           to={{
-            pathname: `/joke/${props.id || props.joke.id}`,
+            pathname: `/post/${props.id || props.post.id}`,
           }}
           component={Link}
         >
-          <u>#{jokeId.slice(jokeId.length - 5)}</u>
+          <u>#{postId.slice(postId.length - 5)}</u>
         </Button>
         <Tooltip title="Copy link">
           <IconButton aria-label="Share" onClick={shareButton}>
@@ -57,15 +60,15 @@ export default function JokeHeader(props) {
       </Grid>
       <Grid item xs={6}>
         {props.edit ? (
-          <JokeEditButtons
-            jokeId={props.joke.id}
+          <PostEditButtons
+            postId={props.post.id}
             editMode={props.editMode}
             setEditMode={props.setEditMode}
-            refreshList={props.refreshList}
+            refreshList={refreshList}
           />
         ) : (
           <Typography align="right" color="textSecondary">
-            {props.joke.time}
+            {props.post.time}
           </Typography>
         )}
       </Grid>

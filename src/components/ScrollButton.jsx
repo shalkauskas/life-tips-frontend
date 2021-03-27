@@ -17,7 +17,7 @@ export default function ScrollButton() {
       <img
         src="/scrollToTop.png"
         alt="Scroll up"
-        className={`scrollTop cursor-pointer position-fixed`}
+        className={`scrollTop`}
         onClick={scrollTop}
         style={{
           height: 40,

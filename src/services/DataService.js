@@ -1,38 +1,38 @@
 import http from "../http-common";
-// Create a new Joke
+// Create a new Post
 const create = (data) => {
-  return http.post("/joke", data);
+  return http.post("/post", data);
 };
-// Retrieve all Jokes
+// Retrieve all Posts
 const getAll = (page, order) => {
-  return http.get(`/joke/update?page=${page}&order=${order}`);
+  return http.get(`/post/update?page=${page}&order=${order}`);
 };
-// Retrieve all Published Jokes
+// Retrieve all Published Posts
 const getAllPublished = (page, order) => {
   return http.get(`/explore?page=${page}&order=${order}`);
 };
-// Retrieve a single Joke with id
+// Retrieve a single Post with id
 const get = (id) => {
-  return http.get(`/joke/${id}`);
+  return http.get(`/post/${id}`);
 };
-// Retrieve a single Joke with id for update (not used?)
+// Retrieve a single Post with id for update (not used?)
 const getUpdate = (id) => {
-  return http.get(`/joke/update/${id}`);
+  return http.get(`/post/update/${id}`);
 };
-// Update a Joke with id
+// Update a Post with id
 const update = (id, data) => {
-  return http.put(`/joke/update/${id}`, data);
+  return http.put(`/post/update/${id}`, data);
 };
 const updateMany = (data) => {
-  return http.put(`/joke/update/`, data);
+  return http.put(`/post/update/`, data);
 };
-// Delete a Joke with id
+// Delete a Post with id
 const remove = (id) => {
-  return http.delete(`/joke/update/${id}`);
+  return http.delete(`/post/update/${id}`);
 };
-// Delete all Jokes
+// Delete all Posts
 const removeAll = () => {
-  return http.delete(`/joke/update`);
+  return http.delete(`/post/update`);
 };
 
 const findBySearch = (query, page) => {

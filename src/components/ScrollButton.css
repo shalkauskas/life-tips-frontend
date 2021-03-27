@@ -6,6 +6,8 @@
      opacity: 0.5;
      right: 20px;
      z-index: 10;
+     cursor: pointer;
+     position: fixed;
    }
    .moveUp {
      transition: transform 0.3s linear;

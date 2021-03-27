@@ -5,7 +5,7 @@ import IconButton from "@material-ui/core/IconButton";
 import Avatar from "@material-ui/core/Avatar";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
-import { Divider } from "@material-ui/core";
+import Divider from "@material-ui/core/Divider";
 import AuthService from "../../services/AuthService";
 export default function UserMenu(props) {
   const [anchorEl, setAnchorEl] = React.useState(null);

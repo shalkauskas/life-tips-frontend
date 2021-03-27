@@ -13,62 +13,62 @@ const useStyles = makeStyles({
     padding: "1rem",
   },
 });
-export default function JokeFooter(props) {
+export default function PostFooter(props) {
   const classes = useStyles();
   const updateRating = (modifier) => {
     const updateRatingAPI = (data) => {
-      DataService.update(props.id || props.joke.id, data)
+      DataService.update(props.id || props.post.id, data)
         .then((response) => {
-          props.setJoke(response.data);
+          props.setPost(response.data);
           // console.log(response.data);
         })
         .catch((e) => {
           console.log(e);
         });
     };
-    if (modifier === props.jokeRatingCheck) {
+    if (modifier === props.postRatingCheck) {
       if (modifier === "up") {
-        localStorage.setItem(props.joke.id, "");
+        localStorage.setItem(props.post.id, "");
         const data = {
-          rating: props.joke.rating - 1,
+          rating: props.post.rating - 1,
         };
         updateRatingAPI(data);
       } else if (modifier === "down") {
-        localStorage.setItem(props.joke.id, "");
+        localStorage.setItem(props.post.id, "");
         const data = {
-          rating: props.joke.rating + 1,
+          rating: props.post.rating + 1,
         };
         updateRatingAPI(data);
       } else {
         // console.log("Already voted");
       }
     } else {
-      if (props.jokeRatingCheck === "up") {
-        localStorage.setItem(props.joke.id, "");
+      if (props.postRatingCheck === "up") {
+        localStorage.setItem(props.post.id, "");
         const data = {
-          rating: props.joke.rating - 1,
+          rating: props.post.rating - 1,
         };
         updateRatingAPI(data);
-      } else if (props.jokeRatingCheck === "down") {
-        localStorage.setItem(props.joke.id, "");
+      } else if (props.postRatingCheck === "down") {
+        localStorage.setItem(props.post.id, "");
         const data = {
-          rating: props.joke.rating + 1,
+          rating: props.post.rating + 1,
         };
         updateRatingAPI(data);
       } else {
-        localStorage.setItem(props.joke.id, modifier);
+        localStorage.setItem(props.post.id, modifier);
         const data = {
           rating:
             modifier === "up"
-              ? props.joke.rating + 1
+              ? props.post.rating + 1
               : "down"
-              ? props.joke.rating - 1
-              : props.joke.rating,
+              ? props.post.rating - 1
+              : props.post.rating,
         };
         updateRatingAPI(data);
       }
     }
-    // console.log(modifier, jokeRatingCheck);
+    // console.log(modifier, postRatingCheck);
   };
   const ratingHandler = (score) => {
     // props.isAuthenticated ?
@@ -82,12 +82,12 @@ export default function JokeFooter(props) {
           {props.edit ? (
             <Tooltip title="Date added" placement="left">
               <Typography align="left" color="textSecondary">
-                {props.joke.time}
+                {props.post.time}
               </Typography>
             </Tooltip>
           ) : (
             <Typography color="textSecondary">
-              By {props.joke.author}
+              By {props.post.author}
             </Typography>
           )}
         </Grid>
@@ -101,7 +101,7 @@ export default function JokeFooter(props) {
                 >
                   <ThumbUpIcon
                     style={{
-                      color: props.jokeRatingCheck === "up" ? green[500] : "",
+                      color: props.postRatingCheck === "up" ? green[500] : "",
                     }}
                   />
                 </IconButton>
@@ -114,7 +114,7 @@ export default function JokeFooter(props) {
                   align="center"
                   variant="subtitle1"
                 >
-                  [{props.joke.rating}]
+                  [{props.post.rating}]
                 </Typography>
               </Tooltip>
             </Grid>
@@ -126,7 +126,7 @@ export default function JokeFooter(props) {
                 >
                   <ThumbDownIcon
                     style={{
-                      color: props.jokeRatingCheck === "down" ? red[900] : "",
+                      color: props.postRatingCheck === "down" ? red[900] : "",
                     }}
                   />
                 </IconButton>

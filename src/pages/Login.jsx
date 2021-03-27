@@ -9,6 +9,7 @@ import Grid from "@material-ui/core/Grid";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
+import LoginGoogle from "./LoginGoogle";
 
 export default function Login(props) {
   const useStyles = makeStyles((theme) => ({
@@ -58,11 +59,7 @@ export default function Login(props) {
         console.log(e);
       });
   };
-  const loginGoogle = () => {
-    AuthService.loginGoogle().then((response) => {
-      console.log(response);
-    });
-  };
+
   const onLogin = () => {
     props.history.push("/");
     props.history.go(0);
@@ -123,15 +120,7 @@ export default function Login(props) {
           </Grid>
         </form>
       </div>
-      <div className="text-center mt-3">
-        <a
-          href={`${process.env.REACT_APP_SERVER}/auth/google`}
-          onClick={loginGoogle}
-        >
-          <img src="google-login.svg" alt="google login" width="300px" />
-        </a>
-      </div>
-      {/* </div> */}
+      <LoginGoogle />
     </Container>
   );
 }

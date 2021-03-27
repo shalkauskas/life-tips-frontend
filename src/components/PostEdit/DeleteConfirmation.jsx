@@ -30,7 +30,7 @@ const useStyles = makeStyles({
 });
 export default function UpdateConfirmation(props) {
   const classes = useStyles();
-  const removeAllJokes = () => {
+  const removeAllPosts = () => {
     DataService.removeAll()
       .then((response) => {
         console.log(response.data);
@@ -40,10 +40,11 @@ export default function UpdateConfirmation(props) {
         console.log(e);
       });
   };
-  const deleteJoke = () => {
-    DataService.remove(props.jokeId)
+  const deletePost = () => {
+    DataService.remove(props.postId)
       .then((response) => {
         console.log(response.data);
+        props.setShowConfirm(false);
         props.refreshList();
       })
       .catch((e) => {
@@ -73,7 +74,7 @@ export default function UpdateConfirmation(props) {
         </DialogContent>
         <DialogActions className={classes.buttonGroup}>
           <Button
-            onClick={props.deleteAll ? removeAllJokes : deleteJoke}
+            onClick={props.deleteAll ? removeAllPosts : deletePost}
             variant="contained"
             color="secondary"
           >

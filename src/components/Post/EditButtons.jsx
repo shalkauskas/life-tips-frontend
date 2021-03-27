@@ -6,7 +6,7 @@ import { Container } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { blue, red } from "@material-ui/core/colors";
 import Tooltip from "@material-ui/core/Tooltip";
-import DeleteConfirmation from "../JokesEdit/DeleteConfirmation";
+import DeleteConfirmation from "../PostEdit/DeleteConfirmation";
 const useStyles = makeStyles({
   buttonGroup: {
     textAlign: "end",
@@ -18,10 +18,12 @@ const useStyles = makeStyles({
     "&:hover": { color: blue[500] },
   },
 });
-export default function JokeEditButtons(props) {
+export default function PostEditButtons(props) {
   const classes = useStyles();
   const [showConfirm, setShowConfirm] = React.useState(false);
-
+  const refreshList = () => {
+    props.refreshList();
+  };
   return (
     <Container className={classes.buttonGroup}>
       <Tooltip title="Edit">
@@ -47,6 +49,8 @@ export default function JokeEditButtons(props) {
       <DeleteConfirmation
         showConfirm={showConfirm}
         setShowConfirm={setShowConfirm}
+        postId={props.postId}
+        refreshList={refreshList}
       />
     </Container>
   );

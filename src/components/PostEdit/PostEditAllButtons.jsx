@@ -1,11 +1,11 @@
 import DataService from "../../services/DataService";
-export default function JokesEditAllButtons(props) {
-  const publishAllJokes = () => {
+export default function PostsEditAllButtons(props) {
+  const publishAllPosts = () => {
     DataService.updateMany()
       .then((response) => {
         console.log(response.data);
         props.refreshList();
-        props.setMessage("All jokes have been published!");
+        props.setMessage("All posts have been published!");
       })
       .catch((e) => {
         console.log(e);
@@ -13,11 +13,11 @@ export default function JokesEditAllButtons(props) {
   };
   return (
     <div className="text-center">
-      {props.adminRole && props.jokes.length > 1 ? (
+      {props.adminRole && props.posts.length > 1 ? (
         <>
           <button
             className="m-3 btn btn-sm btn-success"
-            onClick={publishAllJokes}
+            onClick={publishAllPosts}
           >
             Publish All
           </button>
@@ -28,7 +28,7 @@ export default function JokesEditAllButtons(props) {
             Remove All
           </button>
         </>
-      ) : props.jokes.length > 1 ? (
+      ) : props.posts.length > 1 ? (
         <button
           className="m-3 btn btn-sm btn-danger"
           onClick={() => props.setShowConfirm(true)}

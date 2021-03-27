@@ -3,7 +3,7 @@ export default function About() {
     <div className="jumbotron container">
       <h1 className="display-4">About this project</h1>
       <p className="lead">
-        DB jokes is a small platform where you can add jokes, either your own or
+        DB posts is a small platform where you can add posts, either your own or
         your favorites, so they can be rated by other people. Whether you're
         soon to be dad or just want to make your date more akward and need some
         inspiration - this might be a perfect place.

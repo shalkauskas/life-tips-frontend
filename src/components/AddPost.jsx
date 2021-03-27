@@ -9,7 +9,7 @@ import { Alert } from "@material-ui/lab?Alert";
 import Checkbox from "@material-ui/core/Checkbox";
 import Collapse from "@material-ui/core/Collapse";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
-const AddJoke = (props) => {
+const AddPost = (props) => {
   const useStyles = makeStyles((theme) => ({
     button: {
       margin: theme.spacing(1),
@@ -37,7 +37,7 @@ const AddJoke = (props) => {
     hour: "2-digit",
     minute: "2-digit",
   });
-  const initialJokeState = {
+  const initialPostState = {
     id: null,
     title: "",
     content: "",
@@ -47,26 +47,29 @@ const AddJoke = (props) => {
     rating: "0",
     time: time,
   };
-  const [joke, setJoke] = useState(initialJokeState);
+  const [post, setPost] = useState(initialPostState);
   const [submitted, setSubmitted] = useState(false);
   const [checked, setChecked] = React.useState(false);
+  const [error, setError] = React.useState(false);
   const handleInputChange = (event) => {
+    post.title.length > 1 && setError(false);
     const { name, value } = event.target;
-    setJoke({ ...joke, [name]: value });
+    setPost({ ...post, [name]: value });
   };
   const user = JSON.parse(localStorage.getItem(`user`));
-  const saveJoke = () => {
+  const isAuthenticated = JSON.parse(localStorage.getItem(`isAuthenticated`));
+  const savePost = () => {
     var data = {
-      title: joke.title,
-      content: joke.content,
-      published: joke.published,
-      author: user && !checked ? user.displayName : joke.author,
-      userId: user ? user.id : joke.userId,
+      title: post.title,
+      content: post.content,
+      published: post.published,
+      author: isAuthenticated && !checked ? user.displayName : post.author,
+      userId: isAuthenticated ? user.id : post.userId,
       time: time,
     };
     DataService.create(data)
       .then((response) => {
-        setJoke({
+        setPost({
           id: response.data.id,
           rating: response.data.rating,
           title: response.data.title,
@@ -76,14 +79,15 @@ const AddJoke = (props) => {
           userId: response.data.userId,
         });
         setSubmitted(true);
+        props.setSubmitted(true);
       })
       .catch((e) => {
-        console.log(e);
+        post.title.length < 1 ? setError(true) : alert(e);
       });
   };
 
-  const newJoke = () => {
-    setJoke(initialJokeState);
+  const newPost = () => {
+    setPost(initialPostState);
     setSubmitted(false);
   };
 
@@ -94,7 +98,7 @@ const AddJoke = (props) => {
           classes={{ icon: classes.message }}
           className={classes.alert}
           action={
-            <Button color="inherit" size="small" onClick={newJoke}>
+            <Button color="inherit" size="small" onClick={newPost}>
               Add another?
             </Button>
           }
@@ -109,12 +113,14 @@ const AddJoke = (props) => {
             fullWidth
             required
             multiline
-            rows={1}
+            rows={3}
             name="title"
             label="Title"
-            value={joke.title}
+            value={post.title}
             onChange={handleInputChange}
             variant="outlined"
+            error={error}
+            helperText={error ? "Title cannot be empty" : ""}
           />
           <TextField
             className={classes.textField}
@@ -123,14 +129,14 @@ const AddJoke = (props) => {
             rows={7}
             name="content"
             label="Text (Optional)"
-            value={joke.content}
+            value={post.content}
             onChange={handleInputChange}
             variant="outlined"
           />
           <FormControlLabel
             style={{
               width: "100%",
-              display: user ? "block" : "none",
+              display: isAuthenticated ? "block" : "none",
             }}
             control={
               <Checkbox
@@ -147,7 +153,7 @@ const AddJoke = (props) => {
             variant="contained"
             size="large"
             className={classes.button}
-            onClick={saveJoke}
+            onClick={savePost}
           >
             Submit
           </Button>
@@ -165,4 +171,4 @@ const AddJoke = (props) => {
   );
 };
 
-export default AddJoke;
+export default AddPost;

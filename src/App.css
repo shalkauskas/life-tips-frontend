@@ -8,9 +8,6 @@ html, body, #app, #app>div {
 }
 #root {
   min-height: 100vh;
-}
-.edit-form {
-  max-width: 300px;
-  margin: auto;
+  position: relative;
 }
  

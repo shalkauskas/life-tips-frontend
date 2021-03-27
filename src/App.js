@@ -1,9 +1,9 @@
 import React from "react";
 import "./App.css";
-import "bootstrap/dist/css/bootstrap.min.css";
+// import "bootstrap/dist/css/bootstrap.min.css";
 import { Switch, Route } from "react-router-dom";
 import Index from "./pages/Index";
-import Joke from "./components/Joke";
+import Post from "./components/Post";
 import PrivateRoute from "./components/PrivateRoute";
 import Login from "./pages/Login";
 import AuthService from "./services/AuthService";
@@ -11,7 +11,7 @@ import NotFound from "./pages/NotFound";
 import UserProfile from "./pages/UserProfile";
 import Register from "./pages/Register";
 import Footer from "./components/Footer";
-import JokesEdit from "./pages/MyContent";
+import PostsEdit from "./pages/MyContent";
 import ScrollButton from "./components/ScrollButton";
 import SearchResult from "./pages/SearchResult";
 import Header from "./components/Header/Header";
@@ -44,7 +44,7 @@ export default function App(props) {
   // const user = JSON.parse(localStorage.getItem(`user`));
   // console.log(user);
   return (
-    <div style={{ position: "relative", paddingBottom: "8rem" }}>
+    <div style={{ paddingBottom: "8rem" }}>
       <Header userdata={userdata} isAuthenticated={isAuthenticated} />
 
       <div style={{ paddingTop: "6rem" }}>
@@ -58,10 +58,10 @@ export default function App(props) {
             )}
           />
           <Route
-            path={"/joke/:id"}
+            path={"/post/:id"}
             exact
             render={(props) => (
-              <Joke {...props} isAuthenticated={isAuthenticated} />
+              <Post {...props} isAuthenticated={isAuthenticated} />
             )}
           />
           <Route
@@ -80,7 +80,7 @@ export default function App(props) {
           <Route exact path="/register" component={Register} />
           <PrivateRoute
             path={`/dashboard`}
-            component={JokesEdit}
+            component={PostsEdit}
             isAuthenticated={session}
             userdata={userdata}
             exact
