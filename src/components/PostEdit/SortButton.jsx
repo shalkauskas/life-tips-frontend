@@ -4,6 +4,7 @@ import Button from "@material-ui/core/Button";
 import ExpandMore from "@material-ui/icons/ExpandMore";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
+import AuthService from "../services/AuthService";
 const useStyles = makeStyles((theme) => ({
   paper: {
     width: "160px",
@@ -14,6 +15,7 @@ export default function SortButton(props) {
   const [orderType, setOrderType] = React.useState("Date");
   const [descending, setDescending] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [adminRole, setAdminRole] = React.useState(false);
   const open = Boolean(anchorEl);
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -24,6 +26,15 @@ export default function SortButton(props) {
   };
   // reload sorting if additional content has been fetched
   React.useEffect(() => {}, [props.posts]);
+  React.useEffect(() => {
+    AuthService.admin().then((response) => {
+      if (response.data.admin) {
+        setAdminRole(true);
+      } else {
+        console.log(response);
+      }
+    });
+  }, []);
   // React.useEffect(() => {
   //   setDescending(true);
   // }, [orderType]);
@@ -113,7 +124,7 @@ export default function SortButton(props) {
         >
           Rating
         </MenuItem>
-        {props.adminRole && (
+        {adminRole && (
           <MenuItem
             button
             id="Author"

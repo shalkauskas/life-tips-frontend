@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef, createContext } from "react";
-// import AuthService from "../services/AuthService";
 // import SortButton from "../components/PostsEdit/SortButton";
 import AddPost from "../components/AddPost";
 import DeleteConfirmation from "../components/PostEdit/DeleteConfirmation";
@@ -12,13 +11,8 @@ import { Container, Paper, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import Collapse from "@material-ui/core/Collapse";
 import amber from "@material-ui/core/colors/amber";
-import Snackbar from "@material-ui/core/Snackbar";
-import MuiAlert from "@material-ui/lab/Alert";
-// import { RefreshContext } from "../services/RefreshContext";
-
-function Alert(props) {
-  return <MuiAlert elevation={6} variant="filled" {...props} />;
-}
+import UpdateAlert from "../components/PostEdit/UpdateAlert";
+import { reduce, initialState } from "../services/ContentUpdateReducer";
 const useStyles = makeStyles((theme) => ({
   header: {
     display: "flex",
@@ -35,57 +29,11 @@ export const RefreshContext = createContext();
 export default function PostsEdit() {
   const classes = useStyles();
   const ref = useRef();
-  // context
-  const updateState = {
-    refresh: false,
-    message: "",
-  };
-  const [update, setUpdate] = useState(updateState);
-  const [showUpdateConfirm, setShowUpdateConfirm] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-  const [showDeleteAlert, setShowDeleteAlert] = React.useState(false);
-  // const [adminRole, setAdminRole] = useState(false);
   const [showAdd, setShowAdd] = useState(false);
   const [hasNextPage, setHasNextPage] = useState(false);
   const [page, setPage] = useState(0);
-  console.log(update);
-  // reducer
-  const reduce = (state, action) => {
-    switch (action.type) {
-      case "OnSuccess":
-        return {
-          loading: false,
-          posts: action.payload,
-          error: "",
-        };
-      case "OnFailure":
-        return {
-          loading: false,
-          posts: {},
-          error: "Something went wrong",
-        };
-      case "OnUpdate":
-        return initialState;
-
-      default:
-        return state;
-    }
-  };
-  const initialState = {
-    posts: [],
-    loading: true,
-    error: "",
-  };
   const [state, dispatch] = React.useReducer(reduce, initialState);
-  // useEffect(() => {
-  //   AuthService.admin().then((response) => {
-  //     if (response.data.admin) {
-  //       setAdminRole(true);
-  //     } else {
-  //       console.log(response);
-  //     }
-  //   });
-  // }, []);
   useEffect(() => {
     async function fetchPosts() {
       await DataService.getAll(page, "new")
@@ -99,18 +47,9 @@ export default function PostsEdit() {
           dispatch({ type: "OnFailure" });
         });
     }
-    const reset = () => {
-      dispatch({ type: "OnUpdate" });
-      // setUpdate((prevState) => ({ ...prevState, refresh: false }));
-      update.message === "Saved"
-        ? setShowUpdateConfirm(true)
-        : update.message === "Deleted"
-        ? setShowDeleteAlert(true)
-        : console.log("Error");
-      fetchPosts();
-    };
-    update ? reset() : fetchPosts();
-  }, [page, update]);
+    fetchPosts();
+  }, [page, state.refresh]);
+  // infinite scroll auto fetch
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -131,18 +70,10 @@ export default function PostsEdit() {
     }
     return () => observer.disconnect();
   }, [hasNextPage, ref]);
-  const handleClose = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-    setShowUpdateConfirm(false);
-    setShowDeleteAlert(false);
-    // setUpdate(updateState);
-  };
 
   return (
-    <div>
-      <RefreshContext.Provider value={[update, setUpdate]}>
+    <section>
+      <RefreshContext.Provider value={[state, dispatch]}>
         <Container className={classes.header}>
           <Typography variant="h5">My content</Typography>
           {/* <SortButton posts={posts} setPosts={setPosts} adminRole={adminRole} /> */}
@@ -188,24 +119,7 @@ export default function PostsEdit() {
           setShowConfirm={setShowDeleteConfirm}
           deleteAll
         />
-        <Snackbar
-          open={showUpdateConfirm}
-          autoHideDuration={5000}
-          onClose={handleClose}
-        >
-          <Alert onClose={handleClose} severity="success">
-            Your post has been updated!
-          </Alert>
-        </Snackbar>
-        <Snackbar
-          open={showDeleteAlert}
-          autoHideDuration={5000}
-          onClose={handleClose}
-        >
-          <Alert onClose={handleClose} severity="error">
-            Your post has been deleted!
-          </Alert>
-        </Snackbar>
+        <UpdateAlert />
         {/* --------- Edit all buttons -------- */}
         {/* <PostsEditAllButtons
         adminRole={adminRole}
@@ -214,6 +128,6 @@ export default function PostsEdit() {
         setMessage={setMessage}
       /> */}
       </RefreshContext.Provider>
-    </div>
+    </section>
   );
 }

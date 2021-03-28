@@ -62,7 +62,7 @@ export default function Register(props) {
     setUserData({ ...userdata, [name]: value });
   };
   return (
-    <Container component="main" maxWidth="xs">
+    <Container component="section" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>

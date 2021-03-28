@@ -66,7 +66,7 @@ export default function SearchNew() {
           history.push({
             pathname: "/search",
             search: `?query=${search}`,
-            state: { result: response.data.posts },
+            state: { result: response.data.posts, query: search },
           });
         })
         .catch((e) => {

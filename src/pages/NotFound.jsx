@@ -18,7 +18,7 @@ const useStyles = makeStyles({
 export default function NotFound() {
   const classes = useStyles();
   return (
-    <Container>
+    <Container component="section">
       <Paper className={classes.wrapper}>
         <Typography variant="h1">404 - Not Found!</Typography>
         <Typography variant="h6">

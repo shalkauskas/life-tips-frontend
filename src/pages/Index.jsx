@@ -118,7 +118,7 @@ export default function Index(props) {
     setValue(newValue);
   };
   return (
-    <Container className={classes.list}>
+    <Container className={classes.list} component="section">
       <Container className={classes.tabs} disableGutters>
         <Tabs
           value={value}

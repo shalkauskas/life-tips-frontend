@@ -16,7 +16,6 @@ import ScrollButton from "./components/ScrollButton";
 import SearchResult from "./pages/SearchResult";
 import Header from "./components/Header/Header";
 import About from "./pages/About";
-import { RefreshContextProvider } from "./services/RefreshContext";
 export default function App(props) {
   const [userdata, setUserdata] = React.useState([]);
   const [isAuthenticated, setAuthenticated] = React.useState(false);
@@ -86,7 +85,6 @@ export default function App(props) {
             userdata={userdata}
             exact
           />
-
           <PrivateRoute
             path={`/dashboard`}
             component={PostsEdit}
@@ -98,7 +96,6 @@ export default function App(props) {
         </Switch>
       </div>
       <ScrollButton />
-
       <Footer />
     </div>
   );

@@ -65,8 +65,7 @@ export default function Login(props) {
     props.history.go(0);
   };
   return (
-    // <div className="" style={{ maxWidth: "600px" }}>
-    <Container component="main" maxWidth="xs">
+    <Container component="section" maxWidth="xs">
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon />

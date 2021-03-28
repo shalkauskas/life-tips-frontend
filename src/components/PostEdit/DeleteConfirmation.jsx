@@ -30,13 +30,13 @@ const useStyles = makeStyles({
   },
 });
 export default function UpdateConfirmation(props) {
-  const [, setRefresh] = React.useContext(RefreshContext);
+  const [, dispatch] = React.useContext(RefreshContext);
   const classes = useStyles();
   const removeAllPosts = () => {
     DataService.removeAll()
       .then((response) => {
         console.log(response.data);
-        setRefresh(true);
+        dispatch({ type: "OnUpdate", payload: "deleted" });
       })
       .catch((e) => {
         console.log(e);
@@ -48,7 +48,7 @@ export default function UpdateConfirmation(props) {
         console.log(response.data);
         props.setShowConfirm(false);
 
-        setRefresh(true);
+        dispatch({ type: "OnUpdate", payload: "deleted" });
       })
       .catch((e) => {
         console.log(e);

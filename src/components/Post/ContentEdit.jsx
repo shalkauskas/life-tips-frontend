@@ -45,7 +45,7 @@ export default function PostContentEdit(props) {
   const [post, setPost] = React.useState(initialPostState);
   const [error, setError] = React.useState(false);
   const [editActive, setEditActive] = React.useState(false);
-  const [, setUpdate] = React.useContext(RefreshContext);
+  const [, dispatch] = React.useContext(RefreshContext);
   const handleInputChange = (event) => {
     post.title.length > 1 && setError(false);
     const { name, value } = event.target;
@@ -71,7 +71,8 @@ export default function PostContentEdit(props) {
           title: response.data.title,
           content: response.data.content,
         });
-        setUpdate({ refresh: true, message: "Saved" });
+        // setUpdate({ refresh: true, message: "Saved" });
+        dispatch({ type: "OnUpdate", payload: "updated" });
       })
       .catch((e) => {
         post.title.length < 1 ? setError(true) : alert(e);
