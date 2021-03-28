@@ -12,7 +12,7 @@ export const reduce = (state, action) => {
     case "OnFailure":
       return {
         loading: false,
-        posts: {},
+        posts: [],
         refresh: false,
         error: "Something went wrong",
         message: "Something went wrong",

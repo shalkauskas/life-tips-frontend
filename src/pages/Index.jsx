@@ -30,7 +30,7 @@ export default function Index(props) {
       case "OnFailure":
         return {
           loading: false,
-          posts: {},
+          posts: [],
           error: "Something went wrong",
         };
 
