@@ -3,7 +3,7 @@ import Link from "@material-ui/core/Link";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 import { Container, Paper, Typography } from "@material-ui/core";
-import { grey } from "@material-ui/core/colors";
+import { grey, blue } from "@material-ui/core/colors";
 const useStyles = makeStyles({
   wrapper: {
     padding: "2rem",
@@ -44,8 +44,13 @@ export default function About() {
         <Typography variant="h6" gutterBottom>
           What is a Life Pro Tip?
         </Typography>
-        <Typography variant="body1" component="blockquote">
-          <blockquote cite="https://www.reddit.com/r/LifeProTips/">
+        <Typography
+          variant="body1"
+          component="blockquote"
+          cite="https://www.reddit.com/r/LifeProTips/"
+          style={{ borderLeft: "6px solid", borderColor: blue[900] }}
+        >
+          <blockquote>
             A Life Pro Tip (or an LPT) is a specific action with definitive
             results that improves life for you and those around you in a
             specific and significant way. Keep in mind that giving someone

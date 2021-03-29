@@ -41,12 +41,10 @@ const useStyles = makeStyles((theme) => ({
     // vertical padding + font size from searchIcon
     paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
     transition: theme.transitions.create("width"),
-    width: "100%",
-    [theme.breakpoints.up("sm")]: {
-      width: "0ch",
-      "&:focus, &:hover": {
-        width: "20ch",
-      },
+    width: "0ch",
+    "&:focus, &:hover": {
+      width: "20ch",
+      [theme.breakpoints.up("sm")]: {},
     },
   },
 }));

@@ -11,7 +11,7 @@ import Tab from "@material-ui/core/Tab";
 import { makeStyles } from "@material-ui/core/styles";
 import Collapse from "@material-ui/core/Collapse";
 import Container from "@material-ui/core/Container";
-
+import { reduce, initialState } from "../services/IndexPageReducer";
 export default function Index(props) {
   const [showAdd, setShowAdd] = React.useState(false);
   const [hasNextPage, setHasNextPage] = React.useState(false);
@@ -19,32 +19,7 @@ export default function Index(props) {
   const [order, setOrder] = React.useState("new");
   const [submitted, setSubmitted] = React.useState(false);
   // reducer
-  const reduce = (state, action) => {
-    switch (action.type) {
-      case "OnSuccess":
-        return {
-          loading: false,
-          posts: action.payload,
-          error: "",
-        };
-      case "OnFailure":
-        return {
-          loading: false,
-          posts: [],
-          error: "Something went wrong",
-        };
-
-      default:
-        return state;
-    }
-  };
-  const initialState = {
-    posts: [],
-    loading: true,
-    error: "",
-  };
   const [state, dispatch] = React.useReducer(reduce, initialState);
-
   // styles
   const useStyles = makeStyles({
     list: {
@@ -63,7 +38,6 @@ export default function Index(props) {
     },
   });
   const classes = useStyles();
-
   // infinite scroll
   const ref = React.useRef();
   let location = useLocation();
@@ -97,9 +71,9 @@ export default function Index(props) {
   }, [location]);
   React.useEffect(() => {
     async function fetchPosts() {
-      await DataService.getAllPublished(page, order)
+      await DataService.getAllPublished(page)
         .then((response) => {
-          console.log(response.data);
+          // console.log(response.data);
           setHasNextPage(response.data.hasNextPage);
           dispatch({ type: "OnSuccess", payload: response.data.posts });
           setSubmitted(false);
@@ -110,13 +84,36 @@ export default function Index(props) {
         });
     }
     fetchPosts();
-  }, [page, order, submitted]);
-  console.log(state);
+  }, [page, submitted]);
+  React.useEffect(() => {
+    async function fetchPosts() {
+      await DataService.getAllPublished(0, order)
+        .then((response) => {
+          setHasNextPage(response.data.hasNextPage);
+          dispatch({ type: "OnOrderChange", payload: response.data.posts });
+          setSubmitted(false);
+        })
+        .catch((e) => {
+          console.log(e);
+          dispatch({ type: "OnFailure" });
+        });
+    }
+    dispatch({ type: "OnOrderChangeStart" });
+    fetchPosts();
+  }, [order]);
+  // filter duplicates
+  const postArr = Array.from(new Set(state.posts.map((post) => post.id))).map(
+    (id) => {
+      return state.posts.find((post) => post.id === id);
+    }
+  );
+  // console.log(postArr);
   // Tabs
   const [value, setValue] = React.useState(0);
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
   return (
     <Container className={classes.list} component="section">
       <Container className={classes.tabs} disableGutters>
@@ -127,7 +124,7 @@ export default function Index(props) {
           textColor="primary"
           centered
         >
-          <Tab label=" New" to="/" component={Link} />
+          <Tab label="New" to="/" component={Link} />
           <Tab label="Best" to="/best" component={Link} />
           <Tab label="Random" to="/random" component={Link} />
         </Tabs>
@@ -138,7 +135,7 @@ export default function Index(props) {
         <AddPost close={() => setShowAdd(false)} setSubmitted={setSubmitted} />
       </Collapse>
 
-      <PostsList posts={state.posts} isAuthenticated={props.isAuthenticated} />
+      <PostsList posts={postArr} isAuthenticated={props.isAuthenticated} />
       {state.loading && <Skeleton />}
 
       <div ref={ref} className={classes.loadMoreWrapper}>
