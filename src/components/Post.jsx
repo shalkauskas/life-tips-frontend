@@ -8,7 +8,6 @@ import PostHeader from "./Post/Header";
 import PostContent from "./Post/Content";
 import PostContentEdit from "./Post/ContentEdit";
 import PostFooter from "./Post/Footer";
-
 const useStyles = makeStyles({
   root: {
     minWidth: 275,

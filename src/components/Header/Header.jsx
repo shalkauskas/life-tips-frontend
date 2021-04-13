@@ -8,6 +8,7 @@ import Search from "./Search";
 import { grey } from "@material-ui/core/colors";
 import HeaderBrand from "./Brand";
 import UserMenu from "./UserMenu";
+import { GlobalContext } from "../../App";
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -22,16 +23,16 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ButtonAppBar(props) {
   const classes = useStyles();
+  const [state] = React.useContext(GlobalContext);
+
   return (
     <div className={classes.root}>
       <AppBar position="fixed">
         <Toolbar>
           <HeaderBrand />
-
           <Search />
-
-          {props.isAuthenticated ? (
-            <UserMenu photoUrl={props.userdata.photoUrl} />
+          {state.User.isAuthenticated ? (
+            <UserMenu />
           ) : (
             <Button className={classes.button} to="/login" component={Link}>
               Login

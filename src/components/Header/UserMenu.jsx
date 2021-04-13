@@ -7,8 +7,10 @@ import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import Divider from "@material-ui/core/Divider";
 import AuthService from "../../services/AuthService";
-export default function UserMenu(props) {
+import { GlobalContext } from "../../App";
+export default function UserMenu() {
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [state, dispatch] = React.useContext(GlobalContext);
   const open = Boolean(anchorEl);
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -19,9 +21,9 @@ export default function UserMenu(props) {
   };
   const logout = () => {
     AuthService.logout().then((response) => {
-      localStorage.setItem(`isAuthenticated`, false);
-      localStorage.removeItem(`user`);
-      window.location.reload();
+      dispatch({
+        type: "OnLogout",
+      });
       console.log(response);
     });
   };
@@ -34,7 +36,7 @@ export default function UserMenu(props) {
         onClick={handleMenu}
         color="inherit"
       >
-        <Avatar src={props.photoUrl} alt="user profile pic">
+        <Avatar src={state.User.photoUrl} alt="user profile pic">
           <AccountCircle />
         </Avatar>
       </IconButton>

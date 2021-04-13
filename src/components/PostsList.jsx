@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Post from "./Post";
+
 const PostsList = (props) => {
   const [posts, setPosts] = useState([]);
 
@@ -11,11 +12,7 @@ const PostsList = (props) => {
     <>
       {posts.map((post, index) => (
         <div key={index}>
-          <Post
-            id={post.id}
-            post={posts}
-            isAuthenticated={props.isAuthenticated}
-          />
+          <Post id={post.id} post={posts} />
         </div>
       ))}
     </>

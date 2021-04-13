@@ -2,13 +2,13 @@ import React, { useState, useEffect, useRef } from "react";
 import AddPost from "../components/AddPost";
 import Skeleton from "../components/Skeleton";
 import LoadMoreButton from "../components/LoadMoreButton";
-import AddButton from "../components/AddButton";
 import Post from "../components/Post";
 import DataService from "../services/DataService";
 import { Container, Paper, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import Collapse from "@material-ui/core/Collapse";
 import amber from "@material-ui/core/colors/amber";
+import { GlobalContext } from "../App";
 const useStyles = makeStyles((theme) => ({
   header: {
     display: "flex",
@@ -23,17 +23,18 @@ const useStyles = makeStyles((theme) => ({
 }));
 export default function UserLiked() {
   const classes = useStyles();
-  const user = JSON.parse(localStorage.getItem(`user`));
   const ref = useRef();
   const [showAdd, setShowAdd] = useState(false);
   const [hasNextPage, setHasNextPage] = useState(false);
   const [page, setPage] = useState(0);
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [state] = React.useContext(GlobalContext);
+  const user = state.User.id;
   useEffect(() => {
     async function fetchPosts() {
       setLoading(true);
-      await DataService.userLiked(user.id)
+      await DataService.userLiked(user)
         .then((response) => {
           console.log(response);
           setHasNextPage(response.data.hasNextPage);
@@ -45,7 +46,7 @@ export default function UserLiked() {
         });
     }
     fetchPosts();
-  }, [user.id]);
+  }, [user]);
   // infinite scroll auto fetch
   useEffect(() => {
     const observer = new IntersectionObserver(

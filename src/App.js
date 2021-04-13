@@ -1,6 +1,5 @@
 import React from "react";
 import "./App.css";
-// import "bootstrap/dist/css/bootstrap.min.css";
 import { Switch, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import Post from "./components/Post";
@@ -17,95 +16,81 @@ import SearchResult from "./pages/SearchResult";
 import Header from "./components/Header/Header";
 import About from "./pages/About";
 import UserLiked from "./pages/UserLiked";
-export default function App(props) {
-  const [userdata, setUserdata] = React.useState([]);
-  const [isAuthenticated, setAuthenticated] = React.useState(false);
-
+import { reduce, initialState } from "./services/GlobalContext";
+export const GlobalContext = React.createContext();
+export default function App() {
+  const [state, dispatch] = React.useReducer(reduce, initialState);
   React.useEffect(() => {
     async function authorize() {
       await AuthService.index()
         .then((response) => {
-          console.log(response);
-          localStorage.setItem(
-            `isAuthenticated`,
-            JSON.stringify(response.data.isAuthenticated)
-          );
-          isAuthenticated &&
-            localStorage.setItem(`user`, JSON.stringify(response.data.user));
-          setAuthenticated(response.data.isAuthenticated);
-          setUserdata(response.data.user);
+          console.log(response.data);
+          response.data.isAuthenticated &&
+            dispatch({
+              type: "OnLogin",
+              payload: {
+                isAuthenticated: response.data.isAuthenticated,
+                displayName: response.data.user.displayName,
+                id: response.data.user.id,
+                photoUrl: response.data.user.photoUrl,
+                username: response.data.user.username,
+              },
+            });
+          dispatch({
+            type: "CheckAuth",
+            payload: response.data.isAuthenticated,
+          });
         })
         .catch((e) => {
           console.log(e);
         });
     }
     authorize();
-  }, [isAuthenticated]);
-  const session = JSON.parse(localStorage.getItem(`isAuthenticated`));
-  // const user = JSON.parse(localStorage.getItem(`user`));
-  // console.log(user);
+  }, [state.User.isAuthenticated]);
+  console.log(state);
   return (
-    <div style={{ paddingBottom: "8rem" }}>
-      <Header userdata={userdata} isAuthenticated={isAuthenticated} />
+    <GlobalContext.Provider value={[state, dispatch]}>
+      <div style={{ paddingBottom: "8rem" }}>
+        <Header />
 
-      <div style={{ paddingTop: "6rem" }}>
-        <Switch>
-          <Route path={"/about"} component={About} />
-          <Route
-            path={["/", "/best", "/random"]}
-            exact
-            render={(props) => (
-              <Index {...props} isAuthenticated={isAuthenticated} />
-            )}
-          />
-          <Route
-            path={"/post/:id"}
-            exact
-            render={(props) => (
-              <Post {...props} isAuthenticated={isAuthenticated} />
-            )}
-          />
-          <Route
-            path={"/search"}
-            exact
-            render={(props) => (
-              <SearchResult {...props} isAuthenticated={isAuthenticated} />
-            )}
-          />
-          <Route
-            path="/login"
-            exact
-            component={Login}
-            isAuthenticated={isAuthenticated}
-          />
-          <Route exact path="/register" component={Register} />
-          <PrivateRoute
-            path={`/dashboard/profile`}
-            component={UserProfile}
-            isAuthenticated={session}
-            userdata={userdata}
-            exact
-          />
-          <PrivateRoute
-            path={`/dashboard/favorites`}
-            component={UserLiked}
-            isAuthenticated={session}
-            userdata={userdata}
-            exact
-          />
-          <PrivateRoute
-            path={`/dashboard`}
-            component={PostsEdit}
-            isAuthenticated={session}
-            userdata={userdata}
-            exact
-          />
+        <div style={{ paddingTop: "6rem" }}>
+          <Switch>
+            <Route path={"/about"} component={About} />
+            <Route
+              path={["/", "/best", "/random"]}
+              exact
+              render={(props) => <Index {...props} />}
+            />
+            <Route
+              path={"/post/:id"}
+              exact
+              render={(props) => <Post {...props} />}
+            />
+            <Route
+              path={"/search"}
+              exact
+              render={(props) => <SearchResult {...props} />}
+            />
+            <Route path="/login" exact component={Login} />
+            <Route exact path="/register" component={Register} />
+            <PrivateRoute
+              path={`/dashboard/profile`}
+              component={UserProfile}
+              exact
+            />
+            <PrivateRoute
+              path={`/dashboard/favorites`}
+              component={UserLiked}
+              exact
+            />
+            <PrivateRoute path={`/dashboard`} component={PostsEdit} exact />
 
-          <Route component={NotFound} />
-        </Switch>
+            <Route component={NotFound} />
+          </Switch>
+        </div>
+        <ScrollButton />
+        <Footer />
       </div>
-      <ScrollButton />
-      <Footer />
-    </div>
+    </GlobalContext.Provider>
   );
 }

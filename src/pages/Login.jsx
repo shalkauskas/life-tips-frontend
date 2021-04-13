@@ -10,6 +10,7 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import LoginGoogle from "./LoginGoogle";
+import { GlobalContext } from "../App";
 
 export default function Login(props) {
   const useStyles = makeStyles((theme) => ({
@@ -37,7 +38,7 @@ export default function Login(props) {
     password: "",
   };
   const [userdata, setUserData] = React.useState(initialUserData);
-
+  const [, dispatch] = React.useContext(GlobalContext);
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setUserData({ ...userdata, [name]: value });
@@ -50,19 +51,24 @@ export default function Login(props) {
     };
     AuthService.login(data)
       .then((response) => {
-        console.log(response.data.isAuthenticated);
+        dispatch({
+          type: "OnLogin",
+          payload: {
+            isAuthenticated: response.data.isAuthenticated,
+            displayName: response.data.user.displayName,
+            id: response.data.user.id,
+            photoUrl: response.data.user.photoUrl,
+            username: response.data.user.username,
+          },
+        });
+        console.log(response.data);
         response.data.isAuthenticated
-          ? onLogin()
+          ? props.history.push("/")
           : props.history.push("/login");
       })
       .catch((e) => {
         console.log(e);
       });
-  };
-
-  const onLogin = () => {
-    props.history.push("/");
-    props.history.go(0);
   };
   return (
     <Container component="section" maxWidth="xs">

@@ -6,6 +6,7 @@ import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import TextField from "@material-ui/core/TextField";
 import UpdateButtons from "../components/UserProfile/UpdateButtons";
+import { GlobalContext } from "../App";
 const useStyles = makeStyles({
   card: {
     width: "20rem",
@@ -16,20 +17,17 @@ const useStyles = makeStyles({
     marginTop: "1rem",
   },
 });
-export default function UserProfile(props) {
+export default function UserProfile() {
   const classes = useStyles();
   const [name, setName] = React.useState("");
   const [userpic, setUserpic] = React.useState("");
   const [activeButton, setActiveButton] = React.useState(false);
   const [showConfirm, setShowConfirm] = React.useState(false);
+  const [state] = React.useContext(GlobalContext);
   React.useEffect(() => {
-    props.userdata.displayName
-      ? setName(props.userdata.displayName)
-      : setName("");
-    props.userdata.photoUrl
-      ? setUserpic(props.userdata.photoUrl)
-      : setUserpic("");
-  }, [props.userdata.displayName, props.userdata.photoUrl]);
+    state.User.displayName ? setName(state.User.displayName) : setName("");
+    state.User.photoUrl ? setUserpic(state.User.photoUrl) : setUserpic("");
+  }, [state.User.displayName, state.User.photoUrl]);
   const handleInputChange = (event) => {
     setActiveButton(true);
     setName(event.target.value);
@@ -42,7 +40,7 @@ export default function UserProfile(props) {
             userpic={userpic}
             setUserpic={setUserpic}
             setActiveButton={setActiveButton}
-            userdataId={props.userdata.id}
+            userdataId={state.User.id}
           />
           <TextField
             className={classes.input}
@@ -62,7 +60,7 @@ export default function UserProfile(props) {
           <TextField
             className={classes.input}
             id="email"
-            value={props.userdata.username ? props.userdata.username : "email"}
+            value={state.User.username ? state.User.username : "email"}
             label="Email"
             style={{ margin: 8 }}
             helperText="Email update currently unavailable"

@@ -9,7 +9,9 @@ import { Alert } from "@material-ui/lab?Alert";
 import Checkbox from "@material-ui/core/Checkbox";
 import Collapse from "@material-ui/core/Collapse";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
-const AddPost = (props) => {
+import { GlobalContext } from "../App";
+import { time } from "../services/Time";
+export default function AddPost(props) {
   const useStyles = makeStyles((theme) => ({
     button: {
       margin: theme.spacing(1),
@@ -29,14 +31,6 @@ const AddPost = (props) => {
     },
   }));
   const classes = useStyles();
-
-  const time = new Date().toLocaleString([], {
-    year: "numeric",
-    month: "numeric",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
   const initialPostState = {
     id: null,
     title: "",
@@ -51,20 +45,23 @@ const AddPost = (props) => {
   const [submitted, setSubmitted] = useState(false);
   const [checked, setChecked] = React.useState(false);
   const [error, setError] = React.useState(false);
+  const [state] = React.useContext(GlobalContext);
   const handleInputChange = (event) => {
     post.title.length > 1 && setError(false);
     const { name, value } = event.target;
     setPost({ ...post, [name]: value });
   };
-  const user = JSON.parse(localStorage.getItem(`user`));
-  const isAuthenticated = JSON.parse(localStorage.getItem(`isAuthenticated`));
+
   const savePost = () => {
     var data = {
       title: post.title,
       content: post.content,
       published: post.published,
-      author: isAuthenticated && !checked ? user.displayName : post.author,
-      userId: isAuthenticated ? user.id : post.userId,
+      author:
+        state.User.isAuthenticated && !checked
+          ? state.User.displayName
+          : post.author,
+      userId: state.User.isAuthenticated ? state.User.id : post.userId,
       time: time,
     };
     DataService.create(data)
@@ -136,7 +133,7 @@ const AddPost = (props) => {
           <FormControlLabel
             style={{
               width: "100%",
-              display: isAuthenticated ? "block" : "none",
+              display: state.User.isAuthenticated ? "block" : "none",
             }}
             control={
               <Checkbox
@@ -169,6 +166,4 @@ const AddPost = (props) => {
       </Collapse>
     </Container>
   );
-};
-
-export default AddPost;
+}

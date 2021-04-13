@@ -12,7 +12,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Collapse from "@material-ui/core/Collapse";
 import Container from "@material-ui/core/Container";
 import { reduce, initialState } from "../services/IndexPageReducer";
-export default function Index(props) {
+export default function Index() {
   const [showAdd, setShowAdd] = React.useState(false);
   const [hasNextPage, setHasNextPage] = React.useState(false);
   const [page, setPage] = React.useState(0);
@@ -20,6 +20,7 @@ export default function Index(props) {
   const [submitted, setSubmitted] = React.useState(false);
   // reducer
   const [state, dispatch] = React.useReducer(reduce, initialState);
+
   // styles
   const useStyles = makeStyles({
     list: {
@@ -60,7 +61,7 @@ export default function Index(props) {
       observer.unobserve(ref.current);
     }
     return () => observer.disconnect();
-  }, [hasNextPage, props, ref]);
+  }, [hasNextPage, ref]);
   React.useEffect(() => {
     location.pathname === "/"
       ? setOrder("new")
@@ -135,7 +136,7 @@ export default function Index(props) {
         <AddPost close={() => setShowAdd(false)} setSubmitted={setSubmitted} />
       </Collapse>
 
-      <PostsList posts={postArr} isAuthenticated={props.isAuthenticated} />
+      <PostsList posts={postArr} />
       {state.loading && <Skeleton />}
 
       <div ref={ref} className={classes.loadMoreWrapper}>
