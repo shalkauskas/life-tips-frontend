@@ -3,7 +3,7 @@ export const reduce = (state, action) => {
     case "OnSuccess":
       return {
         loading: false,
-        posts: action.payload,
+        posts: [...state.posts, ...action.payload],
         error: "",
         message: state.message,
         refresh: false,

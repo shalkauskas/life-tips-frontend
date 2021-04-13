@@ -73,7 +73,7 @@ export default function Index(props) {
     async function fetchPosts() {
       await DataService.getAllPublished(page)
         .then((response) => {
-          // console.log(response.data);
+          console.log(response.data);
           setHasNextPage(response.data.hasNextPage);
           dispatch({ type: "OnSuccess", payload: response.data.posts });
           setSubmitted(false);

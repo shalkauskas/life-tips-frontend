@@ -15,8 +15,23 @@ const useStyles = makeStyles({
 });
 export default function PostFooter(props) {
   const classes = useStyles();
+  const user = JSON.parse(localStorage.getItem(`user`));
+  const isAuthenticated = JSON.parse(localStorage.getItem(`isAuthenticated`));
   const updateRating = (modifier) => {
     const updateRatingAPI = (data) => {
+      DataService.update(props.id || props.post.id, data)
+        .then((response) => {
+          props.setPost(response.data);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    };
+    const updateLikesAPI = (operator) => {
+      const data = {
+        likes: user.id,
+        switch: operator,
+      };
       DataService.update(props.id || props.post.id, data)
         .then((response) => {
           props.setPost(response.data);
@@ -31,12 +46,14 @@ export default function PostFooter(props) {
         const data = {
           rating: props.post.rating - 1,
         };
+        isAuthenticated && updateLikesAPI("remove");
         updateRatingAPI(data);
       } else if (modifier === "down") {
         localStorage.setItem(props.post.id, "");
         const data = {
           rating: props.post.rating + 1,
         };
+        isAuthenticated && updateLikesAPI("add");
         updateRatingAPI(data);
       } else {
         // console.log("Already voted");
@@ -47,12 +64,14 @@ export default function PostFooter(props) {
         const data = {
           rating: props.post.rating - 1,
         };
+        isAuthenticated && updateLikesAPI("remove");
         updateRatingAPI(data);
       } else if (props.postRatingCheck === "down") {
         localStorage.setItem(props.post.id, "");
         const data = {
           rating: props.post.rating + 1,
         };
+        isAuthenticated && updateLikesAPI("add");
         updateRatingAPI(data);
       } else {
         localStorage.setItem(props.post.id, modifier);
@@ -64,6 +83,8 @@ export default function PostFooter(props) {
               ? props.post.rating - 1
               : props.post.rating,
         };
+        const operator = modifier === "up" ? "add" : "down" ? "remove" : null;
+        isAuthenticated && updateLikesAPI(operator);
         updateRatingAPI(data);
       }
     }

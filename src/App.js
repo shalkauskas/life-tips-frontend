@@ -16,6 +16,7 @@ import ScrollButton from "./components/ScrollButton";
 import SearchResult from "./pages/SearchResult";
 import Header from "./components/Header/Header";
 import About from "./pages/About";
+import UserLiked from "./pages/UserLiked";
 export default function App(props) {
   const [userdata, setUserdata] = React.useState([]);
   const [isAuthenticated, setAuthenticated] = React.useState(false);
@@ -86,12 +87,20 @@ export default function App(props) {
             exact
           />
           <PrivateRoute
+            path={`/dashboard/favorites`}
+            component={UserLiked}
+            isAuthenticated={session}
+            userdata={userdata}
+            exact
+          />
+          <PrivateRoute
             path={`/dashboard`}
             component={PostsEdit}
             isAuthenticated={session}
             userdata={userdata}
             exact
           />
+
           <Route component={NotFound} />
         </Switch>
       </div>

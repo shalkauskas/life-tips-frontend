@@ -57,6 +57,9 @@ export default function UserMenu(props) {
         <MenuItem component={Link} to="/dashboard">
           My content
         </MenuItem>
+        <MenuItem component={Link} to="/dashboard/favorites">
+          My favorites
+        </MenuItem>
         <MenuItem component={Link} to="/dashboard/profile">
           Profile
         </MenuItem>

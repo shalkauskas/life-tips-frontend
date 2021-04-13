@@ -38,7 +38,12 @@ const removeAll = () => {
 const findBySearch = (query, page) => {
   return http.get(`/explore?title=${query}&page=${page}`);
 };
-
+const userLiked = (id) => {
+  return http.get(`/explore?user=${id}`);
+};
+const addComment = (id, data) => {
+  return http.post(`/post/${id}`, data);
+};
 // eslint-disable-next-line import/no-anonymous-default-export
 export default {
   getAll,
@@ -51,4 +56,6 @@ export default {
   remove,
   removeAll,
   findBySearch,
+  userLiked,
+  addComment,
 };
