@@ -26,14 +26,12 @@ const useStyles = makeStyles({
   },
 });
 export default function PostHeader(props) {
+  const { id, post, edit, editMode, setEditMode } = props;
   const classes = useStyles();
-  const postId = (props.id || window.location.pathname.slice(6)).replace(
-    /\D/g,
-    ""
-  );
+  const postId = (id || window.location.pathname.slice(6)).replace(/\D/g, "");
   const shareButton = () => {
     navigator.clipboard.writeText(
-      window.location.href + `post/${props.id || props.post.id}`
+      window.location.href + `post/${id || post.id}`
     );
   };
   return (
@@ -43,7 +41,7 @@ export default function PostHeader(props) {
           className={classes.id}
           color="secondary"
           to={{
-            pathname: `/post/${props.id || props.post.id}`,
+            pathname: `/post/${id || post.id}`,
           }}
           component={Link}
         >
@@ -56,15 +54,15 @@ export default function PostHeader(props) {
         </Tooltip>
       </Grid>
       <Grid item xs={6}>
-        {props.edit ? (
+        {edit ? (
           <PostEditButtons
-            postId={props.post.id}
-            editMode={props.editMode}
-            setEditMode={props.setEditMode}
+            postId={post.id}
+            editMode={editMode}
+            setEditMode={setEditMode}
           />
         ) : (
           <Typography align="right" color="textSecondary">
-            {props.post.time}
+            {post.time}
           </Typography>
         )}
       </Grid>

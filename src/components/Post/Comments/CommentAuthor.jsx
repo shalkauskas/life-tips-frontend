@@ -1,4 +1,4 @@
-import AuthService from "../../services/AuthService";
+import AuthService from "../../../services/AuthService";
 import React from "react";
 import Container from "@material-ui/core/Container";
 import { makeStyles } from "@material-ui/core/styles";
@@ -16,6 +16,7 @@ const useStyles = makeStyles((theme) => ({
   },
   authorName: {
     marginLeft: "10px",
+    fontWeight: 600,
   },
 }));
 export default function CommentsPreview(props) {
@@ -26,7 +27,6 @@ export default function CommentsPreview(props) {
     async function fetch() {
       await AuthService.findUser(user)
         .then((response) => {
-          console.log(response);
           // console.log(response.data.comments);
           setUserdata(response.data.user);
         })
@@ -42,12 +42,14 @@ export default function CommentsPreview(props) {
         <Avatar src={userdata.photoUrl} alt="user profile pic">
           <AccountCircle />
         </Avatar>
-        <Typography className={classes.authorName}>
+        <Typography className={classes.authorName} variant="subtitle2">
           {userdata.displayName}
         </Typography>
       </div>
 
-      <Typography>{time}</Typography>
+      <Typography color="textSecondary" variant="caption">
+        {time}
+      </Typography>
     </Container>
   );
 }

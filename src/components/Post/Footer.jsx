@@ -13,20 +13,26 @@ import Button from "@material-ui/core/Button";
 import CommentIcon from "@material-ui/icons/Comment";
 import { Collapse } from "@material-ui/core";
 import CommentBox from "./CommentBox";
+import { useLocation } from "react-router-dom";
+import { GlobalContext } from "../../App";
 const useStyles = makeStyles({
   footer: {
     padding: "1rem",
   },
   comments: {
-    marginLeft: "2rem",
+    marginLeft: "1rem",
   },
 });
 export default function PostFooter(props) {
-  const classes = useStyles();
   const { edit, postRatingCheck, post, id, setPost } = props;
+  const classes = useStyles();
+  const location = useLocation();
+  const [state] = React.useContext(GlobalContext);
   const [showComments, setShowComments] = React.useState(false);
-  const user = JSON.parse(localStorage.getItem(`user`));
-  const isAuthenticated = JSON.parse(localStorage.getItem(`isAuthenticated`));
+  React.useEffect(() => {
+    location.pathname === `/post/${post.id}` && setShowComments(true);
+  }, [post.id, location.pathname]);
+
   const updateRating = (modifier) => {
     const updateRatingAPI = (data) => {
       DataService.update(id || post.id, data)
@@ -39,7 +45,7 @@ export default function PostFooter(props) {
     };
     const updateLikesAPI = (operator) => {
       const data = {
-        likes: user.id,
+        likes: state.User.id,
         switch: operator,
       };
       DataService.update(id || post.id, data)
@@ -56,14 +62,14 @@ export default function PostFooter(props) {
         const data = {
           rating: post.rating - 1,
         };
-        isAuthenticated && updateLikesAPI("remove");
+        state.User.isAuthenticated && updateLikesAPI("remove");
         updateRatingAPI(data);
       } else if (modifier === "down") {
         localStorage.setItem(post.id, "");
         const data = {
           rating: post.rating + 1,
         };
-        isAuthenticated && updateLikesAPI("add");
+        state.User.isAuthenticated && updateLikesAPI("add");
         updateRatingAPI(data);
       } else {
         // console.log("Already voted");
@@ -74,14 +80,14 @@ export default function PostFooter(props) {
         const data = {
           rating: post.rating - 1,
         };
-        isAuthenticated && updateLikesAPI("remove");
+        state.User.isAuthenticated && updateLikesAPI("remove");
         updateRatingAPI(data);
       } else if (postRatingCheck === "down") {
         localStorage.setItem(post.id, "");
         const data = {
           rating: post.rating + 1,
         };
-        isAuthenticated && updateLikesAPI("add");
+        state.User.isAuthenticated && updateLikesAPI("add");
         updateRatingAPI(data);
       } else {
         localStorage.setItem(post.id, modifier);
@@ -94,7 +100,7 @@ export default function PostFooter(props) {
               : post.rating,
         };
         const operator = modifier === "up" ? "add" : "down" ? "remove" : null;
-        isAuthenticated && updateLikesAPI(operator);
+        state.User.isAuthenticated && updateLikesAPI(operator);
         updateRatingAPI(data);
       }
     }
@@ -124,13 +130,14 @@ export default function PostFooter(props) {
           {/* comments */}
           <Grid item xs={4}>
             <Button
+              disabled={location.pathname === `/post/${post.id}` && true}
               onClick={() => setShowComments(!showComments)}
               size={"small"}
               align="center"
               className={classes.comments}
               startIcon={<CommentIcon />}
             >
-              Comments
+              {post.comments && post.comments.length} Comments
             </Button>
           </Grid>
           {/* likes */}

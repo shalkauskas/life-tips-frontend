@@ -1,7 +1,6 @@
 import React from "react";
 import { useLocation, Link } from "react-router-dom";
 import AddPost from "../components/AddPost";
-import PostsList from "../components/PostsList";
 import DataService from "../services/DataService";
 import Skeleton from "../components/Skeleton";
 import LoadMoreButton from "../components/LoadMoreButton";
@@ -12,6 +11,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Collapse from "@material-ui/core/Collapse";
 import Container from "@material-ui/core/Container";
 import { reduce, initialState } from "../services/IndexPageReducer";
+import Post from "../components/Post";
 export default function Index() {
   const [showAdd, setShowAdd] = React.useState(false);
   const [hasNextPage, setHasNextPage] = React.useState(false);
@@ -135,8 +135,11 @@ export default function Index() {
       <Collapse in={showAdd}>
         <AddPost close={() => setShowAdd(false)} setSubmitted={setSubmitted} />
       </Collapse>
-
-      <PostsList posts={postArr} />
+      {postArr.map((post, index) => (
+        <div key={index}>
+          <Post id={post.id} />
+        </div>
+      ))}
       {state.loading && <Skeleton />}
 
       <div ref={ref} className={classes.loadMoreWrapper}>
