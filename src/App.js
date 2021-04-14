@@ -24,7 +24,7 @@ export default function App() {
     async function authorize() {
       await AuthService.index()
         .then((response) => {
-          console.log(response.data);
+          // console.log(response.data);
           response.data.isAuthenticated &&
             dispatch({
               type: "OnLogin",
@@ -47,7 +47,7 @@ export default function App() {
     }
     authorize();
   }, [state.User.isAuthenticated]);
-  console.log(state);
+  // console.log(state);
   return (
     <GlobalContext.Provider value={[state, dispatch]}>
       <div style={{ paddingBottom: "8rem" }}>

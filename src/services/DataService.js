@@ -45,7 +45,7 @@ const addComment = (id, data) => {
   return http.post(`/post/${id}`, data);
 };
 const getComments = (id) => {
-  return http.post(`/post/${id}/comments`);
+  return http.get(`/post/${id}/comments`);
 };
 // eslint-disable-next-line import/no-anonymous-default-export
 export default {

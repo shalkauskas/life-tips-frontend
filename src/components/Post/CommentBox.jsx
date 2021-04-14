@@ -6,6 +6,7 @@ import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 import { Paper } from "@material-ui/core";
 import { time } from "../../services/Time";
+import CommentsPreview from "./CommentsPreview";
 const useStyles = makeStyles((theme) => ({
   commentBox: {
     display: "flex",
@@ -26,13 +27,26 @@ export default function CommentBox(props) {
   const [error, setError] = React.useState(false);
   const { id } = props;
   const initialCommentState = {
-    id: time,
     userId: "",
     content: "",
     time: time,
   };
   const [comment, setComment] = React.useState(initialCommentState);
   const [comments, setComments] = React.useState([]);
+  React.useEffect(() => {
+    async function fetch() {
+      await DataService.getComments(id)
+        .then((response) => {
+          // console.log(response);
+          // console.log(response.data.comments);
+          setComments(response.data.comments);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    }
+    fetch();
+  }, [id]);
   const handleInputChange = (event) => {
     comment.content.length > 1 && setError(false);
     const { name, value } = event.target;
@@ -53,11 +67,13 @@ export default function CommentBox(props) {
         comment.content.length < 1 ? setError(true) : alert(e);
       });
   };
+  // console.log(comments);
   return (
     <Paper elevation={3}>
       <Container className={classes.commentBox}>
         {/* first 2 comments */}
-        <Container>kid</Container>
+        {comments.length > 1 && <CommentsPreview comments={comments} />}
+
         <Container className={classes.inputGroup}>
           <TextField
             fullWidth

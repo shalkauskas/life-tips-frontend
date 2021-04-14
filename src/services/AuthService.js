@@ -4,6 +4,9 @@ import http from "../http-common";
 const index = () => {
   return http.get("/");
 };
+const findUser = (id) => {
+  return http.get(`/user/${id}`);
+};
 const login = (data) => {
   return http.post("/login", data);
 };
@@ -30,4 +33,5 @@ export default {
   loginGoogle,
   register,
   logout,
+  findUser,
 };

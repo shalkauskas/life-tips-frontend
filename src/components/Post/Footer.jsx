@@ -180,7 +180,7 @@ export default function PostFooter(props) {
         </Grid>
       </CardActions>
       <Collapse in={showComments}>
-        <CommentBox id={post.id} />
+        {post.id && <CommentBox id={post.id} />}
       </Collapse>
     </>
   );
