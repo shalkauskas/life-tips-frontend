@@ -48,6 +48,7 @@ export default function AddPost(props) {
   const [state] = React.useContext(GlobalContext);
   const handleInputChange = (event) => {
     post.title.length > 1 && setError(false);
+    post.title.length >= 999 && setError(true);
     const { name, value } = event.target;
     setPost({ ...post, [name]: value });
   };
@@ -117,7 +118,12 @@ export default function AddPost(props) {
             onChange={handleInputChange}
             variant="outlined"
             error={error}
-            helperText={error ? "Title cannot be empty" : ""}
+            inputProps={{ maxLength: 1000 }}
+            helperText={
+              error && post.title.length >= 998
+                ? "Max 1000 characters"
+                : error && "Title cannot be empty"
+            }
           />
           <TextField
             className={classes.textField}
@@ -127,8 +133,10 @@ export default function AddPost(props) {
             name="content"
             label="Text (Optional)"
             value={post.content}
+            inputProps={{ maxLength: 1000 }}
             onChange={handleInputChange}
             variant="outlined"
+            helperText={"Max 1000 characters"}
           />
           <FormControlLabel
             style={{

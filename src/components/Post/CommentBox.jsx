@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     justifyContent: "center",
     flexDirection: "column",
-    padding: "2rem",
+    padding: "1rem",
   },
   inputGroup: {
     display: "flex",
@@ -65,6 +65,7 @@ export default function CommentBox(props) {
   }, [id]);
   const handleInputChange = (event) => {
     comment.content.length > 1 && setError(false);
+    comment.content.length >= 999 && setError(true);
     const { name, value } = event.target;
     setComment({ ...comment, [name]: value });
   };
@@ -98,14 +99,19 @@ export default function CommentBox(props) {
                 size="small"
                 required
                 multiline
-                rowsMax={4}
+                rowsMax={6}
                 name="content"
                 placeholder="Add a comment..."
                 value={comment.content}
                 onChange={handleInputChange}
                 variant="outlined"
                 error={error}
-                helperText={error ? "Title cannot be empty" : ""}
+                inputProps={{ maxLength: 1000 }}
+                helperText={
+                  error && comment.content.length >= 998
+                    ? "Max 1000 characters"
+                    : error && "Title cannot be empty"
+                }
               />
               <Button
                 onClick={sendComment}
