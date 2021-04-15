@@ -7,10 +7,10 @@ import CommentContent from "./CommentContent";
 export default function CommentsPreview(props) {
   // const classes = useStyles();
   const { comments, preview } = props;
-  const commentsMap = preview ? comments.slice(0, 2) : comments;
+  const commentsMap = preview ? comments.slice(comments.length - 2) : comments;
   return (
     <Container>
-      {commentsMap.map((item, index) => (
+      {commentsMap.reverse().map((item, index) => (
         <Container key={index} disableGutters>
           <CommentAuthor user={item.userId} time={item.time} />
           <CommentContent content={item.content} />

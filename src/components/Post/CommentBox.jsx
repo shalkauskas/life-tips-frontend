@@ -48,6 +48,7 @@ export default function CommentBox(props) {
   };
   const [comment, setComment] = React.useState(initialCommentState);
   const [comments, setComments] = React.useState([]);
+  const [submitted, setSubmitted] = React.useState(false);
   const [state] = React.useContext(GlobalContext);
   React.useEffect(() => {
     async function fetch() {
@@ -56,13 +57,14 @@ export default function CommentBox(props) {
           // console.log(response);
           // console.log(response.data.comments);
           setComments(response.data.comments);
+          setSubmitted(false);
         })
         .catch((e) => {
           console.log(e);
         });
     }
     fetch();
-  }, [id]);
+  }, [id, submitted]);
   const handleInputChange = (event) => {
     comment.content.length > 1 && setError(false);
     comment.content.length >= 999 && setError(true);
@@ -81,6 +83,7 @@ export default function CommentBox(props) {
         // console.log(response);
         setComments([...comments, comment]);
         setComment(initialCommentState);
+        setSubmitted(true);
       })
       .catch((e) => {
         comment.content.length < 1 ? setError(true) : alert(e);
@@ -134,10 +137,10 @@ export default function CommentBox(props) {
           )}
         </Container>
         {/* view comments */}
-        {comments.length > 1 && (
+        {comments.length >= 1 && (
           <CommentsContainer comments={comments} preview={preview} />
         )}
-        {comments.length > 2 && preview && (
+        {comments.length >= 2 && preview && (
           <Link
             to={`/post/${id}`}
             component={RouterLink}

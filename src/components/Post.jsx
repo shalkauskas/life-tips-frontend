@@ -49,7 +49,7 @@ export default function Post(props) {
     };
     retrievePosts(id || location.pathname.slice(6));
     return () => (mounted = false);
-  }, [location, id, postRatingCheck]);
+  }, [location, id]);
   const refreshList = () => {
     props.refreshList();
   };

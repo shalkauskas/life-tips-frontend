@@ -5,13 +5,14 @@ const useStyles = makeStyles((theme) => ({
   commentContent: {
     padding: "1rem",
   },
+  content: {},
 }));
 export default function CommentsPreview(props) {
   const classes = useStyles();
   const { content } = props;
   return (
     <Container className={classes.commentContent}>
-      <Typography>{content}</Typography>
+      <Typography className={classes.content}>{content}</Typography>
     </Container>
   );
 }
