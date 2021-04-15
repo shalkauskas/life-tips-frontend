@@ -40,8 +40,10 @@ export default function Post(props) {
       setLoading(true);
       DataService.get(id)
         .then((response) => {
-          if (mounted) setPost(response.data);
-          setLoading(false);
+          if (mounted) {
+            setPost(response.data);
+            setLoading(false);
+          }
         })
         .catch((e) => {
           console.log(e);

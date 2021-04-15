@@ -51,19 +51,23 @@ export default function CommentBox(props) {
   const [submitted, setSubmitted] = React.useState(false);
   const [state] = React.useContext(GlobalContext);
   React.useEffect(() => {
+    let mounted = true;
     async function fetch() {
       await DataService.getComments(id)
         .then((response) => {
           // console.log(response);
           // console.log(response.data.comments);
-          setComments(response.data.comments);
-          setSubmitted(false);
+          if (mounted) {
+            setComments(response.data.comments);
+            setSubmitted(false);
+          }
         })
         .catch((e) => {
           console.log(e);
         });
     }
     fetch();
+    return () => (mounted = false);
   }, [id, submitted]);
   const handleInputChange = (event) => {
     comment.content.length > 1 && setError(false);

@@ -62,21 +62,21 @@ export default function PostContentEdit(props) {
       title: post.title,
       content: post.content,
     };
-    DataService.update(props.post.id, data)
-      .then((response) => {
-        console.log(response.data);
-        props.setEditMode(false);
-        setPost({
-          ...post,
-          title: response.data.title,
-          content: response.data.content,
+    post.title.length >= 1 &&
+      DataService.update(props.post.id, data)
+        .then((response) => {
+          console.log(response.data);
+          props.setEditMode(false);
+          setPost({
+            ...post,
+            title: response.data.title,
+            content: response.data.content,
+          });
+          dispatch({ type: "OnUpdate", payload: "updated" });
+        })
+        .catch((e) => {
+          post.title.length < 1 ? setError(true) : alert(e);
         });
-        // setUpdate({ refresh: true, message: "Saved" });
-        dispatch({ type: "OnUpdate", payload: "updated" });
-      })
-      .catch((e) => {
-        post.title.length < 1 ? setError(true) : alert(e);
-      });
   };
   return (
     <Container disableGutters className={classes.wrapper}>

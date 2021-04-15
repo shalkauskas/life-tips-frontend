@@ -24,17 +24,21 @@ export default function CommentsPreview(props) {
   const { user, time } = props;
   const [userdata, setUserdata] = React.useState([]);
   React.useEffect(() => {
+    let mounted = true;
     async function fetch() {
       await AuthService.findUser(user)
         .then((response) => {
           // console.log(response.data.comments);
-          setUserdata(response.data.user);
+          if (mounted) {
+            setUserdata(response.data.user);
+          }
         })
         .catch((e) => {
           console.log(e);
         });
     }
     fetch();
+    return () => (mounted = false);
   }, [user]);
   return (
     <Container className={classes.authorWrapper} disableGutters>
