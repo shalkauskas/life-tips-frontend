@@ -9,7 +9,7 @@ export default function CommentsPreview(props) {
   const { comments, preview } = props;
   const commentsMap = preview ? comments.slice(comments.length - 2) : comments;
   return (
-    <Container>
+    <Container disableGutters>
       {commentsMap.reverse().map((item, index) => (
         <Container key={index} disableGutters>
           <CommentAuthor user={item.userId} time={item.time} />

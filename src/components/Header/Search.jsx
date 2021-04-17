@@ -44,11 +44,16 @@ const useStyles = makeStyles((theme) => ({
     width: "0ch",
     "&:focus, &:hover": {
       width: "20ch",
-      [theme.breakpoints.up("sm")]: {},
+      [theme.breakpoints.down("sm")]: {
+        "&:focus, &:hover": {
+          width: "15ch",
+        },
+      },
     },
   },
 }));
-export default function SearchNew() {
+export default function SearchNew(props) {
+  const { setFocus } = props;
   const classes = useStyles();
   const [search, setSearch] = React.useState("");
   const onChangeSearch = (e) => {
@@ -85,6 +90,8 @@ export default function SearchNew() {
           value={search}
           onChange={onChangeSearch}
           onKeyPress={findBySearch}
+          onFocus={() => setFocus(true)}
+          onBlur={() => setFocus(false)}
           classes={{
             root: classes.inputRoot,
             input: classes.inputInput,

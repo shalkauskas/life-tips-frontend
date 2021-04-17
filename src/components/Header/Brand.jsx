@@ -16,8 +16,9 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }));
-export default function HeaderBrand() {
+export default function HeaderBrand(props) {
   const classes = useStyles();
+  const { focus } = props;
   return (
     <>
       <Typography
@@ -34,7 +35,7 @@ export default function HeaderBrand() {
             color: yellow[500],
           }}
         />
-        Life Pro Tips
+        {focus ? "LPT" : "Life Pro Tips"}
       </Typography>
     </>
   );

@@ -98,7 +98,7 @@ export default function CommentBox(props) {
     <Paper elevation={3}>
       <Container className={classes.commentBox}>
         {/* post comments */}
-        <Container className={classes.inputGroup}>
+        <Container className={classes.inputGroup} disableGutters>
           {state.User.isAuthenticated ? (
             <>
               <TextField

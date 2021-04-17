@@ -21,7 +21,7 @@ LPT is a full-stack app, with this repository containing a front-end side built 
 
 ### Front-end
 
-- [React](https://reactjs.org/)
+- [React](https://reactjs.org/) - state management with Context API and useReducer
 - [Axios](https://github.com/axios/axios) - API calls
 - [Material-UI](https://material-ui.com/) - styling and UI.
 - [Cloudinary](https://cloudinary.com/) - user profile picture upload storage
@@ -40,7 +40,7 @@ _Hosted on [Heroku](https://www.heroku.com/)_
 
 ## Installation
 
-Installation guidelines for fron-end only.
+Installation guidelines for front-end only.
 Back-end can be found in corresponding [repo](https://github.com/shalkauskas/life-tips-server).
 
 1. Clone the repo
@@ -48,6 +48,7 @@ Back-end can be found in corresponding [repo](https://github.com/shalkauskas/lif
 2. In root folder create a `.env` file and add your API keys
 
 ```
+PORT="Port for react server"
 REACT_APP_SERVER="Server address for all api calls || default http://localhost:8080/api"
 REACT_APP_CLOUDNAME="Cloudname from Cloudinary for uploading user pictures"
 REACT_APP_CLOUDINARY_API_KEY="Cloudinary API key"

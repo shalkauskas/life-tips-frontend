@@ -24,13 +24,13 @@ const useStyles = makeStyles((theme) => ({
 export default function ButtonAppBar(props) {
   const classes = useStyles();
   const [state] = React.useContext(GlobalContext);
-
+  const [focus, setFocus] = React.useState(false);
   return (
     <div className={classes.root}>
       <AppBar position="fixed">
         <Toolbar>
-          <HeaderBrand />
-          <Search />
+          <HeaderBrand focus={focus} />
+          <Search setFocus={setFocus} />
           {state.User.isAuthenticated ? (
             <UserMenu />
           ) : (

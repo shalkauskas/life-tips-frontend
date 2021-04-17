@@ -15,12 +15,31 @@ import { Collapse } from "@material-ui/core";
 import CommentBox from "./CommentBox";
 import { useLocation } from "react-router-dom";
 import { GlobalContext } from "../../App";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 const useStyles = makeStyles({
   footer: {
     padding: "1rem",
   },
-  comments: {
-    marginLeft: "1rem",
+  authorContainer: {
+    width: "33%",
+  },
+  commentsContainer: {
+    margin: "0 auto",
+  },
+  likesContainer: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    width: "33%",
+    maxWidth: "33%",
+  },
+  likeButton: {
+    width: "max-content",
+  },
+  rating: {
+    maxWidth: "5ch",
+    width: "max-content",
+    padding: "1ch",
   },
 });
 export default function PostFooter(props) {
@@ -29,6 +48,7 @@ export default function PostFooter(props) {
   const location = useLocation();
   const [state] = React.useContext(GlobalContext);
   const [showComments, setShowComments] = React.useState(false);
+  const matches = useMediaQuery("(min-width:600px)");
   React.useEffect(() => {
     location.pathname === `/post/${post.id}` && setShowComments(true);
   }, [post.id, location.pathname]);
@@ -114,21 +134,36 @@ export default function PostFooter(props) {
   return (
     <>
       <CardActions className={classes.footer}>
-        <Grid container alignItems="center" justify="space-between">
+        <Grid
+          container
+          direction="row"
+          justify="space-between"
+          alignItems="center"
+        >
           {/* author */}
-          <Grid item xs={4}>
+          <div className={classes.authorContainer}>
             {edit ? (
               <Tooltip title="Date added" placement="left">
-                <Typography align="left" color="textSecondary">
+                <Typography
+                  align="left"
+                  color="textSecondary"
+                  style={{ fontSize: !matches && "0.7rem" }}
+                >
                   {post.time}
                 </Typography>
               </Tooltip>
             ) : (
-              <Typography color="textSecondary">By {post.author}</Typography>
+              <Typography
+                color="textSecondary"
+                style={{ fontSize: !matches && "0.8rem" }}
+                noWrap
+              >
+                {post.author}
+              </Typography>
             )}
-          </Grid>
+          </div>
           {/* comments */}
-          <Grid item xs={4}>
+          <div className={classes.commentsContainer}>
             <Button
               disabled={location.pathname === `/post/${post.id}` && true}
               onClick={() => setShowComments(!showComments)}
@@ -137,53 +172,58 @@ export default function PostFooter(props) {
               className={classes.comments}
               startIcon={<CommentIcon />}
             >
-              {post.comments && post.comments.length} Comments
+              {post.comments && post.comments.length}
+              {matches && " Comments"}
             </Button>
-          </Grid>
+          </div>
           {/* likes */}
-          <Grid item xs={4}>
-            <Grid container alignItems="center" justify="flex-end">
-              <Grid item xs={3}>
-                {!edit && (
-                  <IconButton
-                    aria-label="Like"
-                    onClick={() => ratingHandler("up")}
-                  >
-                    <ThumbUpIcon
-                      style={{
-                        color: postRatingCheck === "up" ? green[500] : "",
-                      }}
-                    />
-                  </IconButton>
-                )}
-              </Grid>
-              <Grid item xs={4}>
-                <Tooltip title="Rating">
-                  <Typography
-                    color="textSecondary"
-                    align="center"
-                    variant="subtitle1"
-                  >
-                    [{post.rating}]
-                  </Typography>
-                </Tooltip>
-              </Grid>
-              <Grid item xs={3}>
-                {!edit && (
-                  <IconButton
-                    aria-label="Dislike"
-                    onClick={() => ratingHandler("down")}
-                  >
-                    <ThumbDownIcon
-                      style={{
-                        color: postRatingCheck === "down" ? red[900] : "",
-                      }}
-                    />
-                  </IconButton>
-                )}
-              </Grid>
-            </Grid>
-          </Grid>
+          <div className={classes.likesContainer}>
+            <div className={classes.likeButton}>
+              {!edit && (
+                <IconButton
+                  style={{ padding: !matches && "0.5rem" }}
+                  aria-label="Like"
+                  onClick={() => ratingHandler("up")}
+                >
+                  <ThumbUpIcon
+                    style={{
+                      color: postRatingCheck === "up" ? green[500] : "",
+                    }}
+                  />
+                </IconButton>
+              )}
+            </div>
+            <div className={classes.rating}>
+              <Tooltip title="Rating">
+                <Typography
+                  color="textSecondary"
+                  align="center"
+                  variant="subtitle1"
+                >
+                  [
+                  {post.rating > 999
+                    ? Math.round(post.rating / 1000) + "K"
+                    : post.rating}
+                  ]
+                </Typography>
+              </Tooltip>
+            </div>
+            <div className={classes.likeButton}>
+              {!edit && (
+                <IconButton
+                  style={{ padding: !matches && "0.5rem" }}
+                  aria-label="Dislike"
+                  onClick={() => ratingHandler("down")}
+                >
+                  <ThumbDownIcon
+                    style={{
+                      color: postRatingCheck === "down" ? red[900] : "",
+                    }}
+                  />
+                </IconButton>
+              )}
+            </div>
+          </div>
         </Grid>
       </CardActions>
       <Collapse in={showComments}>

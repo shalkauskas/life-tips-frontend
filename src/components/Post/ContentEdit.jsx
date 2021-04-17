@@ -24,6 +24,10 @@ const useStyles = makeStyles((theme) => ({
     width: "fit-content",
     marginLeft: "auto",
     marginRight: "auto",
+    "@media (max-width: 600px)": {
+      position: "initial",
+      marginBottom: "1rem",
+    },
   },
   saveButton: {
     backgroundColor: green[500],
